@@ -2,7 +2,7 @@ import React, {FC} from 'react'
 import { Button, Dropdown, Input, Layout, Menu , message} from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import styles from '../index.module.less';
-import topbarImg from "@/asserts/topbarImg.png";
+import topbarImg from "@/assets/topbarImg.png";
 import { useHistory } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 const { Header } = Layout;
