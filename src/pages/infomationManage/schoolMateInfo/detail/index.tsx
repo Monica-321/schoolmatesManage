@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Table, Modal, Form, Input, message, Select } from 'antd';
 import { FormInstance } from 'antd/lib/form';
-import styles from './index.module.less';
+import styles from '../index.module.less';
 import { observer, inject } from 'mobx-react'
 const { Item } = Form
 const { Option } = Select
@@ -11,7 +11,7 @@ interface IState {
 interface IProps {
   history?: any,
 }
-class IndexPage extends Component<IProps, IState>{
+class SchoolMateInfoDetail extends Component<IProps, IState>{
 
   state: IState = {
     loading: false
@@ -24,10 +24,10 @@ class IndexPage extends Component<IProps, IState>{
   render() {
     return (
       <div className={styles.pageCenter}>
-        <div> 首页 </div>
-        </div>
+      <div> 校友信息详情</div>
+      </div>
     )
   }
 };
 
-export default IndexPage;
+export default SchoolMateInfoDetail;

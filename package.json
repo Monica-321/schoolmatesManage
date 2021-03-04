@@ -10,8 +10,12 @@
   },
   "dependencies": {
     "antd": "^4.8.6",
+    "axios": "^0.21.1",
+    "http-proxy-middleware": "^1.0.6",
+    "jsencrypt": "^3.0.0-rc.1",
     "mobx": "^6.0.4",
     "mobx-react": "^7.0.5",
+    "node-jsencrypt": "^1.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
@@ -45,5 +49,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": ""
+  "proxy":""
 }

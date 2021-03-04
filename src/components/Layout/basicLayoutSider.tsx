@@ -1,41 +1,46 @@
-import {Component} from 'react';
+import React, {FC,useState} from 'react';
 import { Layout, Menu, Breadcrumb ,ConfigProvider } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import {Redirect} from 'react-router-dom';
 import TopBar from './TopBar';
 import SiderBar from './SiderBar';
 import Bread from './Bread'
+import MenuData from '@/components/Layout/SiderBar/menuData'
 import styles from './index.module.less'
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-// interface IProps {
-//   children?: any;
-//   router?:any;
-// }
-class BasicLayoutSider extends Component{
-  constructor(props:any){
-    super(props);
-    console.log(props)
-  }
-  render(){
+interface IProps {
+  children: any;
+  router?:any;
+  data:[any];
+  defaultCollapsed:boolean;
+}
+  const BasicLayoutSider: FC<IProps> = props => {
+    const {data,router,defaultCollapsed} = props;
+    const [collapsed, setCollapsed] = useState(defaultCollapsed);
+    const siderBarProps = {
+      collapsed,
+      data,
+      router,
+    }
     return(
       <Layout>
-        <TopBar ></TopBar>
+        <TopBar  // {...topBarProps}
+        ></TopBar>
       <Layout>
-        <SiderBar 
-        // keys={this.props.children}
-        ></SiderBar>
+        {/* {keys?null:<Redirect to="/404" />} */}
+        <SiderBar {...siderBarProps} />
         <Layout style={{ padding: '0 24px 24px' }}>
-          {/* <Bread></Bread> */}
+        <ConfigProvider input={{autoComplete: 'off'}}>
             <Content className={styles.content} >
-              {this.props.children}
+              {props.children}
             </Content>
+          </ConfigProvider>
         </Layout>
       </Layout>
     </Layout>
     )
   }
-};
 
 export default BasicLayoutSider;

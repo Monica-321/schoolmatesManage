@@ -2,18 +2,18 @@ import {Component} from 'react';
 import { Button, } from 'antd';
 import styles from './index.module.less';
 
-class Item1 extends Component{
+class GraduateAnalysis extends Component{
   constructor(props:any){
     super(props)
 
   }
   render(){
     return(
-      <div className={`${styles.pageCenter}`}>
-        <div> 测试页-item1 </div>
+      <div className={styles.pageCenter}>
+        <div> 毕业去向统计 </div>
         </div>
     )
   }
 };
 
-export default Item1;
+export default GraduateAnalysis;

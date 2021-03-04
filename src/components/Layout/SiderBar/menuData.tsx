@@ -1,30 +1,63 @@
 const menuData = [
   {
-    title:'mockApi服务',
-    path:null,
+    name:'首页',
+    url:'/dashboard/index',
+  },
+  {
+    name:'信息管理',
+    url:null,
     children:[
       {
-        title:"项目管理",
-        key:"projectsmanage",
-        path:"/mockapiservice/projectsmanage",
+        name:"校友信息管理",
+        url:"/infoManage/schoolMateInfoManage",
       },
       {
-        title:"Api管理",
-        key:"apismanage",
-        path:"/mockapiservice/apismanage",
+        name:"校友单位信息管理",
+        url:"/infoManage/schoolCompanyManage",
       },
     ]
   },
   {
-    title:'other',
-    path:null,
+    name:'操作日志',
+    url:null,
     children:[
       {
-        title:"item1",
-        path:"/other/item1",
-        key:"item1",
+        name:"帐号日志",
+        url:"/log/accountLog",
       }
     ]
-  }
+  },
+  {
+    name:'数据分析统计',
+    url:null,
+    children:[
+      {
+        name:"基本数据分析",
+        url:"/dataAnalysis/basicAnalysis",
+      },
+      {
+        name:"毕业去向分析",
+        url:"/dataAnalysis/graduateAnalysis",
+      },
+      {
+        name:"校友捐赠分析",
+        url:"/dataAnalysis/donateAnalysis",
+      },
+    ]
+  },
+  {
+    name:'数字影像管理',
+    url:null,
+    children:[
+      {
+        name:"毕业影像",
+        url:"/mediaCenter/graduateMedia",
+      },
+      {
+        name:"其他影像",
+        url:"/mediaCenter/otherMedia",
+      },
+    ]
+  },
 ];
 export default menuData;

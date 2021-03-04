@@ -10,8 +10,11 @@ interface IState {
 }
 interface IProps {
   history?: any,
+  // apiManageStore: any
 }
-class IndexPage extends Component<IProps, IState>{
+// @inject('apiManageStore')
+// @observer
+class SchoolCompanyManage extends Component<IProps, IState>{
 
   state: IState = {
     loading: false
@@ -24,10 +27,10 @@ class IndexPage extends Component<IProps, IState>{
   render() {
     return (
       <div className={styles.pageCenter}>
-        <div> 首页 </div>
+        <div> 校友单位页 </div>
         </div>
     )
   }
 };
 
-export default IndexPage;
+export default SchoolCompanyManage;

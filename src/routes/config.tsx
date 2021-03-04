@@ -2,10 +2,14 @@ import Routes from './routes';
 
 const {
   Login,
-  Register,
+  // Register,
   Layout,
-  Dashboard,
-  PageNotFound,
+  DashBoard,
+  InfomationManage,
+  Log,
+  DataAnalysis,
+  MediaCenter,
+  Error,
 } = Routes;
 
 const routes = [
@@ -21,73 +25,95 @@ const routes = [
     component:Login.Login,
   },
   //注册
-  {
-    path:"/register",
-    component:Register.Register,
-  },
-  //工作台
+  // {
+  //   path:"/register",
+  //   component:Register.Register,
+  // },
+  //首页
   {
     path:"/dashboard",
-    component:Layout.Basic,
-    children:[
-      //工作台首页
+    component:Layout.Master,
+    collapsed:true,
+    children: [
       {
-        path:'/index',
-        component:Dashboard.Dashboard,
+        path: '/index',
+        component: DashBoard.IndexPage,
       },
-      //个人信息修改
-      {
-        path:'/modifyinfo',
-        component:Dashboard.ModifyInfo,
-      },
-    ]
+    ],
+    
   },
-  //mockapi服务
+  //InfomationManage
   {
-    path:"/mockapiservice",
+    path:"/infoManage",
     component:Layout.Master,
     children:[
-      //项目管理-列表页
       {
-        path:'/projectsmanage',
-        component:Dashboard.MockApiService.ProjectsManage,
+        path:'/schoolMateInfoManage',
+        component:InfomationManage.SchoolMateInfoManage,
       },
-      //项目管理-创建/修改项目页
-      // {
-      //   path:'/projectsmanage/addproject',
-      //   component:Dashboard.MockApiService.ProjectsAdd,
-      // },
-
-      //模块管理-列表页
       {
-        path:'/modulesmanage',
-        component:Dashboard.MockApiService.ModulesManage,
+        path:'/schoolMateInfoDetail',
+        component:InfomationManage.SchoolMateInfoDetail,
       },
-
-      //api管理-列表页
       {
-        path:'/apismanage',
-        component:Dashboard.MockApiService.ApisManage,
+        path:'/schoolCompanyManage',
+        component:InfomationManage.SchoolCompanyManage,
       },
-
+      {
+        path:'/schoolCompanyDetail',
+        component:InfomationManage.SchoolCompanyDetail,
+      },
     ]
   },
-  //other服务-菜单路由辅助测试
+  // 操作日志
   {
-    path:"/other",
-    component:Layout.Master,
-    children:[
-      //项目管理-列表页
+    path: '/log',
+    component: Layout.Master,
+    children: [
       {
-        path:'/item1',
-        component:Dashboard.OtherService.Item1,
+        path: '/accountLog',
+        component: Log.AccountLog,
       },
-    ]
+    ],
   },
+//DataAnalysis
+{
+  path:"/dataAnalysis",
+  component:Layout.Master,
+  children:[
+    {
+      path:'/basicAnalysis',
+      component:DataAnalysis.BasicAnalysis,
+    },
+    {
+      path:'/graduateAnalysis',
+      component:DataAnalysis.GraduateAnalysis,
+    },
+    {
+      path:'/donateAnalysis',
+      component:DataAnalysis.DonateAnalysis,
+    },
+  ]
+},
+//MediaCenter
+{
+  path:"/mediaCenter",
+  component:Layout.Master,
+  children:[
+    {
+      path:'/graduateMedia',
+      component:MediaCenter.GraduateMedia,
+    },
+    {
+      path:'/otherMedia',
+      component:MediaCenter.OtherMedia,
+    },
+  ]
+},
   //404
   {
     path:"/404",
-    component:PageNotFound.PageNotFound,
+    component:Error.Error,
   },
 
 ];
