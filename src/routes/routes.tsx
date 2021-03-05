@@ -9,8 +9,8 @@ import IndexPage from '@/pages/dashboard'
 
 import SchoolMateInfoManage from '@/pages/infomationManage/schoolMateInfo';
 import SchoolMateInfoDetail from '@/pages/infomationManage/schoolMateInfo/detail';
-import SchoolCompanyManage from '@/pages/infomationManage/schoolMateInfo';
-import SchoolCompanyDetail from '@/pages/infomationManage/schoolMateInfo/detail';
+import SchoolCompanyManage from '@/pages/infomationManage/schoolMateCompany';
+import SchoolCompanyDetail from '@/pages/infomationManage/schoolMateCompany/detail';
 
 import BasicAnalysis from '@/pages/dataAnalysis/basicAnalysis'
 import GraduateAnalysis from '@/pages/dataAnalysis/graduateAnalysis'

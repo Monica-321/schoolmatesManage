@@ -82,13 +82,73 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         {el:'input',label: '姓名' ,name:'name',placeholder: '请输入校友姓名',},
         {
           el:'select',
-          name:'states',
-          label:"状态",
-          placeholder:"请选择校友状态",
+          name:'gender',
+          label:"性别",
+          placeholder:"请选择性别",
           style:{width: 174},
           selectOptions:[
-            { label: '离校' ,value: 1 },
-            { label: '在校' ,value: 2 },
+            { label: '女' ,value: 0 },
+            { label: '男' ,value: 1 },
+          ],
+          selectField: {
+            label: 'label',
+            value: 'value'
+          }
+        },
+        {
+          el:'select',
+          name:'nationality',
+          label:"民族",
+          placeholder:"请选择民族",
+          style:{width: 174},
+          selectOptions:[
+            { label: '汉族' ,value: 1 },
+            { label: '其他族' ,value: 2 },
+          ],
+          selectField: {
+            label: 'label',
+            value: 'value'
+          }
+        },
+        // {
+        //   el:'select',
+        //   name:'faculty',
+        //   label:"学院",
+        //   placeholder:"请选择学院",
+        //   style:{width: 174},
+        //   selectOptions:[
+        //     { label: '信息学院' ,value: 1 },
+        //     { label: '其他学院' ,value: 2 },
+        //   ],
+        //   selectField: {
+        //     label: 'label',
+        //     value: 'value'
+        //   }
+        // },
+        {
+          el:'select',
+          name:'major',
+          label:"专业",
+          placeholder:"请选择专业",
+          style:{width: 174},
+          selectOptions:[
+            { label: '数字媒体技术' ,value: 1 },
+            { label: '其他专业' ,value: 2 },
+          ],
+          selectField: {
+            label: 'label',
+            value: 'value'
+          }
+        },
+        {
+          el:'select',
+          name:'yearOfGraduation',
+          label:"毕业年份",
+          placeholder:"请选择毕业年份",
+          style:{width: 174},
+          selectOptions:[
+            { label: '2021' ,value: 1 },
+            { label: '2020' ,value: 2 },
           ],
           selectField: {
             label: 'label',
@@ -119,6 +179,20 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       handleCheckChange:this.handleCheckChange,
     }
 
+    let dataSource=[{
+      id:'1',
+      name:'qy',
+      gender:0,
+      nationality:'汉族',
+      faculty:'信息学院',
+      major:'数字媒体技术',
+      class:'2',
+      yearOfGraduation:'2021',
+      birthplace:'江苏省溧阳市',
+      contactPhone:'11',
+      contactEmail:'222',
+    }]
+
      //表格部分
      const columns = [
       {
@@ -134,6 +208,13 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         title: '性别',
         key: 'gender',
         dataIndex: 'gender',
+        render:(text:any)=>{
+          switch(text){
+            case 0: return '女';
+            case 1: return '男';
+            default: return text;
+          }
+        }
       },{
         title: '民族',
         key: 'nationality',
@@ -173,6 +254,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         key: 'action',
         render:(text:any, record:any, index:number)=>{
           return <span>
+          <Button type="link" onClick={()=>{this.props.history.push('/infoManage/schoolMateInfoDetail')}}>查看详情</Button>
           <Button type="link" onClick={()=>{}}>编辑</Button>
           <Button type="link" style={{color:'red'}} onClick={()=>{}}>删除</Button> 
           </span>
@@ -200,9 +282,11 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     let listProps:any={
       rowKey:'id',
       columns,
-      dataSource:[],
+      // dataSource:[],
+      dataSource,
       pagination,
       loading,
+      
     }
 
     return (
@@ -211,9 +295,13 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           <SearchPanel {...searchProps}/>
         </div>
         <div className={styles.tableBeforeNode}>
-          <Button type='primary' style={{margin:'0 0 25px 10px'}} onClick={()=>{}} >
-            创建校友
+          <div>
+          <Button style={{margin:'0 10px 25px 10px'}} onClick={()=>{}} >
+            添加校友
           </Button>
+          <Button type='primary' onClick={()=>{}}>批量导入?</Button>
+          <Button type='primary' onClick={()=>{}} style={{marginLeft:'10px'}}>批量导出?</Button>
+          </div>
 
           <FilterPopover {...filterProps} />
         </div>
