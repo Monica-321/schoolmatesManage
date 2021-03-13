@@ -139,6 +139,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
         key: 'action',
         render:(text:any, record:any, index:number)=>{
           return <span>
+          <Button type="link" onClick={()=>{this.props.history.push('/infoManage/schoolCompanyDetail')}}>查看详情</Button>
           <Button type="link" onClick={()=>{}}>编辑</Button>
           <Button type="link" style={{color:'red'}} onClick={()=>{}}>删除</Button> 
           </span>
