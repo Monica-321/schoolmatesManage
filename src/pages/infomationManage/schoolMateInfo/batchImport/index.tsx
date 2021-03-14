@@ -44,9 +44,9 @@ class BatchImportModal extends Component<IProps,IState> {
     const pagination={
         current: pageNum,
         pageSize: pageSize,
-        total:50, //TODO
-        showQuickJumper: true,
-        showSizeChanger:false,
+        total:20, //TODO
+        // showQuickJumper: true,
+        // showSizeChanger:false,
         onChange: (pageNum: number) => {
             this.setState({ pageNum,})
         },
@@ -85,7 +85,7 @@ class BatchImportModal extends Component<IProps,IState> {
                   size='small'
                   pagination={pagination}
               />
-              <div style={{display:'flex',justifyContent:'center'}}>
+              <div style={{display:'flex',justifyContent:'center',marginTop:'15px'}}>
                   <Button type="primary" onClick={this.submitImport}>确认</Button>
                   <Button onClick={this.nextCancel} style={{marginLeft:'10px'}}>取消</Button>
               </div>

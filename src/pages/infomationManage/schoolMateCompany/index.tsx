@@ -3,6 +3,10 @@ import { Button, Table, Modal, Form, Input, message, Select } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import styles from './index.module.less';
 import SearchPanel from '@/components/SearchFormComp'
+import InfoModal from '@/components/InfoModal'
+import AddOrEdit from './addOrEdit'
+import BatchExportModal from './batchExport'
+import {companyTypesData} from '@/utils/staticData'
 import { observer, inject } from 'mobx-react'
 const { Item } = Form
 const { Option } = Select
@@ -11,7 +15,15 @@ interface IState {
   pageNum: number,
   pageSize: number,
   total?:number,
-  searchVal?: any,
+  searchVal?: any, 
+  selectedRowKeys:any[],
+  deleteModalVisible:boolean,
+  deleteRecord?:any,
+  editModalVisible:boolean,
+  editRecord?:any,
+  editFlag:number,
+  batchExportVisible:boolean,
+  // batchImportVisible:boolean,
 }
 interface IProps {
   history?: any,
@@ -27,7 +39,15 @@ class SchoolCompanyManage extends Component<IProps, IState>{
     pageNum: 1,
     pageSize: 5,
     total:10,
-    searchVal:{}, 
+    searchVal:{},
+    selectedRowKeys:[],
+    deleteModalVisible:false,
+    deleteRecord:{},
+    editModalVisible:false ,
+    editRecord:{},
+    editFlag:0,
+    batchExportVisible:false,
+    // batchImportVisible:false,
   }
   componentDidMount() {
     this.getTableData()
@@ -37,7 +57,10 @@ class SchoolCompanyManage extends Component<IProps, IState>{
   getTableData=async()=>{
     
   }
-  
+  refreshData = () => {
+    // @ts-ignore
+    this.searchRef.handleReset()
+  }
   //重置
   handleReset=()=>{
     this.setState({pageNum: 1,searchVal:{}},()=>{
@@ -52,9 +75,30 @@ class SchoolCompanyManage extends Component<IProps, IState>{
       this.getTableData()
     })
   }
+  //弹出编辑/创建框
+  showEdit=async(record:any)=>{
+    this.setState({editRecord:record,editModalVisible:true,editFlag:1})
+  }
+
+  //删除
+  goDelete=()=>{
+    const { deleteRecord }=this.state
+      message.success(`"${deleteRecord.name}"已删除！`)
+      this.getTableData()
+      this.setState({deleteModalVisible:false})
+  }
+  //批量导出
+  batchExport=()=>{
+    if (!this.state.selectedRowKeys.length) {
+      message.warn('请先选择需要导出的校友单位数据')
+      return
+    }
+    this.setState({batchExportVisible: true})
+  }
 
   render() {
-    const {pageNum,pageSize,loading,total, }=this.state
+    const {pageNum,pageSize,loading,total,selectedRowKeys , deleteModalVisible , deleteRecord ,
+      editModalVisible, editRecord , editFlag , batchExportVisible  }=this.state
     let searchProps={
       handleReset:this.handleReset,
       handleQuery:this.handleQuery,
@@ -62,22 +106,18 @@ class SchoolCompanyManage extends Component<IProps, IState>{
       formItems: [
         {
           el:'input',
-          name:'id',
+          name:'companyId',
           label:"企业编号",
           placeholder:"请输入企业编号",
         },
-        {el:'input',label: '企业名称' ,name:'name',placeholder: '请输入企业名称',},
+        {el:'input',label: '企业名称' ,name:'companyName',placeholder: '请输入企业名称',},
         {
           el:'select',
-          name:'type',
+          name:'companyType',
           label:"企业性质",
           placeholder:"请选择企业性质",
           style:{width: 174},
-          selectOptions:[
-            { label: '国有企业' ,value: 0 },
-            { label: '三资企业' ,value: 1 },
-            { label: '其他企业' ,value: 2 },
-          ],
+          selectOptions:companyTypesData,
           selectField: {
             label: 'label',
             value: 'value'
@@ -85,7 +125,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
         },
         {
           el:'select',
-          name:'city',
+          name:'companyCity',
           label:"企业所在城市",
           placeholder:"请选择企业所在城市",
           style:{width: 174},
@@ -97,51 +137,61 @@ class SchoolCompanyManage extends Component<IProps, IState>{
             label: 'label',
             value: 'value'
           }
-        }]
+        },
+        // {el:'input',label: '企业相关负责校友' ,name:'relatedSchoolMate',placeholder: '请输入',},
+      ]
     }
 
+    //fake
     let dataSource=[{
-      id:'1',
-      name:'qy企业',
-      city:'江苏省溧阳市',
+      companyId:'1',
+      companyName:'qy企业',
+      companyType:2,
+      companyCity:'江苏省溧阳市',
+      belongArea:'行业',
     }]
 
      //表格部分
      const columns = [
       {
         title: '企业编号',
-        key: 'id',
-        dataIndex: 'id',
+        key: 'companyId',
+        dataIndex: 'companyId',
       },
       {
         title: '企业名称',
-        key: 'name',
-        dataIndex: 'name',
+        key: 'companyName',
+        dataIndex: 'companyName',
       },{
         title: '企业性质',
-        key: 'type',
-        dataIndex: 'type',
+        key: 'companyType',
+        dataIndex: 'companyType',
         render:(text:any)=>{
+          //TODO 数组那个没用
           switch(text){
-            case 0: return '国有企业';
-            case 1: return '三资企业';
-            case 2: return '其他企业';
+            case 1: return '国有企业';
+            case 2: return '三资企业';
+            case 3: return '其他企业';
             default: return text;
           }
         }
       },{
-        title: '所在城市',
-        key: 'city',
-        dataIndex: 'city',
+        title: '主要所在城市',
+        key: 'companyCity',
+        dataIndex: 'companyCity',
+      },{
+        title:'所属行业',
+        key:'belongArea',
+        dataIndex:'belongArea',
       },
       {
         title: '操作',
         key: 'action',
         render:(text:any, record:any, index:number)=>{
           return <span>
-          <Button type="link" onClick={()=>{this.props.history.push('/infoManage/schoolCompanyDetail')}}>查看详情</Button>
-          <Button type="link" onClick={()=>{}}>编辑</Button>
-          <Button type="link" style={{color:'red'}} onClick={()=>{}}>删除</Button> 
+          <Button type="link" onClick={()=>{this.props.history.push(`/infoManage/schoolCompanyDetail?id=${record.companyId}`)}}>查看详情</Button>
+          <Button type="link" onClick={()=>{this.setState({editRecord:record,editModalVisible:true}) }}>编辑</Button>
+          <Button type="link" style={{color:'red'}} onClick={()=>this.setState({deleteModalVisible:true,deleteRecord:record})}>删除</Button> 
           </span>
         }
       },
@@ -162,14 +212,54 @@ class SchoolCompanyManage extends Component<IProps, IState>{
       },
     }
 
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: (selectedRowKeys:any,selectedRows:any)=>{
+          console.log('selectedRowKeys changed: ', selectedRowKeys);
+          this.setState({ selectedRowKeys });
+      },
+    }
     let listProps:any={
-      rowKey:'id',
+      rowKey:'companyId',
       columns,
       // dataSource:[],
       dataSource,
       pagination,
       loading,
-      
+      rowSelection,
+    }
+
+    let deleteModalProps={
+      visible:deleteModalVisible,
+      title: "",
+      children:<div>
+        <p>是否确认删除"{deleteRecord.companyName}"校友企业？</p>
+        <p style={{color:'red',fontSize:'11px',margin:'10px auto'}}>注：删除后将无法恢复，需手动再添加！</p>
+      </div>,
+      handleOk:this.goDelete,
+      handleCancel: ()=>{
+        this.setState({deleteModalVisible:false})
+      },
+    }
+
+    let editModalProps={
+      editFlag,
+      editRecord,
+      // warningContactStore ,
+      hideEdit:()=>{
+        this.setState({editRecord:{},editModalVisible:false},()=>{
+          this.getTableData()
+        })
+      },
+      editModalVisible,
+    }
+
+    let exportModalProps = {
+      // Store,
+      hideModal:()=> this.setState({ batchExportVisible: false,selectedRowKeys: []}),
+      afterExport:() => this.refreshData(),
+      batchExportVisible,
+      selectedRowKeys,
     }
 
     return (
@@ -179,17 +269,21 @@ class SchoolCompanyManage extends Component<IProps, IState>{
         </div>
         <div className={styles.tableBeforeNode}>
           <div>
-          <Button style={{margin:'0 10px 25px 10px'}} onClick={()=>{}} >
+          <Button style={{margin:'0 10px 25px 10px'}} onClick={()=>{this.setState({editRecord:{},editModalVisible:true,editFlag:0}) }} >
             添加校友单位
           </Button>
-          <Button type='primary' onClick={()=>{}}>批量导入?</Button>
-          <Button type='primary' onClick={()=>{}} style={{marginLeft:'10px'}}>批量导出?</Button>
+          {/* <Button type='primary' onClick={()=>{}}>批量导入?</Button> */}
+          <Button type='primary' onClick={this.batchExport} style={{marginLeft:'10px'}}>批量导出</Button>
           </div>
         </div>
         <div className={styles.searchTable}>
           <Table {...listProps}/>
         </div>
-        </div>
+        <InfoModal {...deleteModalProps}></InfoModal>
+        <AddOrEdit {...editModalProps} />
+        <BatchExportModal {...exportModalProps}/>
+
+      </div>
     )
   }
 };

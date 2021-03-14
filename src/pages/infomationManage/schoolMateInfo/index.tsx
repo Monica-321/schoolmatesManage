@@ -436,7 +436,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           console.log('selectedRowKeys changed: ', selectedRowKeys);
           this.setState({ selectedRowKeys });
       },
-  }
+    }
     let listProps:any={
       rowKey:'id',
       columns,

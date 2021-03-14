@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Modal, Form, Input, message, Select } from 'antd';
-import { Descriptions } from 'antd';
-import { FormInstance } from 'antd/lib/form';
+import { Button, Table, Modal, Form, Input, message, Select,Descriptions } from 'antd';
 import styles from '../index.module.less';
 import { observer, inject } from 'mobx-react'
 const { Item } = Descriptions
