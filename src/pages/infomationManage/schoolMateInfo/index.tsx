@@ -6,6 +6,8 @@ import FilterPopover from '@/components/FilterPopover'
 import styles from './index.module.less';
 import InfoModal from '@/components/InfoModal'
 import AddOrEdit from './addOrEdit'
+import BatchExportModal from './batchExport'
+import BatchImportModal from './batchImport'
 import {politicalStatusData} from '@/utils/staticData'
 import { observer, inject } from 'mobx-react'
 const { Item } = Form
@@ -18,12 +20,14 @@ interface IState {
   searchVal?: any,
   defaultValue:any[],
   checkedValue:any[],
-  selectedRowKeys?:any[],
+  selectedRowKeys:any[],
   deleteModalVisible:boolean,
   deleteRecord?:any,
   editModalVisible:boolean,
   editRecord?:any,
   editFlag:number,
+  batchExportVisible:boolean,
+  batchImportVisible:boolean,
 }
 interface IProps {
   history?: any,
@@ -49,6 +53,8 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     editModalVisible:false ,
     editRecord:{},
     editFlag:0,
+    batchExportVisible:false,
+    batchImportVisible:false,
   }
 
   componentDidMount() {
@@ -62,7 +68,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   
   //重置
   handleReset=()=>{
-    this.setState({pageNum: 1,searchVal:{}},()=>{
+    this.setState({pageNum: 1,pageSize: 10,searchVal:{},selectedRowKeys: [],},()=>{
       this.getTableData()
     })
   }
@@ -70,9 +76,14 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   //查询
   handleQuery=(params:any)=>{
     console.log("表单的请求参数为：",params)
-    this.setState({pageNum: 1,searchVal:params},()=>{
+    this.setState({pageNum: 1,pageSize: 10,searchVal:params,selectedRowKeys: [],},()=>{
       this.getTableData()
     })
+  }
+
+  refreshData = () => {
+    // @ts-ignore
+    this.searchRef.handleReset()
   }
 
   //表头筛选选中与否
@@ -98,9 +109,23 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     // }
   }
 
+  //批量导出
+  batchExport=()=>{
+    if (!this.state.selectedRowKeys.length) {
+      message.warn('请先选择需要导出的校友数据')
+      return
+    }
+    this.setState({batchExportVisible: true})
+  }
+
+  //批量导入
+  batchImport=()=>{
+    this.setState({batchImportVisible: true})
+  }
+
   render() {
     const {pageNum,pageSize,loading,total,checkedValue, selectedRowKeys , deleteModalVisible , deleteRecord ,
-    editModalVisible, editRecord , editFlag , }=this.state
+    editModalVisible, editRecord , editFlag , batchExportVisible , batchImportVisible }=this.state
     let searchProps={
       handleReset:this.handleReset,
       handleQuery:this.handleQuery,
@@ -408,7 +433,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     const rowSelection = {
       selectedRowKeys,
       onChange: (selectedRowKeys:any,selectedRows:any)=>{
-          // console.log('selectedRowKeys changed: ', selectedRowKeys);
+          console.log('selectedRowKeys changed: ', selectedRowKeys);
           this.setState({ selectedRowKeys });
       },
   }
@@ -447,6 +472,20 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       editModalVisible,
     }
 
+    let exportModalProps = {
+      // Store,
+      hideModal:()=> this.setState({ batchExportVisible: false,selectedRowKeys: []}),
+      afterExport:() => this.refreshData(),
+      batchExportVisible,
+      selectedRowKeys,
+    }
+    let importModalProps = {
+      // Store,
+      hideModal:()=> this.setState({ batchImportVisible: false}),
+      afterImport:() => this.refreshData(),
+      batchImportVisible,
+    }
+
     return (
       <div className={styles.pageCenter}>
         <div className={styles.searchPanel}>
@@ -457,8 +496,8 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           <Button style={{margin:'0 10px 25px 10px'}} onClick={()=>{this.setState({editRecord:{},editModalVisible:true,editFlag:0}) }} >
             添加校友
           </Button>
-          <Button type='primary' onClick={()=>{}}>批量导入</Button>
-          <Button type='primary' onClick={()=>{}} style={{marginLeft:'10px'}}>批量导出</Button>
+          <Button type='primary' onClick={this.batchImport}>批量导入</Button>
+          <Button type='primary' onClick={this.batchExport} style={{marginLeft:'10px'}}>批量导出</Button>
           </div>
 
           <FilterPopover {...filterProps} />
@@ -468,7 +507,8 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         </div>
         <InfoModal {...deleteModalProps}></InfoModal>
         <AddOrEdit {...editModalProps} />
-        
+        <BatchExportModal {...exportModalProps}/>
+        <BatchImportModal {...importModalProps}/>
       </div>
     )
   }

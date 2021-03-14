@@ -39,14 +39,14 @@ class AddOrEdit extends Component<IProps,IState> {
             wrapperCol: { span: 16 },
         };
         const tailLayout = {
-            wrapperCol: { span: 15 , offset: 9 },
+            wrapperCol: { span: 14 , offset: 9 },
         };
         const modalProps={
             visible:editModalVisible,
             centered:true,
             closable:false,
             footer:null,
-            width:930,
+            width:1000,
             title:editFlag?"编辑校友":'创建校友',
             onCancel:this.handleCancel,
             destroyOnClose:true,
@@ -174,7 +174,7 @@ class AddOrEdit extends Component<IProps,IState> {
                         
                         <Item {...tailLayout} >
                             <Button type="primary" htmlType='submit' className="mr10">确认</Button>
-                            <Button onClick={this.handleCancel}>取消</Button>
+                            <Button onClick={this.handleCancel} style={{marginLeft:'20px'}}>取消</Button>
                         </Item>
                     </Form>
                 </Modal>
