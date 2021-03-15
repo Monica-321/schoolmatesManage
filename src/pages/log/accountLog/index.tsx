@@ -128,6 +128,7 @@ export default class AccountLog extends React.Component<IProps, IState> {
                 el:'rangePicker',   //TODO
                 name:'logTime',
                 label:"日志时间",
+                style:{width: 230},
               }
             ]
         }

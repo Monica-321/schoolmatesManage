@@ -90,8 +90,8 @@ const routes = [
       component:DataAnalysis.GraduateAnalysis,
     },
     {
-      path:'/donateAnalysis',
-      component:DataAnalysis.DonateAnalysis,
+      path:'/companyAnalysis',
+      component:DataAnalysis.CompanyAnalysis,
     },
   ]
 },

@@ -14,7 +14,8 @@ import SchoolCompanyDetail from '@/pages/infomationManage/schoolMateCompany/deta
 
 import BasicAnalysis from '@/pages/dataAnalysis/basicAnalysis'
 import GraduateAnalysis from '@/pages/dataAnalysis/graduateAnalysis'
-import DonateAnalysis from '@/pages/dataAnalysis/donateAnalysis'
+// import DonateAnalysis from '@/pages/dataAnalysis/donateAnalysis'
+import CompanyAnalysis from '@/pages/dataAnalysis/companyAnalysis'
 
 import GraduateMedia from '@/pages/mediaCenter/graduateMedia'
 import OtherMedia from '@/pages/mediaCenter/otherMedia'
@@ -64,7 +65,8 @@ const Routes = {
   DataAnalysis: {
     BasicAnalysis, //基本信息分析统计
     GraduateAnalysis, //毕业去向分析统计
-    DonateAnalysis, //校友捐赠分析统计
+    // DonateAnalysis, //校友捐赠分析统计
+    CompanyAnalysis,  //校友企业分析
   },
   // 数字影像管理
   MediaCenter: {

@@ -32,7 +32,7 @@ const menuData = [
     url:null,
     children:[
       {
-        name:"基本数据分析",
+        name:"基本校友数据分析",
         url:"/dataAnalysis/basicAnalysis",
       },
       {
@@ -40,8 +40,8 @@ const menuData = [
         url:"/dataAnalysis/graduateAnalysis",
       },
       {
-        name:"校友捐赠分析",
-        url:"/dataAnalysis/donateAnalysis",
+        name:"校友企业分析",
+        url:"/dataAnalysis/companyAnalysis",
       },
     ]
   },
