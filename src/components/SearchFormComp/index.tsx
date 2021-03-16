@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Button, DatePicker } from 'antd';
+import { Form, Input, Select, Button, DatePicker, Cascader} from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
@@ -12,6 +12,7 @@ interface IProps {
   handleReset?: any;
   onRef?: any;
   formItems?: any;
+  isRightBtn?: boolean;   // 查询按钮是否右浮
 }
 
 interface IState {
@@ -31,6 +32,12 @@ class SearchFormComp extends Component<IProps, IState> {
 
   componentDidMount() {
     this.props.onRef(this)
+    // 设置初始值
+    let initialValues:any = {}
+    this.props.formItems.forEach((item: any) => {
+      initialValues[item.name] = item.initialValue
+    })
+    this.formRef.current?.setFieldsValue(initialValues);
   }
 
   handleQuery = () => {
@@ -39,8 +46,12 @@ class SearchFormComp extends Component<IProps, IState> {
   }
 
   handleReset = () => {
-    this.formRef.current?.resetFields();
+    this.clearForm()
     this.props.handleReset();
+  }
+
+  clearForm = () => {
+    this.formRef.current?.resetFields();
   }
 
   toggleShow = () => {
@@ -51,55 +62,134 @@ class SearchFormComp extends Component<IProps, IState> {
 
   render() {
     const {visibleAll} = this.state
-    const { formItems } = this.props
+    const { formItems, isRightBtn=true } = this.props
     return (
       <div className={styles.warp}>
         <Form layout="inline" ref={this.formRef}>
           {formItems.map((item: any, index: number) => {
             switch (item.el) {
+              // 输入框(主要参数: el, label, name, placeholder, style, isAllowClear, autoComplete, initialValue)
               case 'input':
                 return (
-                  <Item label={item.label} name={item.name} key={item.name} className={index > 5 ? (visibleAll ? styles.show : styles.hide) : ''}> 
-                    <Input placeholder={item.placeholder} style={item.style} allowClear={item.isAllowClear} autoComplete={item.isAutoComplete}/>
+                  <Item
+                    label={item.label} 
+                    name={item.name} 
+                    key={item.name} 
+                    className={index > 5 ? (visibleAll ? styles.show : styles.hide) : ''}
+                  > 
+                    <Input
+                      placeholder={item.placeholder}
+                      style={item.style}
+                      className='inputMarginB'
+                      allowClear={item.isAllowClear}
+                      autoComplete={item.autoComplete}
+                    />
                   </Item>
                 )
+              // 下拉选择(主要参数: el, label, name, placeholder, selectMode, selectOptions, selectField(label, value), style, isAllowClear, initialValue)
               case 'select':
                 return (
-                  <Item label={item.label} name={item.name} key={item.name} className={index > 5 ? (visibleAll ? styles.show : styles.hide) : ''}>
-                    <Select placeholder={item.placeholder} mode={item.selectMode} style={item.style} allowClear={item.isAllowClear}>
+                  <Item
+                    label={item.label}
+                    name={item.name}
+                    key={item.name}
+                    className={index > 5 ? (visibleAll ? styles.show : styles.hide) : ''}
+                  >
+                    <Select
+                      placeholder={item.placeholder}
+                      mode={item.selectMode} 
+                      style={item.style}
+                      className='inputMarginB'
+                      allowClear={item.isAllowClear}
+                    >
                       {
                         item.selectOptions.map((sel: any) => <Option value={sel[item.selectField['value']]} key={sel[item.selectField['value']]}>{sel[item.selectField['label']]}</Option>)
                       }
                     </Select>
                   </Item>
                 )
+              // 级联选择(主要参数: el, label, name, placeholder, cascaderOptions, isChangeOnSelect, style, isAllowClear, initialValue)
+              case 'cascader':
+                return (
+                  <Item
+                    label={item.label}
+                    name={item.name}
+                    key={item.name}
+                    className={index > 5 ? (visibleAll ? styles.show : styles.hide) : ''}
+                  >
+                    <Cascader
+                      placeholder={item.placeholder}
+                      options={item.cascaderOptions}
+                      changeOnSelect={item.isChangeOnSelect}
+                      style={item.style}
+                      className='inputMarginB'
+                      allowClear={item.isAllowClear}
+                    />
+                  </Item>
+                )
+              // 时间范围选择(主要参数: el, label, name, placeholder, pickerType, style, initialValue)
               case 'rangePicker':
                 return (
-                  <Item label={item.label} name={item.name} key={item.name} className={index > 5 ? (visibleAll ? styles.show : styles.hide) : ''}>
-                    <RangePicker />
+                  <Item
+                    label={item.label}
+                    name={item.name}
+                    key={item.name}
+                    className={index > 5 ? (visibleAll ? styles.show : styles.hide) : ''}
+                  >
+                    <RangePicker
+                      placeholder={item.placeholder}
+                      picker={item.pickerType}
+                      className='inputMarginB'
+                    />
+                  </Item>
+                )
+              // 日期选择(主要参数: el, label, name, placeholder, pickerType, format, style, initialValue)
+              case 'datePicker':
+                return (
+                  <Item
+                    label={item.label}
+                    name={item.name}
+                    key={item.name}
+                    className={index > 5 ? (visibleAll ? styles.show : styles.hide) : ''}
+                  >
+                    <DatePicker
+                      placeholder={item.placeholder}
+                      picker={item.pickerType}
+                      format={item.format}
+                      style={item.style}
+                      className='inputMarginB'
+                    />
                   </Item>
                 )
               default:
                 return null
             }
           })}
+          {!isRightBtn && (
+            <Item>
+              <Button type="primary" onClick={this.handleQuery} style={{marginRight: 10, marginBottom: 18}}>查询</Button>
+              <Button onClick={this.handleReset}>重置</Button>
+            </Item>
+          )}
         </Form>
-        <div className={styles.btnWrap}>
-          <Button type="primary" onClick={this.handleQuery} style={{marginRight: 10, marginBottom: 18}}>查询</Button>
-          <Button onClick={this.handleReset}>重置</Button>
-          {formItems.length > 6 && 
-            <Button type="link" onClick={this.toggleShow}>
-              {visibleAll
-                ? <span>
-                    收起<UpOutlined />
-                  </span>
-                : <span>
-                    展开<DownOutlined />
-                  </span>
-              }
-            </Button>
-          }
-        </div>
+        {isRightBtn && (
+          <div className={styles.btnWrap}>
+            <Button type="primary" onClick={this.handleQuery} style={{marginRight: 10, marginBottom: 18}}>查询</Button>
+            <Button onClick={this.handleReset}>重置</Button>
+            {formItems.length > 6 && 
+              <Button type="link" onClick={this.toggleShow}>
+                {visibleAll
+                  ? <span>
+                      收起<UpOutlined />
+                    </span>
+                  : <span>
+                      展开<DownOutlined />
+                    </span>
+                }
+              </Button>
+            }
+          </div>
+        )}
       </div>
     )
   }

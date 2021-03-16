@@ -403,6 +403,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       {
         title: '操作',
         key: 'action',
+        fixed: 'right',
         render:(text:any, record:any, index:number)=>{
           return <span>
           <Button type="link" onClick={()=>{this.props.history.push(`/infoManage/schoolMateInfoDetail?id=${record.id}`)}}>查看详情</Button>
@@ -445,6 +446,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       pagination,
       loading,
       rowSelection,
+      scroll: { x: 1000 },
     }
 
     let deleteModalProps={

@@ -1,13 +1,16 @@
 import React , {Component} from 'react';
+// import ReactEcharts from 'echarts-for-react'
 import SearchPanel from '@/components/SearchFormComp' 
+import PieChart from '@/components/ChartComp/PieChart'
 import { FormInstance } from 'antd/lib/form'
-import { DatePicker, Form, Table, Button,Modal } from 'antd'
+import { DatePicker, Form, Table, Button,Modal, Row, Col } from 'antd'
 import styles from './index.module.less';
 interface IProps {
 
 }
 interface IState {
   loading: boolean,
+  loadingGenderPie:boolean,
   
 }
 class BasicAnalysis extends Component<IProps, IState>{
@@ -18,6 +21,7 @@ class BasicAnalysis extends Component<IProps, IState>{
   }
   state:IState = {
     loading: false,
+    loadingGenderPie:false,  //TODO
   }
   componentDidMount(){
     this.fetchData()
@@ -36,7 +40,7 @@ class BasicAnalysis extends Component<IProps, IState>{
   }
 
   render(){
-    const {loading}=this.state
+    const {loading,loadingGenderPie}=this.state
     let searchProps={
       handleReset:this.handleReset,
       handleQuery:this.handleQuery,
@@ -47,7 +51,6 @@ class BasicAnalysis extends Component<IProps, IState>{
           name:'yearOfGraduation',
           label:"毕业年份",
           placeholder:"请选择毕业年份",
-          // selectMode: 'multiple',
           style:{width: 230},
           selectOptions:[
             { label: '2021' ,value: 1 },
@@ -60,14 +63,72 @@ class BasicAnalysis extends Component<IProps, IState>{
           }
         },
       ]
-  }
+    }
+
+    const genderPieProps = {
+      chartName:'男女比例饼状图',
+      // showCenterText:true,
+      chartData: [
+        {value:'246',name:'男'},
+        {value:'301',name:'女'}
+      ],
+      chartColor:['#52a2e5','#ef81a7'],
+
+    }
+
     return(
       <div className={styles.pageCenter}>
           <div className={styles.searchPanel}>
               <SearchPanel {...searchProps}/>
           </div>
           <div className={styles.searchTable}>
-             
+             <Row style={{marginBottom:'30px'}} >
+               <Col className={styles.chartsDiv} span={10} offset={1}>
+                {loadingGenderPie
+                  ? <div className='loadingText'>图表加载中...</div>
+                  : 
+                  <div>
+                    <PieChart {...genderPieProps}/>
+                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                  </div>
+                }
+               </Col>
+               <Col className={styles.chartsDiv} span={10} offset={1}>
+                {loadingGenderPie
+                  ? <div className='loadingText'>图表加载中...</div>
+                  : 
+                  <div>
+                    <PieChart {...genderPieProps}/>
+                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                  </div>
+                }
+               </Col>
+             </Row>
+
+             <Row style={{marginBottom:'30px'}}>
+               <Col className={styles.chartsDiv} span={10} offset={1}>
+                {loadingGenderPie
+                  ? <div className='loadingText'>图表加载中...</div>
+                  : 
+                  <div>
+                    <PieChart {...genderPieProps}/>
+                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                  </div>
+                }
+               </Col>
+               <Col className={styles.chartsDiv} span={10} offset={1}>
+                {loadingGenderPie
+                  ? <div className='loadingText'>图表加载中...</div>
+                  : 
+                  <div>
+                    <PieChart {...genderPieProps}/>
+                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                  </div>
+                }
+               </Col>
+             </Row>
+
+
           </div>
       </div>
     )
