@@ -2,6 +2,7 @@ import React , {Component} from 'react';
 // import ReactEcharts from 'echarts-for-react'
 import SearchPanel from '@/components/SearchFormComp' 
 import PieChart from '@/components/ChartComp/PieChart'
+import BarChart from '@/components/ChartComp/BarChart'
 import { FormInstance } from 'antd/lib/form'
 import { DatePicker, Form, Table, Button,Modal, Row, Col } from 'antd'
 import styles from './index.module.less';
@@ -69,11 +70,25 @@ class BasicAnalysis extends Component<IProps, IState>{
       chartName:'男女比例饼状图',
       // showCenterText:true,
       chartData: [
-        {value:'246',name:'男'},
-        {value:'301',name:'女'}
+        {value:'446',name:'男'},
+        {value:'554',name:'女'}
       ],
-      chartColor:['#52a2e5','#ef81a7'],
+      // chartColor:['#52a2e5','#ef81a7'],
+    }
+    const educationPieProps = {
+      chartName:'毕业学历比例饼状图',
+      // showCenterText:true,
+      chartData: [
+        {value:'546',name:'本科'},
+        {value:'351',name:'硕士'},
+        {value:'101',name:'其他'},
+      ],
+    }
 
+    const majorNumBarProps = {
+      chartName:'各专业人数柱状图',
+      chartData:[{data: [120, 80, 150, 80, 50, ]}],
+      chartXAxis:  ['电子信息工程', '通信工程', '计算机科学与技术', '数字媒体技术', '智能科学与技术'],
     }
 
     return(
@@ -98,7 +113,7 @@ class BasicAnalysis extends Component<IProps, IState>{
                   ? <div className='loadingText'>图表加载中...</div>
                   : 
                   <div>
-                    <PieChart {...genderPieProps}/>
+                    <PieChart {...educationPieProps}/>
                     <Button type="default" className={styles.saveBtn} >保存</Button>
                   </div>
                 }
@@ -106,22 +121,12 @@ class BasicAnalysis extends Component<IProps, IState>{
              </Row>
 
              <Row style={{marginBottom:'30px'}}>
-               <Col className={styles.chartsDiv} span={10} offset={1}>
+               <Col className={styles.chartsDiv} span={21} offset={1}>
                 {loadingGenderPie
                   ? <div className='loadingText'>图表加载中...</div>
                   : 
                   <div>
-                    <PieChart {...genderPieProps}/>
-                    <Button type="default" className={styles.saveBtn} >保存</Button>
-                  </div>
-                }
-               </Col>
-               <Col className={styles.chartsDiv} span={10} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
-                  : 
-                  <div>
-                    <PieChart {...genderPieProps}/>
+                    <BarChart {...majorNumBarProps}/>
                     <Button type="default" className={styles.saveBtn} >保存</Button>
                   </div>
                 }

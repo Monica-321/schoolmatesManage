@@ -4,6 +4,20 @@ const menuData = [
     url:'/dashboard/index',
   },
   {
+    name:'系统设置',
+    url:null,
+    children:[
+      {
+        name:"账号管理",
+        url:"/systemSettings/accountManage",
+      },
+      {
+        name:"个人设置",
+        url:"/systemSettings/personalSetting",
+      },
+    ]
+  },
+  {
     name:'信息管理',
     url:null,
     children:[

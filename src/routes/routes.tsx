@@ -7,6 +7,9 @@ import Layout from '@/components/Layout/basicLayoutSider';
 
 import IndexPage from '@/pages/dashboard'
 
+import AccountManage from '@/pages/systemSetting/accountManage';
+import PersonalSetting from '@/pages/systemSetting/personalSetting';
+
 import SchoolMateInfoManage from '@/pages/infomationManage/schoolMateInfo';
 import SchoolMateInfoDetail from '@/pages/infomationManage/schoolMateInfo/detail';
 import SchoolCompanyManage from '@/pages/infomationManage/schoolMateCompany';
@@ -42,13 +45,11 @@ const Routes = {
 	IndexPage,
 
   },
-  // 系统设置？？分超级管理员、普通管理员？
-  // SystemSetting: {
-    // RoleManage,      // 角色管理？
-    // AccountManage,   // 账号管理
-    // PersonalSetting, // 个人设置
-    // SystemConfig     // 系统配置？
-  // },
+  //系统设置？？分超级管理员、普通管理员？
+  SystemSetting: {
+    AccountManage,   // 账号管理
+    PersonalSetting, // 个人设置
+  },
   // 信息管理
   InfomationManage: {
     SchoolMateInfoManage,     // 校友信息管理

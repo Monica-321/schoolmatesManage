@@ -5,6 +5,7 @@ const {
   // Register,
   Layout,
   DashBoard,
+  SystemSetting,
   InfomationManage,
   Log,
   DataAnalysis,
@@ -41,6 +42,20 @@ const routes = [
       },
     ],
     
+  },
+  {
+    path:"/systemSettings",
+    component:Layout.Master,
+    children:[
+      {
+        path:'/accountManage',
+        component:SystemSetting.AccountManage,
+      },
+      {
+        path:'/personalSetting',
+        component:SystemSetting.PersonalSetting,
+      },
+    ]
   },
   //InfomationManage
   {

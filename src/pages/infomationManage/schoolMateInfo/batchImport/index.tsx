@@ -53,16 +53,12 @@ class BatchImportModal extends Component<IProps,IState> {
     }
     const tableColumns=[
         {
-          title: '员工姓名',
+          title: '校友姓名',
           dataIndex: 'name',
         },
         {
-          title: '用户名',
-          dataIndex: 'username',
-        },
-        {
-          title: '手机号',
-          dataIndex: 'phone',
+          title: '性别',
+          dataIndex: 'gender',
         },
     ]
 
@@ -138,7 +134,7 @@ class BatchImportModal extends Component<IProps,IState> {
                 <InboxOutlined />
               </p>
               <p className="ant-upload-text">请点击此处或拖拽文件以上传</p>
-              <p className="ant-upload-hint">请上传excel文件，且注意表头</p>
+              <p className="ant-upload-hint">请上传excel文件</p>
             </Dragger>
             <div style={{display:'flex',justifyContent:'center',marginTop:'15px'}}>
               <Button type="primary" onClick={this.goNext}>下一步</Button>
