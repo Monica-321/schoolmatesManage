@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Button, DatePicker, Cascader} from 'antd';
+import { Form, Input, Select, Button, DatePicker, Cascader, Col} from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import styles from './index.module.less';
@@ -63,14 +63,16 @@ class SearchFormComp extends Component<IProps, IState> {
   render() {
     const {visibleAll} = this.state
     const { formItems, isRightBtn=true } = this.props
+    const layout={labelCol:{span:8},wrapperCol:{span:15}}
     return (
       <div className={styles.warp}>
-        <Form layout="inline" ref={this.formRef}>
+        <Form layout="inline" {...layout} ref={this.formRef}>
           {formItems.map((item: any, index: number) => {
             switch (item.el) {
               // 输入框(主要参数: el, label, name, placeholder, style, isAllowClear, autoComplete, initialValue)
               case 'input':
                 return (
+                  <Col span={6}>
                   <Item
                     label={item.label} 
                     name={item.name} 
@@ -85,10 +87,12 @@ class SearchFormComp extends Component<IProps, IState> {
                       autoComplete={item.autoComplete}
                     />
                   </Item>
+                  </Col>
                 )
               // 下拉选择(主要参数: el, label, name, placeholder, selectMode, selectOptions, selectField(label, value), style, isAllowClear, initialValue)
               case 'select':
                 return (
+                  <Col span={6}>
                   <Item
                     label={item.label}
                     name={item.name}
@@ -107,10 +111,12 @@ class SearchFormComp extends Component<IProps, IState> {
                       }
                     </Select>
                   </Item>
+                  </Col>
                 )
               // 级联选择(主要参数: el, label, name, placeholder, cascaderOptions, isChangeOnSelect, style, isAllowClear, initialValue)
               case 'cascader':
                 return (
+                  <Col span={6}>
                   <Item
                     label={item.label}
                     name={item.name}
@@ -126,10 +132,12 @@ class SearchFormComp extends Component<IProps, IState> {
                       allowClear={item.isAllowClear}
                     />
                   </Item>
+                  </Col>
                 )
               // 时间范围选择(主要参数: el, label, name, placeholder, pickerType, style, initialValue)
               case 'rangePicker':
                 return (
+                  <Col span={6}>
                   <Item
                     label={item.label}
                     name={item.name}
@@ -142,10 +150,12 @@ class SearchFormComp extends Component<IProps, IState> {
                       className='inputMarginB'
                     />
                   </Item>
+                  </Col>
                 )
               // 日期选择(主要参数: el, label, name, placeholder, pickerType, format, style, initialValue)
               case 'datePicker':
                 return (
+                  <Col span={6}>
                   <Item
                     label={item.label}
                     name={item.name}
@@ -160,16 +170,19 @@ class SearchFormComp extends Component<IProps, IState> {
                       className='inputMarginB'
                     />
                   </Item>
+                  </Col>
                 )
               default:
                 return null
             }
           })}
           {!isRightBtn && (
-            <Item>
-              <Button type="primary" onClick={this.handleQuery} style={{marginRight: 10, marginBottom: 18}}>查询</Button>
-              <Button onClick={this.handleReset}>重置</Button>
-            </Item>
+            <Col span={4}>
+              <Item>
+                <Button type="primary" onClick={this.handleQuery} style={{marginRight: 10, marginBottom: 18}}>查询</Button>
+                <Button onClick={this.handleReset}>重置</Button>
+              </Item>
+            </Col>
           )}
         </Form>
         {isRightBtn && (

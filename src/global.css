@@ -20,9 +20,6 @@ em, i {
   font-style: normal;
 }
 
-.ant-btn .ant-btn-primary{
-    color: #fff;
-    background: #3ac1c3 !important;
-    border-color: #3ac1c3 !important;
-} 
-/* 改不了 */
+.inputMarginB {
+  margin-bottom: 12px;
+}

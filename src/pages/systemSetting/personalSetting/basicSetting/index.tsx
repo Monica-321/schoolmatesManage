@@ -74,7 +74,7 @@ export default class BasicSetting extends React.Component<IProps> {
                         <span>{accountInfo.name}</span>
                     </Form.Item>
                     <Form.Item label='用户名'><Input defaultValue={accountInfo.username} placeholder="请输入用户名"/></Form.Item>
-                    {/* <Form.Item label='手机号'   name="phone" rules={this.phoneRule} validateTrigger="onBlur"><Input placeholder="请输入手机号信息"/></Form.Item> */}
+                    <Form.Item label='手机号'   name="phone" rules={this.phoneRule} validateTrigger="onBlur"><Input placeholder="请输入手机号信息"/></Form.Item>
                     {/* <Form.Item label='邮箱地址' name="email" rules={this.emailRule} validateTrigger="onBlur"><Input placeholder="请输入邮箱地址信息"/></Form.Item> */}
                     <Form.Item label='账户类型'><span>{accountInfo.roleName}</span></Form.Item>
                     <div className="ant-row ant-form-item">

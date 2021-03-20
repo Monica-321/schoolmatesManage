@@ -3,6 +3,7 @@ import React , {Component} from 'react';
 import SearchPanel from '@/components/SearchFormComp' 
 import PieChart from '@/components/ChartComp/PieChart'
 import BarChart from '@/components/ChartComp/BarChart'
+import ChinaMap from '@/components/ChartComp/ChinaMap'
 import { FormInstance } from 'antd/lib/form'
 import { DatePicker, Form, Table, Button,Modal, Row, Col } from 'antd'
 import styles from './index.module.less';
@@ -91,6 +92,21 @@ class BasicAnalysis extends Component<IProps, IState>{
       chartXAxis:  ['电子信息工程', '通信工程', '计算机科学与技术', '数字媒体技术', '智能科学与技术'],
     }
 
+    const politicalBarProps={
+      chartName:'政治面貌柱状图',
+      chartData:[{data: [80, 10, 115, 12, 13 , 11 , 14, 15, 21 , 22 , 23, 65,234 ]}],
+      chartXAxis:  ['中共党员', '中共预备党员', '共青团员', '民革党员', '民盟盟员','民建会员','民进会员','农工党党员','致公党党员','九三学社社员','台盟盟员','无党派人士','群众'],
+    }
+
+    const chinaMap1Props={
+      chartName:'籍贯统计地图',
+
+    }
+    const chinaMap2Props={
+      chartName:'生源地统计地图',
+      
+    }
+
     return(
       <div className={styles.pageCenter}>
           <div className={styles.searchPanel}>
@@ -133,6 +149,46 @@ class BasicAnalysis extends Component<IProps, IState>{
                </Col>
              </Row>
 
+             <Row style={{marginBottom:'30px'}}>
+               <Col className={styles.chartsDiv} span={21} offset={1}>
+                {loadingGenderPie
+                  ? <div className='loadingText'>图表加载中...</div>
+                  : 
+                  <div>
+                    <BarChart {...politicalBarProps}/>
+                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                  </div>
+                }
+               </Col>
+             </Row>
+
+             <Row style={{marginBottom:'30px'}}>
+               <Col className={styles.chartsDiv} span={21} offset={1}>
+                {loadingGenderPie
+                  ? <div className='loadingText'>图表加载中...</div>
+                  : 
+                  <div>
+                    <ChinaMap {...chinaMap1Props} />
+                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                  </div>
+                }
+               </Col>
+             </Row>
+
+             <Row style={{marginBottom:'30px'}}>
+               <Col className={styles.chartsDiv} span={21} offset={1}>
+                {loadingGenderPie
+                  ? <div className='loadingText'>图表加载中...</div>
+                  : 
+                  <div>
+                    <ChinaMap {...chinaMap2Props} />
+                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                  </div>
+                }
+               </Col>
+             </Row>
+
+             
 
           </div>
       </div>
