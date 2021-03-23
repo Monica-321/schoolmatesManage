@@ -3,18 +3,16 @@ import api from '@/api'
 
 
 const JSEncrypt = require('node-jsencrypt');
-const pubkey = `-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDWWIEMSz1t8sAe5djqgonx8X5S
-77tl6Vf41o3apyItbYe+v9qQI4H2MRvj2pcZ4+shKeL0PadQ2v1SgQdVkuLXfjdg
-ok05zJt3EuSpgzGaOAGhHX4nV1rwxFlHPNsH9ZktvZGpUvvLTM+Gj2dvDEw+gP84
-kV1oPKFg02jv4ZWRqQIDAQAB
------END PUBLIC KEY-----`;
+// const pubkey = `-----BEGIN PUBLIC KEY-----
+// MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDWWIEMSz1t8sAe5djqgonx8X5S
+// 77tl6Vf41o3apyItbYe+v9qQI4H2MRvj2pcZ4+shKeL0PadQ2v1SgQdVkuLXfjdg
+// ok05zJt3EuSpgzGaOAGhHX4nV1rwxFlHPNsH9ZktvZGpUvvLTM+Gj2dvDEw+gP84
+// kV1oPKFg02jv4ZWRqQIDAQAB
+// -----END PUBLIC KEY-----`;
 
 const {
   loginApi,
   logoutApi,
-  registerApi,
-  modifyInfoApi,
 } = api
 
 interface content{
@@ -27,42 +25,41 @@ class UserStore{
   constructor(){
     makeObservable(this)
   }
-
+  @observable userData:any={}
+  @observable userName: string = localStorage.getItem('userName')||''
+  // @action
+  // handelLogin= async(params:any) => {
+  //   // var encrypt = new JSEncrypt();
+  //   // encrypt.setPublicKey(pubkey);
+  //   // var encrypted = encrypt.encrypt(JSON.stringify(params));
+  //   // console.log("登录时加密",encrypted);
+  //   // const {success ,  msg , result } =await loginApi({content:encrypted})
+  //   // return {success:success,msg:msg,result:result}
+  //   return {success:true}
+  // }
   @action
   handelLogin= async(params:any) => {
-    // var encrypt = new JSEncrypt();
-    // encrypt.setPublicKey(pubkey);
-    // var encrypted = encrypt.encrypt(JSON.stringify(params));
-    // console.log("登录时加密",encrypted);
-    // const {success ,  msg , result } =await loginApi({content:encrypted})
-    // return {success:success,msg:msg,result:result}
-    return {success:true}
-  }
-
-  @action
-  handelRegister= async(params:any) => {
-    // var encrypt = new JSEncrypt();
-    // encrypt.setPublicKey(pubkey);
-    // var encrypted = encrypt.encrypt(JSON.stringify(params));
-    // console.log("注册时加密",encrypted);
-    // const {success ,  msg } =await registerApi({content:encrypted})
-    // return {success:success,msg:msg}
-    return {success:true}
-  }
-
-  //修改个人信息
-  @action
-  modifyUserInfo= async(params:any) => {
-    // const {success ,  msg , result} =await modifyInfoApi(params)
-    // return {success:success,msg:msg,result:result}
-    return {success:true}
+    let {status,success ,  msg , data} = await loginApi()
+    if (status === 10000) {
+      const {phone,admin, username, name, id,status} = data
+      runInAction(()=>{
+        this.userData=data
+        localStorage.setItem("userName", username);
+        this.userName = username
+        console.log('用户数据：',this.userData,this.userName)
+      })
+    } 
+    return {success,msg};
   }
 
   @action
   handelLogout=async()=>{
-    // const {success ,  msg } =await logoutApi()
-    // return {success:success,msg:msg}
-    return {success:true}
+    const {status, success ,  msg } =await logoutApi()
+    if (status === 10000) {
+      localStorage.clear()
+      sessionStorage.clear()
+    } 
+    return {success:success,msg:msg}
   }
 }
 

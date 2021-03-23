@@ -12,15 +12,15 @@ interface IProps {
 }
 
 const TopBar: FC<IProps> = props => {
-  const {userStore:{handelLogout}}=props
-  const userInfo=JSON.parse(localStorage.getItem("userInfo")|| "") 
+  const {userStore:{userName,handelLogout}}=props
+  // const userInfo=JSON.parse(localStorage.getItem("userInfo")|| "") 
+  // const userName=JSON.parse(localStorage.getItem("userName")|| "") 
   const history = useHistory();
   async function logout(){
     const response=await handelLogout()
     if(response.success){
       message.success(response.msg)
       history.push('../login')
-      localStorage.clear()
     }else{
       message.error(response.msg)
     }
@@ -45,7 +45,7 @@ const TopBar: FC<IProps> = props => {
         <div className={styles.user}>
           <Dropdown overlay={menu} placement="bottomCenter">
               <Button type="link" style={{fontSize:'16px',fontWeight:600}}>
-                  {userInfo.username} <DownOutlined />
+                  {userName} <DownOutlined />
               </Button>
           </Dropdown>
         </div>

@@ -36,17 +36,17 @@ class Login extends Component<IProps,IState>{
 
     if(response.success){
       // localStorage.setItem("userInfo",JSON.stringify(response.result))
-      let result={
-        username:'qy',
+      // let result={
+      //   username:'qy',
 
-      }
-      localStorage.setItem("userInfo",JSON.stringify(result))
+      // }
+      // localStorage.setItem("userInfo",JSON.stringify(result))
       // message.success(response.msg)
       message.success("登录成功")
       this.props.history.push('/dashboard/index')
       // this.props.history.push(menuData[0].children[0].path)
     }else{
-      // message.error(response.msg)
+      message.error(response.msg)
     }   
   }
 

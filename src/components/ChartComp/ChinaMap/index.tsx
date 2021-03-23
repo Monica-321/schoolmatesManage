@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import ChartComp from '@/components/ChartComp'
 import echarts from 'echarts'
-import china from '@/assets/json/china.json' 
-// import chinaJson from 'echarts/map/json/china.json';
-// import echarts from 'echarts';
-// import 'echarts/map/js/china.js';
+import chinaJson from 'echarts/map/json/china.json';
 
 interface IProps {
   chartName?:string;
@@ -13,10 +10,10 @@ interface IProps {
 } 
 class ChinaMap extends Component<IProps> {
   componentDidMount() {
-    // echarts.registerMap('china', china);
+    // echarts.registerMap('china', chinaJson);
   }
   render() {
-    const {chartName,mapData, showCongestionData} = this.props
+    const {chartName,mapData, } = this.props
     let chartOption:any = {
       title:{
         text: chartName,
