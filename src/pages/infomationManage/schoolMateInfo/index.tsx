@@ -30,8 +30,11 @@ interface IState {
   batchImportVisible:boolean,
 }
 interface IProps {
+  schoolMateStore?:any,
   history?: any,
 }
+@inject('schoolMateStore')
+@observer
 class SchoolMateInfoManage extends Component<IProps, IState>{
   searchRef: React.RefObject<FormInstance>;
   constructor(props:IProps){
@@ -58,25 +61,38 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   }
 
   componentDidMount() {
+    //TODO 有些提前要查询的
     this.getTableData()
   }
 
   //获取表格数据
   getTableData=async()=>{
+    const { schoolMateStore: { fetchTableData } } = this.props
+    const {pageNum, pageSize, searchVal} = this.state
+    let params:any = {
+      pageNum,
+      pageSize,
+      ...searchVal
+    }
+    this.setState({loading: true})
+    //TODO 传参
+    await fetchTableData({})
+    this.setState({loading: false})
     
   }
   
   //重置
   handleReset=()=>{
-    this.setState({pageNum: 1,pageSize: 10,searchVal:{},selectedRowKeys: [],},()=>{
+    this.setState({pageNum: 1,searchVal:{},selectedRowKeys: [],},()=>{
       this.getTableData()
     })
   }
 
   //查询
   handleQuery=(params:any)=>{
-    console.log("表单的请求参数为：",params)
-    this.setState({pageNum: 1,pageSize: 10,searchVal:params,selectedRowKeys: [],},()=>{
+    //处理一下某些参数
+    // console.log("表单的请求参数为：",params)
+    this.setState({pageNum: 1,searchVal:params,selectedRowKeys: [],},()=>{
       this.getTableData()
     })
   }
@@ -97,16 +113,17 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   }
 
   //删除
-  goDelete=()=>{
-    // const { warningSetStore: {goTurnOnOrOff} } = this.props
+  goDelete=async()=>{
+    const { schoolMateStore: {goschoolMatesDelete} } = this.props
     const { deleteRecord }=this.state
-    // let params={ id : closeRecord.id ,status:0}
-    // const res=await goTurnOnOrOff(params)
-    // if(res.success){
+    //注意传参 TODO
+    let params={}
+    const res=await goschoolMatesDelete(params)
+    if(res.success){
       message.success(`"${deleteRecord.name}"已删除！`)
       this.getTableData()
       this.setState({deleteModalVisible:false})
-    // }
+    }
   }
 
   //批量导出
@@ -124,7 +141,10 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   }
 
   render() {
-    const {pageNum,pageSize,loading,total,checkedValue, selectedRowKeys , deleteModalVisible , deleteRecord ,
+    const {schoolMateStore}=this.props
+    const {schoolMatesTableData}=schoolMateStore
+    const{total,list}=schoolMatesTableData
+    const {pageNum,pageSize,loading,checkedValue, selectedRowKeys , deleteModalVisible , deleteRecord ,
     editModalVisible, editRecord , editFlag , batchExportVisible , batchImportVisible }=this.state
     let searchProps={
       handleReset:this.handleReset,
@@ -310,23 +330,23 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       handleCheckChange:this.handleCheckChange,
     }
 
-    let dataSource=[{
-      id:'1',
-      name:'qy',
-      gender:0,
-      nationality:'汉族', //映射
-      politicalStatus:'共青团员', //映射
-      sourcePlace:'江苏省无锡市', //映射，选择省市
-      faculty:'信息学院',
-      major:'数字媒体技术',
-      majorClass:'2',
-      yearOfEnrollment:'2017',
-      yearOfGraduation:'2021',
-      homeTown:'江苏省溧阳市', //映射，选择省市
-      contactPhone:'11',
-      contactEmail:'222',
-      workArea:'信息技术行业',  //映射
-    }]
+    // let dataSource=[{
+    //   id:'1',
+    //   name:'qy',
+    //   gender:0,
+    //   nationality:'汉族', //映射
+    //   politicalStatus:'共青团员', //映射
+    //   sourcePlace:'江苏省无锡市', //映射，选择省市
+    //   faculty:'信息学院',
+    //   major:'数字媒体技术',
+    //   majorClass:'2',
+    //   yearOfEnrollment:'2017',
+    //   yearOfGraduation:'2021',
+    //   homeTown:'江苏省溧阳市', //映射，选择省市
+    //   contactPhone:'11',
+    //   contactEmail:'222',
+    //   workArea:'信息技术行业',  //映射
+    // }]
 
      //表格部分,要映射
      const columns = [
@@ -443,7 +463,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       rowKey:'id',
       columns,
       // dataSource:[],
-      dataSource,
+      dataSource:list,
       pagination,
       loading,
       rowSelection,
@@ -466,13 +486,13 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     let editModalProps={
       editFlag,
       editRecord,
-      // warningContactStore ,
+      schoolMateStore,
       hideEdit:()=>{
         this.setState({editRecord:{},editModalVisible:false},()=>{
           this.getTableData()
         })
       },
-      editModalVisible,
+      // editModalVisible,
     }
 
     let exportModalProps = {
@@ -509,7 +529,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           <Table {...listProps}/>
         </div>
         <InfoModal {...deleteModalProps}></InfoModal>
-        <AddOrEdit {...editModalProps} />
+        {editModalVisible && <AddOrEdit {...editModalProps} /> }
         <BatchExportModal {...exportModalProps}/>
         <BatchImportModal {...importModalProps}/>
       </div>

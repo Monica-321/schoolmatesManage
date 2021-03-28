@@ -5,16 +5,21 @@ import { observer, inject } from 'mobx-react'
 const { Item } = Descriptions
 const { Option } = Select
 interface IState {
-  loading: boolean
+  loading: boolean,
+  detailID:String,
 }
 interface IProps {
+  schoolCompanyStore?:any,
   history?: any,
   location?: any;
 }
+@inject('schoolCompanyStore')
+@observer
 class SchoolCompanyDetail extends Component<IProps, IState>{
 
   state: IState = {
-    loading: false
+    loading: false,
+    detailID:'',
   }
 
   componentDidMount() {
@@ -22,10 +27,21 @@ class SchoolCompanyDetail extends Component<IProps, IState>{
      //从url获取id
      const id = search && search.split('=')[1]
      console.log('id为',id)
+     this.setState({detailID:id})
      //请求该条数据信息
- 
-   }
- 
+     this.getDetail()
+  }
+   
+   getDetail=async()=>{
+    const { schoolCompanyStore: { fetchDetail } } = this.props
+    //传id获取对应详情
+    let params:any = {id:this.state.detailID}
+    // this.setState({loading: true})
+    //TODO 传参
+    await fetchDetail({})
+    // this.setState({loading: false})
+  }
+
 
   render() {
     const fakeData={

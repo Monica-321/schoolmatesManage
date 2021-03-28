@@ -26,8 +26,11 @@ interface IState {
   // batchImportVisible:boolean,
 }
 interface IProps {
+  schoolCompanyStore?:any,
   history?: any,
 }
+@inject('schoolCompanyStore')
+@observer
 class SchoolCompanyManage extends Component<IProps, IState>{
   searchRef: React.RefObject<FormInstance>;
   constructor(props:IProps){
@@ -55,7 +58,17 @@ class SchoolCompanyManage extends Component<IProps, IState>{
 
   //获取表格数据
   getTableData=async()=>{
-    
+    const { schoolCompanyStore: { fetchTableData } } = this.props
+    const {pageNum, pageSize, searchVal} = this.state
+    let params:any = {
+      pageNum,
+      pageSize,
+      ...searchVal
+    }
+    this.setState({loading: true})
+    //TODO 传参
+    await fetchTableData({})
+    this.setState({loading: false})
   }
   refreshData = () => {
     // @ts-ignore
@@ -81,11 +94,17 @@ class SchoolCompanyManage extends Component<IProps, IState>{
   }
 
   //删除
-  goDelete=()=>{
+  goDelete=async()=>{
+    const { schoolCompanyStore: {goschoolCompaniesDelete} } = this.props
     const { deleteRecord }=this.state
-      message.success(`"${deleteRecord.name}"已删除！`)
+    //注意传参 TODO
+    let params={}
+    const res=await goschoolCompaniesDelete(params)
+    if(res.success){
+      message.success(`"${deleteRecord.companyName}"已删除！`)
       this.getTableData()
       this.setState({deleteModalVisible:false})
+    }
   }
   //批量导出
   batchExport=()=>{
@@ -97,7 +116,10 @@ class SchoolCompanyManage extends Component<IProps, IState>{
   }
 
   render() {
-    const {pageNum,pageSize,loading,total,selectedRowKeys , deleteModalVisible , deleteRecord ,
+    const {schoolCompanyStore}=this.props
+    const {schoolCompaniesTableData}=schoolCompanyStore
+    const{total,list}=schoolCompaniesTableData
+    const {pageNum,pageSize,loading,selectedRowKeys , deleteModalVisible , deleteRecord ,
       editModalVisible, editRecord , editFlag , batchExportVisible  }=this.state
     let searchProps={
       handleReset:this.handleReset,
@@ -142,14 +164,14 @@ class SchoolCompanyManage extends Component<IProps, IState>{
       ]
     }
 
-    //fake
-    let dataSource=[{
-      companyId:'1',
-      companyName:'qy企业',
-      companyType:2,
-      companyCity:'江苏省溧阳市',
-      belongArea:'行业',
-    }]
+    // //fake
+    // let dataSource=[{
+    //   companyId:'1',
+    //   companyName:'qy企业',
+    //   companyType:2,
+    //   companyCity:'江苏省溧阳市',
+    //   belongArea:'行业',
+    // }]
 
      //表格部分
      const columns = [
@@ -223,7 +245,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
       rowKey:'companyId',
       columns,
       // dataSource:[],
-      dataSource,
+      dataSource:list,
       pagination,
       loading,
       rowSelection,
@@ -245,7 +267,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
     let editModalProps={
       editFlag,
       editRecord,
-      // warningContactStore ,
+      schoolCompanyStore ,
       hideEdit:()=>{
         this.setState({editRecord:{},editModalVisible:false},()=>{
           this.getTableData()

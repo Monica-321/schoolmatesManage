@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Button, Row, Col,Select } from 'antd';
+import { Modal, Form, Input, Button, Row, Col,Select , message } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { znEnReg , phoneReg , emailReg } from '@/utils/reg'
 const { Item } = Form
 const {Option}=Select
 interface IProps {
-    // warningContactStore?: any;
-    editFlag:number
+    schoolMateStore?:any,
+    editFlag:number,    //0添加1编辑
     editRecord?:any,
-    editModalVisible:boolean,
+    // editModalVisible:boolean,
     hideEdit:any,
 }
 interface IState {
-
+    
 }
 
 class AddOrEdit extends Component<IProps,IState> {
@@ -22,9 +22,31 @@ class AddOrEdit extends Component<IProps,IState> {
       this.formRef = React.createRef<FormInstance>()
     }
 
+    componentDidMount(){
+        console.log("editFlag,0添加1编辑:",this.props.editFlag) //是第一次选择的数据，TODO
+    }
+
     submit=async(values:any)=>{
-        //提交,创建/编辑
-        this.props.hideEdit()
+        const { editFlag }=this.props
+        const { schoolMateStore: {goschoolMatesCreate,goschoolMatesModify} } = this.props
+        //处理values
+        //判断编辑还是创建
+        switch(editFlag){
+            case 0: 
+                {//注意传参 TODO
+                let params={}
+                var res=await goschoolMatesCreate(params)
+                break;}
+            case 1: 
+                {//注意传参 TODO
+                let params={}
+                var res=await goschoolMatesModify(params)
+                break;}
+        }
+        if(res.success){
+            message.success(res.msg)
+            this.props.hideEdit()
+        }
     }
 
     handleCancel = () => {
@@ -33,7 +55,7 @@ class AddOrEdit extends Component<IProps,IState> {
     }
 
     render(){  
-        const {editModalVisible, editRecord, editFlag}=this.props
+        const { editRecord, editFlag}=this.props
         const layout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 16 },
@@ -42,7 +64,7 @@ class AddOrEdit extends Component<IProps,IState> {
             wrapperCol: { span: 14 , offset: 9 },
         };
         const modalProps={
-            visible:editModalVisible,
+            visible:true,
             centered:true,
             closable:false,
             footer:null,

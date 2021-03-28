@@ -7,7 +7,7 @@ const { Item } = Form
 const {Option}=Select
 const { TextArea } = Input
 interface IProps {
-    // warningContactStore?: any;
+    schoolCompanyStore?: any;
     editFlag:number
     editRecord?:any,
     editModalVisible:boolean,
@@ -25,8 +25,26 @@ class AddOrEdit extends Component<IProps,IState> {
     }
 
     submit=async(values:any)=>{
-        //提交,创建/编辑
-        this.props.hideEdit()
+        const { editFlag }=this.props
+        const { schoolCompanyStore: {goschoolCompaniesCreate,goschoolCompaniesModify} } = this.props
+        //处理values
+        //判断编辑还是创建
+        switch(editFlag){
+            case 0: 
+                {//注意传参 TODO
+                let params={}
+                var res=await goschoolCompaniesCreate(params)
+                break;}
+            case 1: 
+                {//注意传参 TODO
+                let params={}
+                var res=await goschoolCompaniesModify(params)
+                break;}
+        }
+        if(res.success){
+            message.success(res.msg)
+            this.props.hideEdit()
+        }
     }
 
     handleCancel = () => {

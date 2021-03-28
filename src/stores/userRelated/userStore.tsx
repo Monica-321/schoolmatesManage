@@ -40,7 +40,7 @@ class UserStore{
   @action
   handelLogin= async(params:any) => {
     let {status,success ,  msg , data} = await loginApi()
-    if (status === 10000) {
+    if (success) {
       const {phone,admin, username, name, id,status} = data
       runInAction(()=>{
         this.userData=data
@@ -55,7 +55,7 @@ class UserStore{
   @action
   handelLogout=async()=>{
     const {status, success ,  msg } =await logoutApi()
-    if (status === 10000) {
+    if (success) {
       localStorage.clear()
       sessionStorage.clear()
     } 

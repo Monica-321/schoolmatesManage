@@ -5,16 +5,21 @@ import { observer, inject } from 'mobx-react'
 const { Item } = Descriptions
 const { Option } = Select
 interface IState {
-  loading: boolean
+  loading: boolean,
+  detailID:String,
 }
 interface IProps {
+  schoolMateStore?:any,
   history?: any,
   location?: any;
 }
+@inject('schoolMateStore')
+@observer
 class SchoolMateInfoDetail extends Component<IProps, IState>{
 
   state: IState = {
-    loading: false
+    loading: false,
+    detailID:'',
   }
 
   componentDidMount() {
@@ -22,8 +27,20 @@ class SchoolMateInfoDetail extends Component<IProps, IState>{
     //从url获取id
     const id = search && search.split('=')[1]
     console.log('id为',id)
+    this.setState({detailID:id})
     //请求该条数据信息
 
+    this.getDetail()
+  }
+
+  getDetail=async()=>{
+    const { schoolMateStore: { fetchDetail } } = this.props
+    //传id获取对应详情
+    let params:any = {id:this.state.detailID}
+    // this.setState({loading: true})
+    //TODO 传参
+    await fetchDetail({})
+    // this.setState({loading: false})
   }
 
   render() {
@@ -38,7 +55,7 @@ class SchoolMateInfoDetail extends Component<IProps, IState>{
       sourcePlace:'江苏省无锡市', //映射，选择省市
       faculty:'信息学院',
       major:'数字媒体技术',
-      majorClass:'2',
+      majorClass:2,
       yearOfEnrollment:'2017',
       yearOfGraduation:'2021',
       homeTown:'江苏省溧阳市', //映射，选择省市

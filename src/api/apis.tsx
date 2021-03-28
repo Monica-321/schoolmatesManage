@@ -10,7 +10,7 @@ const Api:any = {
     logoutApi: `POST ${api}/users/logout`,
     
     //校友信息管理
-    schoolMatesQuery:`GET ${api}/schoolMates/schoolMatesList`,
+    schoolMatesQuery:`POST ${api}/schoolMates/schoolMatesList`,
     schoolMatesCreate:`POST ${api}/schoolMates/schoolMatesCreate`,
     schoolMatesModify:`POST ${api}/schoolMates/schoolMatesUpdate`,
     schoolMatesDelete:`POST ${api}/schoolMates/schoolMatesDelete`,
@@ -18,7 +18,7 @@ const Api:any = {
         //批量导入、导出
     
     //校友单位信息管理
-    schoolCompaniesQuery:`GET ${api}/schoolCompanies/schoolCompaniesList`,
+    schoolCompaniesQuery:`POST ${api}/schoolCompanies/schoolCompaniesList`,
     schoolCompaniesCreate:`POST ${api}/schoolCompanies/schoolCompaniesCreate`,
     schoolCompaniesModify:`POST ${api}/schoolCompanies/schoolCompaniesUpdate`,
     schoolCompaniesDelete:`POST ${api}/schoolCompanies/schoolCompaniesDelete`,
