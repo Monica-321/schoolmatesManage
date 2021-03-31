@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ChartComp from '@/components/ChartComp'
 import echarts from 'echarts'
-import chinaJson from 'echarts/map/json/china.json';
+// import chinaJson from 'echarts/map/json/china.json';
+import chinaJson from './china.json';
 
 interface IProps {
   chartName?:string;
@@ -10,67 +11,52 @@ interface IProps {
 } 
 class ChinaMap extends Component<IProps> {
   componentDidMount() {
-    // echarts.registerMap('china', chinaJson);
+    echarts.registerMap('china', chinaJson);
   }
   render() {
     const {chartName,mapData, } = this.props
     let chartOption:any = {
       title:{
         text: chartName,
-        subtext: '纯属虚构',
         left: 'center',
       },
       tooltip: {
         trigger: 'item',
-        
+        formatter(params: any) {
+          let provinceName:string = ''
+          let cityArr = ['北京', '天津', '上海', '重庆']
+          if (cityArr.includes(params.name)) {
+            provinceName = params.name + '市'
+          } else if (params.name === '新疆') {
+            provinceName = '新疆维吾尔自治区'
+          } else if (params.name === '广西') {
+            provinceName = '广西壮族自治区'
+          } else if (params.name === '内蒙古') {
+            provinceName = '内蒙古自治区'
+          } else if (params.name === '西藏') {
+            provinceName = '西藏自治区'
+          } else if (params.name === '宁夏') {
+            provinceName = '宁夏回族自治区'
+          }else if (params.name === '香港') {
+            provinceName = '香港特别行政区'
+          }else if (params.name === '澳门') {
+            provinceName = '澳门特别行政区'
+          } else {
+            provinceName = params.name + '省'
+          }
+          return `${provinceName}<br /> 校友数量：${params.value} `
+        }
       },
       legend: {
         show: true,
         orient: 'vertical',
         left: 'right',
         y: 'bottom',
-        // data: ['iphone3', 'iphone4', 'iphone5'], 
-      },
-      visualMap: {           //地图图例
-        show:true,
-        left: 0,
-        bottom: 0,
-        showLabel:true,
-        pieces: [        //根据数据大小，各省显示不同颜色
-          {
-            gte: 100,
-            label: ">= 1000",
-            color: "#1f307b"
-          },
-          {
-            gte: 500,
-            lt: 999,
-            label: "500 - 999",
-            color: "#3c57ce"
-          },
-          {
-            gte: 100,
-            lt:499,
-            label: "100 - 499",
-            color: "#6f83db"
-          },
-          {
-            gte: 10,
-            lt: 99,
-            label: "10 - 99",
-            color: "#9face7"
-          },
-          {
-            lt:10,
-            label:'<10',
-            color: "#bcc5ee"
-          }
-        ]
       },
       toolbox: {
         show: true,
         orient: 'vertical',
-        left: 'right',
+        left: 'left',
         top: 'center',
         feature: {
             dataView: { readOnly: false },
@@ -79,26 +65,40 @@ class ChinaMap extends Component<IProps> {
         },
       },
       geo: {
-        map: 'china',
-        roam: true,
-        scaleLimit: {
-          min: 1,
-          max: 2
+          map: 'china',
+          center:[104.97, 35.71], 
+          geoIndex:0,
+          roam: true,
+          zoom:1.6,
+          label: {
+            normal: {
+              show: false
+            },
+            emphasis:{
+              show: false
+            }
         },
-        zoom:1,
-        label: {
-          normal: {
-            show:true,
-            fontSize: "14",
-            color: "rgba(0,0,0,0.7)"
+        //隐藏echarts原本分出的南海诸岛区域
+        regions: [
+          {
+            name: "南海诸岛",
+            value: 0,
+            itemStyle: {
+              normal: {
+                opacity: 0,
+                label: {
+                  show: false
+                }
+              }
+            }
           }
-        },
+        ],
         itemStyle: {
           normal:{
             borderColor: 'rgba(0, 0, 0, 0.2)'
           },
           emphasis:{
-            areaColor: '#f2d5ad',
+            areaColor: '#fff48f',
             shadowOffsetX: 0,
             shadowOffsetY: 5,
             shadowBlur: 0,
@@ -110,26 +110,14 @@ class ChinaMap extends Component<IProps> {
       
       series: [
         {
-          // name: "生源地",
           type: "map",
-          // geoIndex: 0,
-          mapType: 'china',
-          label: {
-            normal: {
-                show: true,
-            },
-            emphasis: {
-                show: true,
-            },
-          },
-          data: [
-            {
-              name: "南海诸岛",
-              value: 100,
-            },
+          geoIndex: 0,
+          // data:mapData
+          data:
+          [
             {
               name: "北京",
-              value: 540
+              value: 54
             },
             {
               name: "天津",
@@ -141,7 +129,7 @@ class ChinaMap extends Component<IProps> {
             },
             {
               name: "重庆",
-              value: 750
+              value: 75
             },
             {
               name: "河北",
@@ -149,7 +137,7 @@ class ChinaMap extends Component<IProps> {
             },
             {
               name: "河南",
-              value: 830
+              value: 83
             },
             {
               name: "云南",
@@ -165,7 +153,7 @@ class ChinaMap extends Component<IProps> {
             },
             {
               name: "湖南",
-              value: 690
+              value: 9
             },
             {
               name: "安徽",
@@ -185,7 +173,7 @@ class ChinaMap extends Component<IProps> {
             },
             {
               name: "浙江",
-              value: 104
+              value: 4
             },
             {
               name: "江西",
@@ -209,7 +197,7 @@ class ChinaMap extends Component<IProps> {
             },
             {
               name: "内蒙古",
-              value: 778
+              value: 77
             },
             {
               name: "陕西",
@@ -261,15 +249,27 @@ class ChinaMap extends Component<IProps> {
             },
             {
               name: "澳门",
-              value: 555
+              value: 0
             }
           ],
         },
       ],
+      dataRange: {
+        x: 'right',
+        y: 'bottom',
+        splitList: [
+          { start: 0, end: 0, label: '无' },
+          { start: 1, end: 49, label: '1-49' },
+          { start: 50, end: 99, label: '50-99'},
+          { start: 100, end: 9999, label: '100及以上'},
+        ],
+        // color: ['#276678', '#1687a7', '#d3e0ea', '#f6f5f5']
+        color:['#7579e7','#9ab3f5','#d8edfd','#f6f5f5'] //配色暂定
+      },
 
     }
     const chartProps = {
-      chartStyle: {height: 300},
+      chartStyle: {height: 400},
       chartOption
     }
     return (

@@ -190,6 +190,21 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         },
         {
           el:'select',
+          name:'educationStatus',
+          label:"就读身份",
+          placeholder:"请选择就读身份",
+          style:{width: 174},
+          selectOptions:[
+            { label: '本科生' ,value: 0 },
+            { label: '研究生' ,value: 1 },
+          ],
+          selectField: {
+            label: 'label',
+            value: 'value'
+          }
+        },
+        {
+          el:'select',
           name:'yearOfEnrollment',
           label:"入学年份",
           placeholder:"请选择入学年份",
@@ -386,6 +401,17 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         title: '籍贯',
         key: 'homeTown',
         dataIndex: 'homeTown',
+      },{
+        title: '就读身份',
+        key: 'educationStatus',
+        dataIndex: 'educationStatus',
+        render:(text:any)=>{
+          switch(text){
+            case 0: return '本科生';
+            case 1: return '研究生';
+            default: return text;
+          }
+        }
       },{
         title: '院系',
         key: 'faculty',

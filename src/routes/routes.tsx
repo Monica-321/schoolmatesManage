@@ -23,8 +23,7 @@ import CompanyAnalysis from '@/pages/dataAnalysis/companyAnalysis'
 import GraduateMedia from '@/pages/mediaCenter/graduateMedia'
 import OtherMedia from '@/pages/mediaCenter/otherMedia'
 
-// import RoleManage from '@/pages/systemSetting/roleManage';
-import AccountLog from '@/pages/log/accountLog';
+// import AccountLog from '@/pages/log/accountLog';
 import Error from '@/pages/pageNotFound';
 
 
@@ -58,10 +57,10 @@ const Routes = {
     SchoolCompanyManage,     // 校友单位信息管理
     SchoolCompanyDetail,   // 校友单位信息详情
   },
-  // 操作日志？超级
-  Log: {
-    AccountLog,       // 账号日志
-  },
+  // // 操作日志？超级
+  // Log: {
+  //   AccountLog,       // 账号日志
+  // },
   // 数据分析统计
   DataAnalysis: {
     BasicAnalysis, //基本信息分析统计
@@ -72,7 +71,7 @@ const Routes = {
   // 数字影像管理
   MediaCenter: {
     GraduateMedia, //毕业影像
-	  OtherMedia, //其他影像
+	  // OtherMedia, //其他影像
   },
   //其他校友服务？？
   Error:{

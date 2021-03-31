@@ -7,7 +7,7 @@ const {
   DashBoard,
   SystemSetting,
   InfomationManage,
-  Log,
+  // Log,
   DataAnalysis,
   MediaCenter,
   Error,
@@ -80,17 +80,17 @@ const routes = [
       },
     ]
   },
-  // 操作日志
-  {
-    path: '/log',
-    component: Layout.Master,
-    children: [
-      {
-        path: '/accountLog',
-        component: Log.AccountLog,
-      },
-    ],
-  },
+  // // 操作日志
+  // {
+  //   path: '/log',
+  //   component: Layout.Master,
+  //   children: [
+  //     {
+  //       path: '/accountLog',
+  //       component: Log.AccountLog,
+  //     },
+  //   ],
+  // },
 //DataAnalysis
 {
   path:"/dataAnalysis",
@@ -119,10 +119,10 @@ const routes = [
       path:'/graduateMedia',
       component:MediaCenter.GraduateMedia,
     },
-    {
-      path:'/otherMedia',
-      component:MediaCenter.OtherMedia,
-    },
+    // {
+    //   path:'/otherMedia',
+    //   component:MediaCenter.OtherMedia,
+    // },
   ]
 },
   //404

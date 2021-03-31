@@ -169,7 +169,7 @@ class BasicAnalysis extends Component<IProps, IState>{
                   : 
                   <div>
                     <ChinaMap {...chinaMap1Props} />
-                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                    {/* <Button type="default" className={styles.saveBtn} >保存</Button> */}
                   </div>
                 }
                </Col>
@@ -182,7 +182,7 @@ class BasicAnalysis extends Component<IProps, IState>{
                   : 
                   <div>
                     <ChinaMap {...chinaMap2Props} />
-                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                    {/* <Button type="default" className={styles.saveBtn} >保存</Button> */}
                   </div>
                 }
                </Col>

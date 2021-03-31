@@ -64,6 +64,21 @@ class GraduateMedia extends Component<IProps, IState>{
             value: 'value'
           }
         },
+        {
+          el:'select',
+          name:'educationStatus',
+          label:"就读身份",
+          placeholder:"请选择就读身份",
+          style:{width: 174},
+          selectOptions:[
+            { label: '本科生' ,value: 0 },
+            { label: '研究生' ,value: 1 },
+          ],
+          selectField: {
+            label: 'label',
+            value: 'value'
+          }
+        },
       ]
   }
     return(

@@ -31,16 +31,16 @@ const menuData = [
       },
     ]
   },
-  {
-    name:'操作日志',
-    url:null,
-    children:[
-      {
-        name:"帐号日志",
-        url:"/log/accountLog",
-      }
-    ]
-  },
+  // {
+  //   name:'操作日志',
+  //   url:null,
+  //   children:[
+  //     {
+  //       name:"帐号日志",
+  //       url:"/log/accountLog",
+  //     }
+  //   ]
+  // },
   {
     name:'数据分析统计',
     url:null,
@@ -67,10 +67,10 @@ const menuData = [
         name:"毕业影像",
         url:"/mediaCenter/graduateMedia",
       },
-      {
-        name:"其他影像",
-        url:"/mediaCenter/otherMedia",
-      },
+      // {
+      //   name:"其他影像",
+      //   url:"/mediaCenter/otherMedia",
+      // },
     ]
   },
 ];
