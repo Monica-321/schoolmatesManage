@@ -6,8 +6,11 @@ const api = '/api';
 const Api:any = {
   
     //登陆登出
-    loginApi: `POST ${api}/users/login`,
-    logoutApi: `POST ${api}/users/logout`,
+    loginApi: `POST ${api}/schoolAdmins/login`,
+    logoutApi: `POST ${api}/schoolAdmins/logout`,
+
+    //个人设置
+    getUserInfo:`POST ${api}/schoolAdmins/getUserInfo`,
     
     //校友信息管理
     schoolMatesQuery:`POST ${api}/schoolMates/schoolMatesList`,

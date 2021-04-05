@@ -1,11 +1,12 @@
 import {Component} from 'react';
 import { Link } from 'react-router-dom';
-import { Input, Button , Form, message } from 'antd';
+import { Input, Button , Form, message , Cascader } from 'antd';
 import { UserOutlined , LockOutlined } from '@ant-design/icons';
 import menuData from '@/components/Layout/SiderBar/menuData'
 import { observer, inject } from 'mobx-react'
 import { UserStore } from '@/stores/userRelated/userStore';
 import styles from './index.module.less';
+import {addressData} from '@/utils/staticData'
 const {Item} =Form
 
 interface IProps {
@@ -28,21 +29,14 @@ class Login extends Component<IProps,IState>{
 
   onFinish=async(values:any)=>{
     const {userStore:{handelLogin}} = this.props
-    // console.log('Success:', values);
+    console.log('finishValues:', values);
     //验证账号
     this.setState({loading:true})
     const response=await handelLogin(values) 
     this.setState({loading:false})
 
     if(response.success){
-      // localStorage.setItem("userInfo",JSON.stringify(response.result))
-      // let result={
-      //   username:'qy',
-
-      // }
-      // localStorage.setItem("userInfo",JSON.stringify(result))
-      // message.success(response.msg)
-      message.success("登录成功")
+      message.success(response.msg)
       this.props.history.push('/dashboard/index')
       // this.props.history.push(menuData[0].children[0].path)
     }else{
@@ -75,6 +69,11 @@ class Login extends Component<IProps,IState>{
               <Item  >
                 验证码？
               </Item>
+              {/* <Item label="省市地址" name="provinceId" htmlFor="provinceIdOther" rules={[{ required: true, message: '请选择省市地址' }]}>
+                <Cascader options={addressData} placeholder="请选择省市地址" allowClear onChange={(value, selectedOptions)=>{
+                  console.log('value, selectedOptions及string分别是',value, selectedOptions,value.join(' '))
+                }}/>
+              </Item> */}
               <Item wrapperCol={{ span: "24"}} >
                 <Button style={{width:'100%',height:'42px',fontSize:'17px',marginTop:'3px',marginBottom:'-10px'}} type="primary" htmlType="submit" loading={this.state.loading}>登录</Button>
               </Item>

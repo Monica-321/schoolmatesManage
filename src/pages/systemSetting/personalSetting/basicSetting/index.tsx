@@ -4,7 +4,7 @@ import { FormInstance, Rule } from 'antd/lib/form';
 import styles from './styles.module.less'
 import { inject, observer } from 'mobx-react';
 // import { PersonalSettingStore } from '@/stores/systemSetting/personalSettingStore';
-// import { LoginStore } from '@/stores/login/loginStore';
+import { UserStore } from '@/stores/userRelated/userStore';
 import { emailReg } from '@/utils/reg';
 
 const FORM_LAYOUT = {
@@ -13,8 +13,8 @@ const FORM_LAYOUT = {
 }
 
 interface IProps{
-    // personalSettingStore: PersonalSettingStore,
-    // loginStore?: LoginStore
+    // userStore: UserStore,
+    // history?: any,
 }
 
 const validEmail = async (rules: Rule, value: string)=>{
@@ -22,7 +22,8 @@ const validEmail = async (rules: Rule, value: string)=>{
     if(value.length>50)throw new Error('邮箱地址已超出系统要求的“50个”字符限制，请确认')
     if(!emailReg.test(value)) throw new Error('邮箱地址信息输入信息错误，请确认')
 }
-
+// @inject('userStore')
+// @observer
 export default class BasicSetting extends React.Component<IProps> {
     nameRule: Array<Rule>
     phoneRule: Array<Rule>
@@ -43,6 +44,10 @@ export default class BasicSetting extends React.Component<IProps> {
             {required: true, message: '请输入邮箱地址信息'},
             {validator: validEmail}
         ]
+    }
+    componentDidMount(){
+        // const {userStore:{userData}}=this.props
+        // console.log('userData:',userData)
     }
     async update(){
         

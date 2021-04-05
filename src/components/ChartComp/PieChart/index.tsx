@@ -26,6 +26,17 @@ class PieChart extends Component<IProps> {
           return `${params.name}:${parseFloat(params.percent).toFixed(2)}%`
         }
       },
+      toolbox: {
+        show: true,
+        orient: 'vertical',
+        left: 'right',
+        top: 'center',
+        feature: {
+            dataView: { readOnly: false },
+            // restore: {},
+            saveAsImage: {},
+        },
+      },
       legend: {
           y: 'bottom'
       },

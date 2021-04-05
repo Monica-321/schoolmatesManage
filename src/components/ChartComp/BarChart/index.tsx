@@ -30,6 +30,17 @@ class BarChart extends Component<IProps> {
       tooltip: {
         trigger: 'axis'
       },
+      toolbox: {
+        show: true,
+        orient: 'vertical',
+        left: 'right',
+        top: 'center',
+        feature: {
+            dataView: { readOnly: false },
+            // restore: {},
+            saveAsImage: {},
+        },
+      },
       legend: {
           data: chartLegend,
           y: 'bottom'

@@ -13,6 +13,7 @@ const JSEncrypt = require('node-jsencrypt');
 const {
   loginApi,
   logoutApi,
+  getUserInfo,
 } = api
 
 interface content{
@@ -39,14 +40,24 @@ class UserStore{
   // }
   @action
   handelLogin= async(params:any) => {
-    let {status,success ,  msg , data} = await loginApi()
+    let {status,success ,  msg , data} = await loginApi(params)
     if (success) {
-      const {phone,admin, username, name, id,status} = data
+      const {phone,email, username, identity, status,permissions} = data
       runInAction(()=>{
         this.userData=data
         localStorage.setItem("userName", username);
         this.userName = username
-        console.log('用户数据：',this.userData,this.userName)
+        console.log('用户数据：',this.userData,'用户名',this.userName)
+      })
+    } 
+    return {success,msg};
+  }
+
+  fetchUserInfo=async(params:any) => {
+    let {status,success ,  msg , data} = await getUserInfo(params)
+    if (success) {
+      runInAction(()=>{
+        this.userData=data
       })
     } 
     return {success,msg};

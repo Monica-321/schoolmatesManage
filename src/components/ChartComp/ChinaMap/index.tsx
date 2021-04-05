@@ -66,10 +66,10 @@ class ChinaMap extends Component<IProps> {
       },
       geo: {
           map: 'china',
-          center:[104.97, 35.71], 
+          center:[104.97, 37.71], 
           geoIndex:0,
           roam: true,
-          zoom:1.6,
+          zoom:1.7,
           label: {
             normal: {
               show: false
@@ -269,7 +269,7 @@ class ChinaMap extends Component<IProps> {
 
     }
     const chartProps = {
-      chartStyle: {height: 400},
+      chartStyle: {height: 500},
       chartOption
     }
     return (

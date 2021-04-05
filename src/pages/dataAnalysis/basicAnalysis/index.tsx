@@ -26,6 +26,7 @@ class BasicAnalysis extends Component<IProps, IState>{
     loadingGenderPie:false,  //TODO
   }
   componentDidMount(){
+    //刚进来默认最新一年毕业年份和本科
     this.fetchData()
   }
   fetchData=async()=>{
@@ -120,7 +121,7 @@ class BasicAnalysis extends Component<IProps, IState>{
                   : 
                   <div>
                     <PieChart {...genderPieProps}/>
-                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                    {/* <Button type="default" className={styles.saveBtn} >保存</Button> */}
                   </div>
                 }
                </Col>
@@ -130,7 +131,7 @@ class BasicAnalysis extends Component<IProps, IState>{
                   : 
                   <div>
                     <PieChart {...educationPieProps}/>
-                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                    {/* <Button type="default" className={styles.saveBtn} >保存</Button> */}
                   </div>
                 }
                </Col>
@@ -143,7 +144,7 @@ class BasicAnalysis extends Component<IProps, IState>{
                   : 
                   <div>
                     <BarChart {...majorNumBarProps}/>
-                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                    {/* <Button type="default" className={styles.saveBtn} >保存</Button> */}
                   </div>
                 }
                </Col>
@@ -156,7 +157,7 @@ class BasicAnalysis extends Component<IProps, IState>{
                   : 
                   <div>
                     <BarChart {...politicalBarProps}/>
-                    <Button type="default" className={styles.saveBtn} >保存</Button>
+                    {/* <Button type="default" className={styles.saveBtn} >保存</Button> */}
                   </div>
                 }
                </Col>

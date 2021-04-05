@@ -2,10 +2,15 @@ import React from 'react'
 import { Tabs } from "antd";
 import { PasswdSetting, BasicSetting } from ".";
 import styles from './styles.module.less'
-
+import { observer, inject } from 'mobx-react'
+import { UserStore } from '@/stores/userRelated/userStore';
 interface IProp{
-
+    // userStore: UserStore;
+    // history?: any,
 }
+
+// @inject('userStore')
+// @observer
 export default class PersonalSetting extends React.Component<IProp> {
     basicInfoRef: React.RefObject<BasicSetting> = React.createRef<BasicSetting>()
     componentDidMount(){
