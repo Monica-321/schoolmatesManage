@@ -1,28 +1,34 @@
 import React, { Component } from 'react';
 import { Table, Button, Switch, Tooltip, message } from 'antd';
 import SearchPanel from '@/components/SearchFormComp'
-import AddAccount from './components/AddAccount'
+import InfoModal from '@/components/InfoModal'
 import EditAccount from './components/EditAccount'
 import styles from './index.module.less';
 import { observer, inject } from 'mobx-react'
 interface IProps {
-  //store
-  history: any;
+  accountStore?:any,
+  history?: any;
 }
 interface IState {
   hasBtnAdd: boolean;
   hasBtnEdit: boolean;
-  hasBtnRST: boolean;
+  // hasBtnRST: boolean;
   hasBtnOPEN_CLOSE: boolean;
-  loadingTable: boolean;
+  loading: boolean;
   pageNum: number;
   pageSize: number;
-  sortRule?: string;
   searchVal?: any;
   visibleAdd: boolean;
   visibleEdit: boolean;
   curId?: string;
+  deleteModalVisible:boolean,
+  deleteRecord?:any,
+  action:string,
+  editRecord:any,
 }
+
+@inject('accountStore')
+@observer
 class AccountManage extends Component<IProps,IState> {
   private searchRef: React.RefObject<HTMLDivElement>;
   constructor(prop: IProps){
@@ -32,21 +38,35 @@ class AccountManage extends Component<IProps,IState> {
   state = {
     hasBtnAdd: true,
     hasBtnEdit: true,
-    hasBtnRST: true,  //重置密码
+    // hasBtnRST: true,  //重置密码
     hasBtnOPEN_CLOSE: true,
-    loadingTable: false,
+    loading: false,
     pageNum: 1,
     pageSize: 10,
-    sortRule: 'DESC',
     searchVal: {},
     visibleAdd: false,
     visibleEdit: false,
     curId: '',
+    deleteModalVisible:false,
+    deleteRecord:{},
+    action:'',
+    editRecord:{},
   }
   componentDidMount() {
     this.getAccountList()
   }
   getAccountList = async ()=> {
+    const { accountStore: { fetchTableData } } = this.props
+    const {pageNum, pageSize, searchVal} = this.state
+    let params:any = {
+      pageNum,
+      pageSize,
+      ...searchVal
+    }
+    this.setState({loading: true})
+    //TODO 传参
+    await fetchTableData({})
+    this.setState({loading: false})
     
   }
   refreshData = () => {
@@ -70,104 +90,145 @@ class AccountManage extends Component<IProps,IState> {
       this.getAccountList()
     })
   }
-  resetPwd = async (item: any) => {
-    
-      message.success(`“${item.name}”账号密码重置成功！`)
+  goDelete = async () => {
+    const { accountStore: {goAdminsDelete} } = this.props
+    const { deleteRecord }=this.state
+    //注意传参 TODO
+    let params={}
+    const res=await goAdminsDelete(params)
+    if(res.success){
+      // @ts-ignore
+      message.success(`"${deleteRecord.username}"删除成功！`)
+      this.getAccountList()
+      this.setState({deleteModalVisible:false})
+    }else{
+      message.error(res.msg)
+    }
   }
-  changeStatus = async (item: any) => {
-    
+  changeStatus = async (checked: boolean,record:any) => {
+    const { accountStore: {goOnOrOff} } = this.props
+    let params={
+      // id:record.id,
+      // status:checked?1:0
+    }
+    await goOnOrOff(params)
+    //TODO 目前不产生提醒
+    this.getAccountList()
   }
-  openEditModal = async(id: any) => {
+  openEditModal = async(record: any,action:string) => {
 
     this.setState({
       visibleEdit: true,
-      curId: id
+      // curId: id,
+      editRecord:record,
+      action:action,
+    },()=>{
+      console.log("editRecord,action分别为",this.state.editRecord,this.state.action)
     })
   }
-  openAddModal = () => {
-    this.setState({
-      visibleAdd: true,
-    })
-  }
-  hideAddModal = () => {
-    this.setState({
-      visibleAdd: false,
-    })
-  }
+  // openAddModal = () => {
+  //   this.setState({
+  //     visibleAdd: true,
+  //   })
+  // }
+  // hideAddModal = () => {
+  //   this.setState({
+  //     visibleAdd: false,
+  //   })
+  // }
   hideEditModal = () => {
     this.setState({
       visibleEdit: false,
+      editRecord:{},
     })
   }
   refresh = () => {
 
   }
   render(){
-    const tableData = {
-      total:22,
-      list:[
-        {
-          name:'账户名1',
-          username:'用户名1',
-          type:1,
-          status:0,
-        },
-        {
-          name:'账户名2',
-          username:'用户名2',
-          type:2,
-          status:1,
-        },
-        {
-          name:'账户名3',
-          username:'用户名3',
-          type:2,
-          status:0,
-        }
-      ]
-    }
-    const { total, list } = tableData
-    const {hasBtnAdd, hasBtnEdit, hasBtnRST, hasBtnOPEN_CLOSE, pageNum, pageSize, visibleAdd, curId, visibleEdit, loadingTable} = this.state
-    const columns = [{
-      key: 'name',
-      title: '账户名称',
-      dataIndex: 'name'
-    }, {
+    const { accountStore }=this.props
+    const {adminsTableData} = accountStore
+    // const tableData = {
+    //   total:22,
+    //   list:[
+    //     {
+    //       name:'账户名1',
+    //       username:'用户名1',
+    //       identity:0,
+    //       status:0,
+    //     },
+    //     {
+    //       name:'账户名2',
+    //       username:'用户名2',
+    //       identity:1,
+    //       status:1,
+    //     },
+    //     {
+    //       name:'账户名3',
+    //       username:'用户名3',
+    //       identity:1,
+    //       status:0,
+    //     }
+    //   ]
+    // }
+    const { total, list } = adminsTableData
+    const {pageNum,pageSize,deleteModalVisible , deleteRecord , visibleAdd, curId, visibleEdit, loading , action,editRecord} = this.state
+    const columns = [
+    // {
+    //   key: 'name',
+    //   title: '账户名称',
+    //   dataIndex: 'name'
+    // }, 
+    {
       key: 'username',
       title: '用户名',
-      dataIndex: 'username'
+      dataIndex: 'username',
     }, {
-      key: 'type',
+      key: 'identity',
       title: '账户类型',
-      dataIndex: 'type',
+      dataIndex: 'identity',
       render:(text:any, record: any)=>{
         switch(text){
-          case 1: return '超级管理员' ;
-          case 2: return '管理员';
+          case 0: return '超级管理员' ;
+          case 1: return '管理员';
           default:return text;
         }
       }
-    },  {
-      key: 'createTime',
-      title: '创建时间',
-      dataIndex: 'createTime',
-      // sorter: true,
-    }, {
+    },  
+    // {
+    //   key: 'createTime',
+    //   title: '创建时间',
+    //   dataIndex: 'createTime',
+    //   // sorter: true,
+    // }, 
+    {
       key: 'status',
-      title: '状态',
+      title: '启用状态',
       dataIndex: 'status',
       render: (text:any, record: any) => {
         return (
-          <Switch defaultChecked={!!text} disabled={ record.type===1 } onChange={this.changeStatus.bind(this, record)} />
+          <Switch defaultChecked={!!text} disabled={ record.identity===0 } onChange={(checked:boolean)=>{this.changeStatus(checked,record)} } />
         )
       }
-    }, {
+    },
+    {
+      key: 'phone',
+      title: '关联手机号',
+      dataIndex: 'phone',
+    }, 
+    {
+      key: 'email',
+      title: '关联邮箱号',
+      dataIndex: 'email',
+    }, 
+    {
       title: '操作',
       key: 'action',
       render: (text: any, record: any) => (
         <div className="linkBtnWrap">
-          {hasBtnRST && record.type===2 && <Button type="link" onClick={this.resetPwd.bind(this, record)}>重置密码</Button>}
-          {hasBtnEdit && record.type===2 && <Button type="link" onClick={this.openEditModal.bind(this, record.id)}>编辑</Button>}
+          {/* 重置密码功能？ */}
+          {record.identity===1 && <Button type="link" onClick={this.openEditModal.bind(this,record,'edit')}>编辑</Button>}
+          {record.identity===1 && <Button type="link" style={{color:'red'}} onClick={()=>this.setState({deleteModalVisible:true,deleteRecord:record})}>删除</Button>}
         </div>
       )
     }]
@@ -180,46 +241,35 @@ class AccountManage extends Component<IProps,IState> {
       showTotal() {
         return `共 ${total} 条数据`
       },
-      onChange: (pageNum: number) => {
-        this.setState({ pageNum }, () => {
+      onChange:(pageNum:number, pageSize:number)=>{
+        // console.log("更改页码和页面数目为，",pageNum,pageSize)
+        this.setState({pageNum,pageSize},()=>{
           this.getAccountList()
         })
       },
-      onShowSizeChange: (current: number, pageSize: number) => {
-        this.setState({ pageNum: current,  pageSize }, () => {
-          this.getAccountList()
-        })
-      }
     }
     let listProps:any = {
+      rowKey: "_id",
       dataSource: list,
-      columns,
-      rowKey: 'id',
+      columns,      
       pagination,
-      loading: loadingTable,
-      onChange: (pagination:any, filters: any, sorter: any) => {
-        console.log(sorter, 'sorter')
-        let sortRule = sorter.order === 'ascend' ? 'ASC' : (sorter.order === 'descend' ? 'DESC' : undefined)
-        this.setState({ sortRule }, () => {
-          this.getAccountList()
-        })
-      }
+      loading
     }
     let searchProps:any = {
       handleQuery: this.handleQuery,
       handleReset: this.handleReset,
       onRef: (ref: any) => this.searchRef = ref,
       formItems: [
-        {el:'input',label: '账户名称' ,name:'accountName',placeholder: '请输入账户名称',},
+        {el:'input',label: '用户名' ,name:'username',placeholder: '用户名',},
         {
           el:'select',
-          name:'accountType',
+          name:'identity',
           label:"账户类型",
           placeholder:"请选择账户类型",
           style:{width: 174},
           selectOptions:[
-            { label: '超级管理员' ,value: 1 },
-            { label: '管理员' ,value: 2 },
+            { label: '超级管理员' ,value: 0 },
+            { label: '管理员' ,value: 1 },
           ],
           selectField: {
             label: 'label',
@@ -228,18 +278,34 @@ class AccountManage extends Component<IProps,IState> {
         },
       ],
     }
-    let addModalProps = {
-
-      hideModal: this.hideAddModal,
-      fetchData: this.refreshData,
-      visibleAdd
+    let deleteModalProps={
+      visible:deleteModalVisible,
+      title: "",
+      children:
+      <div>
+        {/* @ts-ignore */}
+        <p>是否确认删除"{deleteRecord.username}"管理员？</p>
+        <p style={{color:'red',fontSize:'11px',margin:'10px auto'}}>注：删除后将无法恢复，需手动再添加！</p>
+      </div>,
+      handleOk:this.goDelete,
+      handleCancel: ()=>{
+        this.setState({deleteModalVisible:false})
+      },
     }
-    let EditModalProps = {
+    // let addModalProps = {
 
+    //   hideModal: this.hideAddModal,
+    //   fetchData: this.refreshData,
+    //   visibleAdd
+    // }
+    let EditModalProps = {
+      accountStore,
       hideModal: this.hideEditModal,
       fetchData: this.refreshData,
       // visibleEdit,
-      curId
+      // curId,
+      action,
+      editRecord,
     }
     return (
       <div className={styles.pageCenter}>
@@ -247,12 +313,13 @@ class AccountManage extends Component<IProps,IState> {
           <SearchPanel {...searchProps}/>
         </div>
         <div className={styles.tableBeforeNode}>
-          {hasBtnAdd && <Button type="primary" onClick={this.openAddModal} className='mb10'>创建帐号</Button>}
+          <Button type="primary"onClick={this.openEditModal.bind(this,{},'add')} className='mb10'>创建帐号</Button>
         </div>
         <div className={styles.searchTable}>
           <Table {...listProps}/>
         </div>
-        <AddAccount {...addModalProps}/>
+        <InfoModal {...deleteModalProps}></InfoModal>
+        {/* <AddAccount {...addModalProps}/> */}
         {visibleEdit && <EditAccount {...EditModalProps}/>}
       </div>
     );

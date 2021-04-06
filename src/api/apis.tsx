@@ -9,6 +9,12 @@ const Api:any = {
     loginApi: `POST ${api}/schoolAdmins/login`,
     logoutApi: `POST ${api}/schoolAdmins/logout`,
 
+    //管理员账户管理
+    adminsQuery:`POST ${api}/schoolAdmins/adminsList`,
+    adminsCreate:`POST ${api}/schoolAdmins/adminsCreate`,
+    adminsModify:`POST ${api}/schoolAdmins/adminsUpdate`,
+    adminsDelete:`POST ${api}/schoolAdmins/adminsDelete`,
+    toOnOrOff:`GET ${api}/schoolAdmins/adminsToOnOrOff`,
     //个人设置
     getUserInfo:`POST ${api}/schoolAdmins/getUserInfo`,
     

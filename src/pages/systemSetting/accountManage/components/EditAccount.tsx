@@ -3,13 +3,14 @@ import { Modal, Form, Input, Select, Button, message } from 'antd';
 import { znEnNumReg, phoneReg, emailReg } from '@/utils/reg';
 import { FormInstance, Rule } from 'antd/lib/form';
 const { Item } = Form
-const { Option } = Select;
-
 interface IProps {
+  accountStore?:any,
   visibleEdit?: boolean;
-  curId?: any;
+  // curId?: any;
   hideModal?: any;
   fetchData?: any;
+  action:string;
+  editRecord?:any;
 }
 interface IState {
   loading: boolean;
@@ -25,8 +26,8 @@ class EditAccount extends Component<IProps,IState> {
   }
 
   componentDidMount() {
-    
-    this.formRef.current?.setFieldsValue({})
+    const {editRecord } = this.props
+    this.formRef.current?.setFieldsValue(editRecord)
   }
   
   handleCancel = () => {
@@ -34,12 +35,44 @@ class EditAccount extends Component<IProps,IState> {
     this.props.hideModal()
   }
 
-  submit = () => {
+  submit = async() => {
     this.formRef.current?.validateFields()
+    const { action,editRecord } = this.props
+    const {accountStore:{goAdminsCreate,goAdminsModify}}=this.props
+    if(action==='add'){
+      //TODO 传参，默认普通管理员、启用状态，密码也默认？
+      const params={
+
+      }
+      const res=await goAdminsCreate(params)
+      if(res.success){
+        message.success(res.msg)
+        this.props.hideModal()
+        this.props.fetchData()
+      }else{
+        message.error(res.msg)
+      }
+    }else{
+      //TODO 传参，普通管理员,id也传一下以找到此数据
+      const params={
+
+      }
+      const res=await goAdminsModify(params)
+      if(res.success){
+        message.success(res.msg)
+        this.props.hideModal()
+        this.props.fetchData()
+      }else{
+        message.error(res.msg)
+      }
+    }
   }
 
   render() {
     const {loading} = this.state
+    const { action,editRecord } = this.props
+    const {identity, username,phone,email} = editRecord
+
     const layout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 16 },
@@ -47,18 +80,11 @@ class EditAccount extends Component<IProps,IState> {
     const tailLayout = {
       wrapperCol: { offset: 6, span: 16 },
     };
-    const { curId, } = this.props
-    const accountDetail={
-      type:'',
-      username:'username',
-    }
-    const {type, username} = accountDetail
-
     return (
       <div>
         <Modal
           getContainer={false}
-          title={curId ? '编辑帐号' : '创建帐号'}
+          title={action==='edit' ? '编辑帐号' : '创建帐号'}
           centered
           visible={true}
           onCancel={this.handleCancel}
@@ -67,24 +93,31 @@ class EditAccount extends Component<IProps,IState> {
           maskClosable={false}
           footer={null}
         >
-          <Form {...layout} ref={this.formRef}>
-            <Item label="帐号姓名" name="name"
+          <Form {...layout} ref={this.formRef} onFinish={this.submit} >
+          {action==='edit' ?
+          <Item label="用户名" required>
+            <span>{username}</span>
+          </Item>
+          :
+          <Item label="用户名" name="username"
               validateTrigger="onBlur" 
               rules={[
-                { required: true, message: '请输入帐号姓名' },
+                { required: true, message: '请输入用户名' },
                 { validator: async (rule: Rule, value: string) => {
                     if (value && !znEnNumReg.test(value) ) {
                       throw new Error('帐号姓名输入信息错误，请确认');
                     } else if (value && value.length > 10 ) {
-                      throw new Error('帐号姓名已超出系统要求的“10个”字符限制，请确认');
+                      throw new Error('帐号姓名已超出系统要求的10个字符限制，请确认');
                     }
                   }
                 }
               ]}>
-              <Input placeholder='请输入帐号姓名' allowClear autoComplete='off'/>
-            </Item>
-            <Item label="用户名" required>
-              <span>{username}</span>
+              <Input placeholder='请输入用户名' allowClear autoComplete='off'/>
+            </Item>            
+          }
+            <Item label="账户类型" required>
+              {/* 超级管理员不能被编辑和平台添加 */}
+              <span>管理员</span>
             </Item>
             <Item label="手机号" name="phone" 
               validateTrigger="onBlur"
@@ -109,9 +142,8 @@ class EditAccount extends Component<IProps,IState> {
               ]}>
               <Input placeholder="请输入邮箱地址" allowClear/>
             </Item>
-            
             <Item {...tailLayout}>
-              <Button type="primary" onClick={this.submit} loading={loading} >确认</Button>
+              <Button type="primary" htmlType="submit" loading={loading} >确认</Button>
               <Button onClick={this.handleCancel} style={{marginLeft:'10px'}}>取消</Button>
             </Item>
           </Form>
