@@ -17,6 +17,8 @@ const Api:any = {
     toOnOrOff:`GET ${api}/schoolAdmins/adminsToOnOrOff`,
     //个人设置
     getUserInfo:`POST ${api}/schoolAdmins/getUserInfo`,
+    modifyUserInfo:`POST ${api}/schoolAdmins/modifyUserInfo`,
+    modifyUserPwd:`POST ${api}/schoolAdmins/modifyUserPwd`,
     
     //校友信息管理
     schoolMatesQuery:`POST ${api}/schoolMates/schoolMatesList`,

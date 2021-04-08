@@ -5,19 +5,20 @@ import styles from './styles.module.less'
 import { observer, inject } from 'mobx-react'
 import { UserStore } from '@/stores/userRelated/userStore';
 interface IProp{
-    // userStore: UserStore;
-    // history?: any,
+    userStore: UserStore;
+    history?: any,
 }
 
-// @inject('userStore')
-// @observer
+@inject('userStore')
+@observer
 export default class PersonalSetting extends React.Component<IProp> {
     basicInfoRef: React.RefObject<BasicSetting> = React.createRef<BasicSetting>()
     componentDidMount(){
         this.resetBasic()
     }
     async resetBasic(){
-        
+        const {userStore:{fetchUserInfo}}=this.props
+        await fetchUserInfo({username:localStorage.getItem("userName")})
         this.basicInfoRef.current?.setForm()
     }
     handleTabChange=(tabKey: string)=>{
@@ -34,10 +35,10 @@ export default class PersonalSetting extends React.Component<IProp> {
             <div className={styles.warpper}>
                 <Tabs tabPosition="left" className={styles.tabs} onChange={(key)=>{this.handleTabChange(key)}}>
                     <Tabs.TabPane tab='基本设置' key="0">
-                        <BasicSetting ref={this.basicInfoRef}   />
+                        <BasicSetting ref={this.basicInfoRef} userStore={this.props.userStore}  />
                     </Tabs.TabPane>
                     <Tabs.TabPane tab='密码设置' key="1">
-                        <PasswdSetting  />
+                        <PasswdSetting userStore={this.props.userStore}  />
                     </Tabs.TabPane>
                 </Tabs>
             </div>

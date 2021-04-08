@@ -14,12 +14,15 @@ const {
   loginApi,
   logoutApi,
   getUserInfo,
+  modifyUserInfo,
+  modifyUserPwd,
+
 } = api
 
-interface content{
-  username:string,
-  password:string,
-}
+// interface content{
+//   username:string,
+//   password:string,
+// }
 
 class UserStore{
 
@@ -62,6 +65,14 @@ class UserStore{
     } 
     return {success,msg};
   }
+  updateUserInfo=async(params:any) => {
+    let {status,success ,  msg , data} = await modifyUserInfo(params)
+    return {success,msg};
+  }
+  updateUserPwd=async(params:any) => {
+    let {status,success ,  msg , data} = await modifyUserPwd(params)
+    return {success,msg};
+  }
 
   @action
   handelLogout=async()=>{
@@ -69,6 +80,7 @@ class UserStore{
     if (success) {
       localStorage.clear()
       sessionStorage.clear()
+      
     } 
     return {success:success,msg:msg}
   }
