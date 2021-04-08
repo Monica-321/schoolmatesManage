@@ -1,19 +1,25 @@
 //政治面貌
-export const politicalStatusData:any[]= [
-    {label:'中共党员',value:1},
-    {label:'中共预备党员',value:2},
-    {label:'共青团员',value:3},
-    {label:'民革党员',value:4},
-    {label:'民盟盟员',value:5},
-    {label:'民建会员',value:6},
-    {label:'民进会员',value:7},
-    {label:'农工党党员',value:8},
-    {label:'致公党党员',value:9},
-    {label:'九三学社社员',value:10},
-    {label:'台盟盟员',value:11},
-    {label:'无党派人士',value:12},
-    {label:'群众',value:13},
+export const politicalStatusData:any[]=[
+  {label:'中共党员',value:'中共党员'},
+  {label:'群众',value:'群众'},
+  {label:'共青团员',value:'共青团员'},
+  {label:'其他',value:'其他'}
 ];
+// [
+//     {label:'中共党员',value:1},
+//     {label:'中共预备党员',value:2},
+//     {label:'共青团员',value:3},
+//     {label:'民革党员',value:4},
+//     {label:'民盟盟员',value:5},
+//     {label:'民建会员',value:6},
+//     {label:'民进会员',value:7},
+//     {label:'农工党党员',value:8},
+//     {label:'致公党党员',value:9},
+//     {label:'九三学社社员',value:10},
+//     {label:'台盟盟员',value:11},
+//     {label:'无党派人士',value:12},
+//     {label:'群众',value:13},
+// ];
 //企业性质
 export const companyTypesData:any[]= [
     {label:'国有企业',value:1},
@@ -24,18 +30,61 @@ export const companyTypesData:any[]= [
     {label:'其他事业单位',value:6},
     {label:'其他',value:7},
 ];
-//行业
-// export const companyTypes:any[]= [
-//     {label:'国有企业',value:1},
-//     {label:'三资企业',value:2},
-//     {label:'其他企业',value:3},
-//     {label:'机关',value:4},
-//     {label:'教育单位',value:5},
-//     {label:'其他事业单位',value:6},
-//     {label:'其他',value:7},
-// ];
 //行业，地区，民族,企业性质，就业标志？
 
+//行业
+export const industryList=[
+  {value:"edu",label:"教育行业"},
+  {value:"animation",label:"动画行业"},
+  {value:"game",label:"游戏行业"},
+  {value:"newMedia",label:"新媒体行业"},
+  {value:"internet",label:"互联网行业"},
+  {value:"shop",label:"电商行业"},
+  {value:"other",label:"其他"},
+]
+export const industryMap:any={
+  "edu":"教育行业",
+  "animation":"动画行业",
+  "game":"游戏行业",
+  "newMedia":"新媒体行业",
+  "internet":"互联网行业",
+  "shop":"电商行业",
+  "other":"其他",
+};
+
+//专业
+//本科专业
+export const major0=[
+  {label:"数字媒体技术",value:"dm"},
+  {label:"计算机科学与技术",value:"cs"},
+  {label:"电子信息工程",value:"em"},
+  {label:"通信工程",value:"tx"},
+  {label:"电子信息科学与技术",value:"ai"},
+];
+//研究生专业
+export const major1=[
+  {label:"计算机应用技术",value:"cat"},
+  {label:"信号与信息处理",value:"sih"},
+];
+export const majorList:any[]=[...major0,...major1];
+export const majorMap:any={
+  "dm":"数字媒体技术",
+  "cs":"计算机科学与技术",
+  "em":"电子信息工程",
+  "tx":"通信工程",
+  "ai":"电子信息科学与技术",
+  "cat":"计算机应用技术",
+  "sih":"信号与信息处理"
+};
+//民族
+export const nationalityList:any[]= ["壮族", "满族", "回族", "苗族", "维吾尔族", "土家族", "彝族", "蒙古族", "藏族", "布依族", "侗族", "瑶族", "朝鲜族", "白族", "哈尼族", "哈萨克族", "黎族", "傣族", "畲族", "傈僳族", "仡佬族", "东乡族", "高山族", "拉祜族", "水族", "佤族", "纳西族", "羌族", "土族", "仫佬族", "锡伯族", "柯尔克孜族", "达斡尔族", "景颇族", "毛南族", "撒拉族", "布朗族", "塔吉克族", "阿昌族", "普米族", "鄂温克族", "怒族", "京族", "基诺族", "德昂族", "保安族", "俄罗斯族", "裕固族", "乌兹别克族", "门巴族", "鄂伦春族", "独龙族", "塔塔尔族", "赫哲族", "珞巴族", "汉族"];
+const list:any[]=[]
+nationalityList.map((item)=>{
+  list.push({label:item,value:item})
+})
+export const nationList=[...list];
+
+ //省市
 export const addressData:any[] = [
     {
       "value": "北京市",

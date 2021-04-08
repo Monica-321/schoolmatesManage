@@ -8,7 +8,7 @@ import InfoModal from '@/components/InfoModal'
 import AddOrEdit from './addOrEdit'
 import BatchExportModal from './batchExport'
 import BatchImportModal from './batchImport'
-import {politicalStatusData} from '@/utils/staticData'
+import {politicalStatusData,nationList,addressData,majorMap,majorList,industryMap,industryList} from '@/utils/staticData'
 import { observer, inject } from 'mobx-react'
 const { Item } = Form
 const { Option } = Select
@@ -41,7 +41,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     super(props)
     this.searchRef = React.createRef();
   }
-  defaultValue=['学号', '姓名', '性别', '院系', '专业','班级', '毕业年份']
+  defaultValue=['学号', '姓名', '性别','就读身份', '院系', '专业','班级', '毕业年份']
   state:IState = {
     loading: false,
     pageNum: 1,
@@ -179,10 +179,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           label:"民族",
           placeholder:"请选择民族",
           style:{width: 174},
-          selectOptions:[
-            { label: '汉族' ,value: 1 },
-            { label: '其他族' ,value: 2 },
-          ],
+          selectOptions:nationList,
           selectField: {
             label: 'label',
             value: 'value'
@@ -210,9 +207,12 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           placeholder:"请选择入学年份",
           style:{width: 174},
           selectOptions:[
-            { label: '2017' ,value: 1 },
-            { label: '2018' ,value: 2 },
-          ],
+            { label: '2017' ,value: '2017' },
+            { label: '2016' ,value: '2016' },
+            { label: '2015' ,value: '2015' },
+            { label: '2014' ,value: '2014' },
+            { label: '2013' ,value: '2013' },
+          ],  //TODO 注意与身份的联动
           selectField: {
             label: 'label',
             value: 'value'
@@ -225,9 +225,13 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           placeholder:"请选择毕业年份",
           style:{width: 174},
           selectOptions:[
-            { label: '2021' ,value: 1 },
-            { label: '2020' ,value: 2 },
-          ],
+            { label: '2021' ,value: '2021' },
+            { label: '2020' ,value: '2020' },
+            { label: '2019' ,value: '2019' },
+            { label: '2018' ,value: '2018' },
+            { label: '2017' ,value: '2017' },
+            { label: '2016' ,value: '2016' },
+          ],  //TODO 注意与身份的联动
           selectField: {
             label: 'label',
             value: 'value'
@@ -245,48 +249,29 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
               value: 'value'
             }
           },
-        // {
-        //   el:'select',
-        //   name:'faculty',
-        //   label:"学院",
-        //   placeholder:"请选择学院",
-        //   style:{width: 174},
-        //   selectOptions:[
-        //     { label: '信息学院' ,value: 1 },
-        //     { label: '其他学院' ,value: 2 },
-        //   ],
-        //   selectField: {
-        //     label: 'label',
-        //     value: 'value'
-        //   }
-        // },
         {
-          el:'select',
+          el:'cascader',
           name:'homeTown',
           label:"籍贯",
           placeholder:"请选择籍贯",
           style:{width: 174},
-          selectOptions:[
-            { label: '选择地区啦' ,value: 1 },
-          ],
-          selectField: {
-            label: 'label',
-            value: 'value'
-          }
+          cascaderOptions:addressData
         },
         {
-          el:'select',
-          name:'sourcePlace',
+          el:'cascader',
+          name:'srcPlace',
           label:"生源地",
           placeholder:"请选择生源地",
           style:{width: 174},
-          selectOptions:[
-            { label: '选择地区啦' ,value: 1 },
-          ],
-          selectField: {
-            label: 'label',
-            value: 'value'
-          }
+          cascaderOptions:addressData,
+        },
+        {
+          el:'cascader',
+          name:'dstPlace',
+          label:"去向城市",
+          placeholder:"请选择去向城市",
+          style:{width: 174},
+          cascaderOptions:addressData,
         },
         {
           el:'select',
@@ -294,9 +279,25 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           label:"专业",
           placeholder:"请选择专业",
           style:{width: 174},
+          selectOptions:majorList,  //TODO 注意与身份的联动
+          selectField: {
+            label: 'label',
+            value: 'value'
+          }
+        },
+        {
+          el:'select',
+          name:'graduateChoice',
+          label:"毕业去向",
+          placeholder:"请选择毕业去向",
+          style:{width: 174},
           selectOptions:[
-            { label: '数字媒体技术' ,value: 1 },
-            { label: '其他专业' ,value: 2 },
+            { label: '就业' ,value: '就业' },
+            { label: '考研' ,value: '考研' },
+            { label: '考公' ,value: '考公' },
+            { label: '留学' ,value: '留学' },
+            { label: '其他' ,value: '其他' },
+            { label: '未就业' ,value: '未就业' },
           ],
           selectField: {
             label: 'label',
@@ -306,12 +307,10 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         {
           el:'select',
           name:'workArea',
-          label:"现从事行业",
+          label:"从事行业",
           placeholder:"请选择从事行业",
           style:{width: 174},
-          selectOptions:[
-            { label: '行业' ,value: 1 },
-          ],
+          selectOptions:industryList,
           selectField: {
             label: 'label',
             value: 'value'
@@ -324,18 +323,20 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       { id:2, label: '姓名', value: '姓名', disabled: false},
       { id:3, label: '性别', value: '性别', disabled: false},
       { id:4, label: '民族', value: '民族', disabled: false},
-      { id:5, label: '政治面貌', value: '政治面貌', disabled: false},
-      { id:6, label: '院系', value: '院系', disabled: false},
-      { id:7, label: '专业', value: '专业', disabled: false},
-      { id:8, label: '班级', value: '班级', disabled: false},
-      { id:9, label: '入校年份', value: '入校年份', disabled: false},
-      { id:10, label: '毕业年份', value: '毕业年份', disabled: false},
-      { id:11, label: '生源地', value: '生源地', disabled: false},
+      { id:5, label: '就读身份', value: '就读身份', disabled: false},
+      { id:6, label: '政治面貌', value: '政治面貌', disabled: false},
+      { id:7, label: '院系', value: '院系', disabled: false},
+      { id:8, label: '专业', value: '专业', disabled: false},
+      { id:9, label: '班级', value: '班级', disabled: false},
+      { id:10, label: '入校年份', value: '入校年份', disabled: false},
+      { id:11, label: '毕业年份', value: '毕业年份', disabled: false},
       { id:12, label: '籍贯', value: '籍贯', disabled: false},
-      { id:13, label: '联系手机', value: '联系手机', disabled: false},
-      { id:14, label: '联系邮箱', value: '联系邮箱', disabled: false},
-      // { id:11, label: '就业标志', value: '更新时间', disabled: false},
-      { id:15, label: '现从事行业', value: '现从事行业', disabled: false},
+      { id:13, label: '生源地', value: '生源地', disabled: false},
+      { id:14, label: '去向城市', value: '去向城市', disabled: false},
+      { id:15, label: '联系手机', value: '联系手机', disabled: false},
+      { id:16, label: '联系邮箱', value: '联系邮箱', disabled: false},
+      { id:17, label: '毕业去向', value: '毕业去向', disabled: false},
+      { id:18, label: '从事行业', value: '从事行业', disabled: false},
     ];
 
     let filterProps={
@@ -344,24 +345,6 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       plainOptions,
       handleCheckChange:this.handleCheckChange,
     }
-
-    // let dataSource=[{
-    //   id:'1',
-    //   name:'qy',
-    //   gender:0,
-    //   nationality:'汉族', //映射
-    //   politicalStatus:'共青团员', //映射
-    //   sourcePlace:'江苏省无锡市', //映射，选择省市
-    //   faculty:'信息学院',
-    //   major:'数字媒体技术',
-    //   majorClass:'2',
-    //   yearOfEnrollment:'2017',
-    //   yearOfGraduation:'2021',
-    //   homeTown:'江苏省溧阳市', //映射，选择省市
-    //   contactPhone:'11',
-    //   contactEmail:'222',
-    //   workArea:'信息技术行业',  //映射
-    // }]
 
      //表格部分,要映射
      const columns = [
@@ -394,13 +377,17 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         key: 'politicalStatus',
         dataIndex: 'politicalStatus',
       },{
-        title: '生源地',
-        key: 'sourcePlace',
-        dataIndex: 'sourcePlace',
-      },{
         title: '籍贯',
         key: 'homeTown',
         dataIndex: 'homeTown',
+      },{
+        title: '生源地',
+        key: 'srcPlace',
+        dataIndex: 'srcPlace',
+      },{
+        title: '去向城市',
+        key: 'dstPlace',
+        dataIndex: 'dstPlace',
       },{
         title: '就读身份',
         key: 'educationStatus',
@@ -420,6 +407,14 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         title: '专业',
         key: 'major',
         dataIndex: 'major',
+        render:(text:any)=>{
+          return majorMap[text] || text
+          // majorList.map((item:any)=>{
+          //   if(text===item.value){
+          //     return item.label
+          //   }
+          // })  //TODO
+        }
       },{
         title: '班级',
         key: 'majorClass',
@@ -442,9 +437,21 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         key: 'contactEmail',
         dataIndex: 'contactEmail',
       },{
-        title: '现从事行业',
+        title: '毕业去向',
+        key: 'graduateChoice',
+        dataIndex: 'graduateChoice',
+      },{
+        title: '从事行业',
         key: 'workArea',
         dataIndex: 'workArea',
+        render:(text:any)=>{
+          return industryMap[text]||text
+          // industryList.map((item:any)=>{
+          //   if(text===item.value){
+          //     return item.label
+          //   }
+          // })  //TODO
+        }
       },
       {
         title: '操作',
@@ -486,14 +493,13 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       },
     }
     let listProps:any={
-      rowKey:'id',
+      rowKey:'_id',
       columns,
-      // dataSource:[],
       dataSource:list,
       pagination,
       loading,
       rowSelection,
-      // scroll: { x: 1000 },
+      // scroll: { x: 1000 },   //?没有滚动
     }
 
     let deleteModalProps={
