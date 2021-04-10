@@ -5,21 +5,6 @@ export const politicalStatusData:any[]=[
   {label:'共青团员',value:'共青团员'},
   {label:'其他',value:'其他'}
 ];
-// [
-//     {label:'中共党员',value:1},
-//     {label:'中共预备党员',value:2},
-//     {label:'共青团员',value:3},
-//     {label:'民革党员',value:4},
-//     {label:'民盟盟员',value:5},
-//     {label:'民建会员',value:6},
-//     {label:'民进会员',value:7},
-//     {label:'农工党党员',value:8},
-//     {label:'致公党党员',value:9},
-//     {label:'九三学社社员',value:10},
-//     {label:'台盟盟员',value:11},
-//     {label:'无党派人士',value:12},
-//     {label:'群众',value:13},
-// ];
 //企业性质
 export const companyTypesData:any[]= [
     {label:'国有企业',value:1},
@@ -32,6 +17,17 @@ export const companyTypesData:any[]= [
 ];
 //行业，地区，民族,企业性质，就业标志？
 
+//
+export const graduateChoiceList=[
+  { label: '就业' ,value: '就业' },
+  { label: '考研' ,value: '考研' },
+  { label: '考公' ,value: '考公' },
+  { label: '留学' ,value: '留学' },
+  { label: '其他' ,value: '其他' },
+  { label: '未就业' ,value: '未就业' },
+]
+export const companyRankList=["50强","100强","500强","其他"];
+export const companySizeList=["0-20","20-99","100-499","500-999","1000-9999","10000及以上"];
 //行业
 export const industryList=[
   {value:"edu",label:"教育行业"},

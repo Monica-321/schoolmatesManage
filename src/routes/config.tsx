@@ -66,6 +66,10 @@ const routes = [
         path:'/schoolMateInfoManage',
         component:InfomationManage.SchoolMateInfoManage,
       },
+      // {
+      //   path:'/schoolMateInfoAddEdit',
+      //   component:InfomationManage.SchoolMateAddEdit,
+      // },
       {
         path:'/schoolMateInfoDetail',
         component:InfomationManage.SchoolMateInfoDetail,

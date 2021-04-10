@@ -8,7 +8,7 @@ import InfoModal from '@/components/InfoModal'
 import AddOrEdit from './addOrEdit'
 import BatchExportModal from './batchExport'
 import BatchImportModal from './batchImport'
-import {politicalStatusData,nationList,addressData,majorMap,majorList,industryMap,industryList} from '@/utils/staticData'
+import {politicalStatusData,nationList,addressData,majorMap,majorList,industryMap,industryList,graduateChoiceList} from '@/utils/staticData'
 import { observer, inject } from 'mobx-react'
 const { Item } = Form
 const { Option } = Select
@@ -24,8 +24,8 @@ interface IState {
   deleteModalVisible:boolean,
   deleteRecord?:any,
   editModalVisible:boolean,
-  editRecord?:any,
-  editFlag:number,
+  // editRecord?:any,
+  editFlag:any,
   batchExportVisible:boolean,
   batchImportVisible:boolean,
 }
@@ -54,8 +54,8 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     deleteModalVisible:false,
     deleteRecord:{},
     editModalVisible:false ,
-    editRecord:{},
-    editFlag:0,
+    // editRecord:{},
+    editFlag:'add',
     batchExportVisible:false,
     batchImportVisible:false,
   }
@@ -90,7 +90,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
 
   //查询
   handleQuery=(params:any)=>{
-    //处理一下某些参数
+    //处理一下某些参数，比如城市那些、还有生日，以及是否精确查询？？
     // console.log("表单的请求参数为：",params)
     this.setState({pageNum: 1,searchVal:params,selectedRowKeys: [],},()=>{
       this.getTableData()
@@ -108,8 +108,26 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   }
 
   //弹出编辑/创建框
-  showEdit=async(record:any)=>{
-    this.setState({editRecord:record,editModalVisible:true,editFlag:1})
+  openEditModal = async(record: any,editFlag:any) => {
+    // let handleRecord={...record}
+    if(editFlag==='edit'){
+      const {id}=record
+      const {schoolMateStore: { fetchDetail }}=this.props
+      await fetchDetail({id:id},true)
+    }
+    // 处理下编辑数据以适应填写框
+    this.setState({
+      editModalVisible: true,
+      // curId: id,
+      // editRecord:record,
+      editFlag:editFlag,
+    })
+  }
+  hideEditModal = () => {
+    this.setState({
+      editModalVisible: false,
+      // editRecord:{},
+    })
   }
 
   //删除
@@ -145,7 +163,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     const {schoolMatesTableData}=schoolMateStore
     const{total,list}=schoolMatesTableData
     const {pageNum,pageSize,loading,checkedValue, selectedRowKeys , deleteModalVisible , deleteRecord ,
-    editModalVisible, editRecord , editFlag , batchExportVisible , batchImportVisible }=this.state
+    editModalVisible, editFlag , batchExportVisible , batchImportVisible }=this.state
     let searchProps={
       handleReset:this.handleReset,
       handleQuery:this.handleQuery,
@@ -193,7 +211,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           style:{width: 174},
           selectOptions:[
             { label: '本科生' ,value: 0 },
-            { label: '研究生' ,value: 1 },
+            { label: '硕士' ,value: 1 },
           ],
           selectField: {
             label: 'label',
@@ -291,14 +309,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           label:"毕业去向",
           placeholder:"请选择毕业去向",
           style:{width: 174},
-          selectOptions:[
-            { label: '就业' ,value: '就业' },
-            { label: '考研' ,value: '考研' },
-            { label: '考公' ,value: '考公' },
-            { label: '留学' ,value: '留学' },
-            { label: '其他' ,value: '其他' },
-            { label: '未就业' ,value: '未就业' },
-          ],
+          selectOptions:graduateChoiceList,
           selectField: {
             label: 'label',
             value: 'value'
@@ -395,7 +406,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         render:(text:any)=>{
           switch(text){
             case 0: return '本科生';
-            case 1: return '研究生';
+            case 1: return '硕士';
             default: return text;
           }
         }
@@ -460,8 +471,12 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         width:240,
         render:(text:any, record:any, index:number)=>{
           return <span>
+            {/* TODO 学号或者_id都唯一 */}
           <Button type="link" onClick={()=>{this.props.history.push(`/infoManage/schoolMateInfoDetail?id=${record.id}`)}}>查看详情</Button>
-          <Button type="link" onClick={()=>{this.setState({editRecord:record,editModalVisible:true}) }}>编辑</Button>
+          <Button type="link" onClick={
+            // this.setState({editRecord:record,editModalVisible:true}) 
+            this.openEditModal.bind(this,record,'edit')
+            }>编辑</Button>
           <Button type="link" style={{color:'red'}} onClick={()=>this.setState({deleteModalVisible:true,deleteRecord:record})}>删除</Button> 
           </span>
         }
@@ -517,14 +532,10 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
 
     let editModalProps={
       editFlag,
-      editRecord,
+      // editRecord,
       schoolMateStore,
-      hideEdit:()=>{
-        this.setState({editRecord:{},editModalVisible:false},()=>{
-          this.getTableData()
-        })
-      },
-      // editModalVisible,
+      hideEdit:this.hideEditModal,
+      fetchData: this.refreshData,
     }
 
     let exportModalProps = {
@@ -548,7 +559,10 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         </div>
         <div className={styles.tableBeforeNode}>
           <div>
-          <Button style={{margin:'0 10px 25px 10px'}} onClick={()=>{this.setState({editRecord:{},editModalVisible:true,editFlag:0}) }} >
+          <Button style={{margin:'0 10px 25px 10px'}} onClick={
+            // this.setState({editRecord:{},editModalVisible:true,editFlag:0}) 
+            this.openEditModal.bind(this,{},'add')
+          }>
             添加校友
           </Button>
           <Button type='primary' onClick={this.batchImport}>批量导入</Button>

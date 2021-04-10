@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Button, Row, Col,Select , message } from 'antd';
+import { Modal, Form, Input, Button, Row, Col,Select , message ,Cascader, InputNumber , DatePicker} from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { znEnReg , phoneReg , emailReg } from '@/utils/reg'
+import moment from 'moment'
+import {politicalStatusData,nationList,graduateChoiceList,addressData,majorList,industryMap,industryList,companySizeList,companyRankList} from '@/utils/staticData'
 const { Item } = Form
 const {Option}=Select
 interface IProps {
     schoolMateStore?:any,
-    editFlag:number,    //0添加1编辑
-    editRecord?:any,
+    editFlag:any,    //0添加1编辑
+    // editRecord?:any,
     // editModalVisible:boolean,
     hideEdit:any,
+    fetchData?: any;
 }
 interface IState {
     
@@ -23,29 +26,44 @@ class AddOrEdit extends Component<IProps,IState> {
     }
 
     componentDidMount(){
-        console.log("editFlag,0添加1编辑:",this.props.editFlag) //是第一次选择的数据，TODO
+        const {editFlag } = this.props
+        if(editFlag==='edit'){
+            const {schoolMateStore:{schoolMateDetail}}=this.props
+            this.formRef.current?.setFieldsValue(schoolMateDetail)
+        }else{
+            this.formRef.current?.resetFields()
+        }
     }
 
     submit=async(values:any)=>{
         const { editFlag }=this.props
         const { schoolMateStore: {goschoolMatesCreate,goschoolMatesModify} } = this.props
-        //处理values
-        //判断编辑还是创建
+        // console.log('原始数据：',values)
+        // 处理values
+        let params={...values}
+        params.birthDate=moment(params.birthDate).format('YYYY-MM-DD')
+        params.homeTown=params.homeTown.join(' ')
+        params.srcPlace=params.srcPlace.join(' ')
+        params.dstPlace=params.dstPlace.join(' ')
+        // console.log(params)
+        // 判断编辑还是创建
         switch(editFlag){
-            case 0: 
-                {//注意传参 TODO
-                let params={}
+            case 'add': 
+                {//注意传参 TODO,id是否自己写？
+                // let params={}
                 var res=await goschoolMatesCreate(params)
                 break;}
-            case 1: 
+            case 'edit': 
                 {//注意传参 TODO
-                let params={}
+                // let params={}
                 var res=await goschoolMatesModify(params)
                 break;}
         }
         if(res.success){
             message.success(res.msg)
             this.props.hideEdit()
+        }else{
+            message.error(res.msg)
         }
     }
 
@@ -55,7 +73,7 @@ class AddOrEdit extends Component<IProps,IState> {
     }
 
     render(){  
-        const { editRecord, editFlag}=this.props
+        const { editFlag}=this.props
         const layout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 16 },
@@ -69,22 +87,22 @@ class AddOrEdit extends Component<IProps,IState> {
             closable:false,
             footer:null,
             width:1000,
-            title:editFlag?"编辑校友":'创建校友',
+            title:editFlag==='edit'?"编辑校友":'创建校友',
             onCancel:this.handleCancel,
             destroyOnClose:true,
         }
         return(
             <div>
                 <Modal {...modalProps} >
-                    <Form ref={this.formRef} {...layout} initialValues={editRecord} onFinish={this.submit} >
+                    <Form ref={this.formRef} {...layout} onFinish={this.submit} >
                         <Row>
                             <Col span={8}>
                                 <Item label="学号" name="id"rules={[
                                         { required: true, message: '请填写学号' },
                                         // { pattern: znEnReg , message:'请输入中文或英文' }
                                     ]} >
-                                    {editFlag?
-                                        <span>{editRecord.id}</span>
+                                    {editFlag==='edit'?
+                                        <Input  disabled/>
                                         :
                                         <Input placeholder="请输入校友学号" />
                                     }
@@ -111,66 +129,145 @@ class AddOrEdit extends Component<IProps,IState> {
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="民族" name="nationality" >
+                                <Item label="民族" name="nationality" rules={[
+                                        { required: true, message: '请选择民族' },
+                                    ]} >
                                     <Select placeholder="请选择民族">
-                                        <Option value={0}>民族</Option>
+                                        {
+                                            nationList.map((item: any) => <Option value={item.value} key={item.value}>{item.label}</Option>)
+                                        }
                                     </Select>
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="政治面貌" name="politicalStatus" >
+                                <Item label="出生日期" name="birthDate"  rules={[
+                                        { required: true, message: '请选择出生日期' },
+                                    ]} >
+                                    <DatePicker style={{width:'100%'}} />
+                                </Item>
+                            </Col>
+                            <Col span={8}>
+                                <Item label="政治面貌" name="politicalStatus" rules={[
+                                        { required: true, message: '请选择政治面貌' },
+                                    ]}>
                                     <Select placeholder="请选择政治面貌">
-                                        <Option value={0}>政治面貌</Option>
+                                    {
+                                        politicalStatusData.map((item: any) => <Option value={item.value} key={item.value}>{item.label}</Option>)
+                                    }
                                     </Select>
+                                </Item>
+                            </Col>                          
+                            {/* 注意回显时的value */}
+                            <Col span={8}>
+                                <Item label="籍贯" name="homeTown" rules={[
+                                        { required: true, message: '请选择籍贯' },
+                                    ]} >
+                                <Cascader
+                                    placeholder="请选择籍贯"
+                                    options={addressData}
+                                    className='inputMarginB'
+                                />
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="生源地" name="sourcePlace" >
-                                    <Select placeholder="请选择生源地">
-                                        <Option value={0}>生源地</Option>
-                                    </Select>
+                                <Item label="生源地" name="srcPlace" rules={[
+                                        { required: true, message: '请选择生源地' },
+                                    ]} >
+                                    <Cascader
+                                        placeholder="请选择生源地"
+                                        options={addressData}
+                                        className='inputMarginB'
+                                    />
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="籍贯" name="homeTown" >
-                                    <Select placeholder="请选择籍贯">
-                                        <Option value={0}>籍贯</Option>
+                                <Item label="去向城市" name="dstPlace" rules={[
+                                        { required: true, message: '请选择去向城市' },
+                                    ]} >
+                                    <Cascader
+                                        placeholder="请选择去向城市"
+                                        options={addressData}
+                                        className='inputMarginB'
+                                    />
+                                </Item>
+                            </Col>
+                            <Col span={8}>
+                                <Item label="就读身份" name="educationStatus" rules={[
+                                        { required: true, message: '请选择就读身份' },
+                                    ]} >
+                                    <Select placeholder="请选择就读身份">
+                                        <Option value={0}>本科生</Option>
+                                        <Option value={1}>硕士</Option>
                                     </Select>
                                 </Item>
                             </Col>
                             <Col span={8}>
                                 <Item label="院系" name="faculty" >
-                                    <Select disabled defaultValue={0} >
-                                        <Option value={0}>信息学院</Option>
+                                    <Select disabled defaultValue="信息学院" >
+                                        <Option value="信息学院">信息学院</Option>
                                     </Select>
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="专业" name="major" >
-                                    <Select placeholder="请选择专业">
-                                        <Option value={0}>专业</Option>
+                                <Item label="专业" name="major" rules={[
+                                        { required: true, message: '请选择专业' },
+                                    ]}  >
+                                    <Select placeholder="请选择专业" >
+                                        {/* TODO 联系本科或硕士 */}
+                                    {
+                                        majorList.map((item: any) => <Option value={item.value} key={item.value}>{item.label}</Option>)
+                                    }
                                     </Select>
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="班级" name="majorClass" >
+                                <Item label="班级" name="majorClass" rules={[
+                                        { required: true, message: '请输入班级' },
+                                    ]}  >
+                                    {/* ?TODO */}
                                     <Input placeholder="请输入班级" />
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="入学年份" name="yearOfEnrollment" >
+                                <Item label="入学年份" name="yearOfEnrollment" rules={[
+                                        { required: true, message: '请选择入学年份' },
+                                    ]}  >
+                                    {/* TODO */}
                                     <Select placeholder="请选择入学年份" >
-                                        <Option value={0}>入学年份</Option>
+                                        <Option value="2017">2017</Option>
+                                        <Option value="2016">2016</Option>
+                                        <Option value="2015">2015</Option>
+                                        <Option value="2014">2014</Option>
+                                        <Option value="2013">2013</Option>
                                     </Select>
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="毕业年份" name="yearOfGraduation" >
+                                <Item label="毕业年份" name="yearOfGraduation" rules={[
+                                        { required: true, message: '请选择毕业年份' },
+                                    ]}  >
                                     <Select placeholder="请选择毕业年份" >
-                                        <Option value={0}>毕业年份</Option>
+                                        {/* TODO */}
+                                        <Option value="2021">2021</Option>
+                                        <Option value="2020">2020</Option>
+                                        <Option value="2019">2019</Option>
+                                        <Option value="2018">2018</Option>
+                                        <Option value="2017">2017</Option>
+                                        <Option value="2016">2016</Option>
                                     </Select>
                                 </Item>
                             </Col>
+                            <Col span={8}>
+                                <Item label="毕业去向" name="graduateChoice" rules={[
+                                        { required: true, message: '请选择毕业去向' },
+                                    ]}  >
+                                    <Select placeholder="请选择毕业去向">
+                                    {
+                                        graduateChoiceList.map((item: any) => <Option value={item.value} key={item.value}>{item.label}</Option>)
+                                    }
+                                    </Select>
+                                </Item>
+                            </Col>   
                             <Col span={8}>
                                 <Item label="联系手机" name="contactPhone"
                                     rules={[{ pattern: phoneReg , message:'请输入正确格式的手机号' }]}
@@ -185,11 +282,43 @@ class AddOrEdit extends Component<IProps,IState> {
                                     <Input placeholder="请输入校友联系邮箱" />
                                 </Item>
                             </Col>
+                            {/* 如果是非就业下面可以不用出现来着 */}
                             <Col span={8}>
-                                <Item label="现从事行业" name="workArea" >
-                                    <Select placeholder="请选择目前从事行业" >
-                                        <Option value={0}>从事行业</Option>
+                                <Item label="从事行业" name="workArea" >
+                                    <Select placeholder="请选择从事行业" >
+                                    {
+                                        industryList.map((item: any) => <Option value={item.value} key={item.value}>{item.label}</Option>)
+                                    }
                                     </Select>
+                                </Item>
+                            </Col>
+                            {/* 岗位、规模、公司排名、薪资？ */}
+                            <Col span={8}>
+                                <Item label="工作岗位" name="job" >
+                                   <Input placeholder="请输入工作岗位" />
+                                </Item>
+                            </Col>
+                            <Col span={8}>
+                                <Item label="公司规模" name="companySize" >
+                                    <Select placeholder="请选择公司规模" >
+                                    {
+                                        companySizeList.map((item: any) => <Option value={item} key={item}>{item}</Option>)
+                                    }
+                                    </Select>
+                                </Item>
+                            </Col>
+                            <Col span={8}>
+                                <Item label="公司排名" name="companyRank" >
+                                    <Select placeholder="请选择公司排名" >
+                                    {
+                                        companyRankList.map((item: any) => <Option value={item} key={item}>{item}</Option>)
+                                    }
+                                    </Select>
+                                </Item>
+                            </Col>
+                            <Col span={8}>
+                                <Item label="毕业薪资" name="salary" >
+                                   <InputNumber style={{width:'100%'}} placeholder="请输入毕业薪资" min={0} max={9999999} />
                                 </Item>
                             </Col>
                         </Row>

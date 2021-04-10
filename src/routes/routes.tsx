@@ -11,6 +11,7 @@ import AccountManage from '@/pages/systemSetting/accountManage';
 import PersonalSetting from '@/pages/systemSetting/personalSetting';
 
 import SchoolMateInfoManage from '@/pages/infomationManage/schoolMateInfo';
+// import SchoolMateAddEdit from '@/pages/infomationManage/schoolMateInfo/addOrEdit'
 import SchoolMateInfoDetail from '@/pages/infomationManage/schoolMateInfo/detail';
 import SchoolCompanyManage from '@/pages/infomationManage/schoolMateCompany';
 import SchoolCompanyDetail from '@/pages/infomationManage/schoolMateCompany/detail';
@@ -52,6 +53,7 @@ const Routes = {
   // 信息管理
   InfomationManage: {
     SchoolMateInfoManage,     // 校友信息管理
+    // SchoolMateAddEdit,
     SchoolMateInfoDetail,   // 校友信息详情
 	  // 校友单位信息管理 及详情？
     SchoolCompanyManage,     // 校友单位信息管理

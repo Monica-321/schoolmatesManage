@@ -1,4 +1,5 @@
 import { observable, action , makeObservable, runInAction } from 'mobx'
+import moment from 'moment'
 import api from '@/api'
 
 const {
@@ -51,14 +52,32 @@ class SchoolMateStore{
 
   //详情查询
   @action
-  fetchDetail= async(params:any) => {
+  fetchDetail= async(params:any,format:Boolean) => {
     let {status,success,msg, data} = await schoolMatesDetail(params)
     if(success){
       runInAction(() => {
         this.schoolMateDetail = data
       })
+      if(format){
+        // console.log('格式化')
+        this.formatData()
+      }
     }
     return {success,msg}
+  }
+  formatData=()=>{
+    let {id,name,gender,nationality,faculty,educationStatus,politicalStatus,yearOfEnrollment,yearOfGraduation,major,majorClass,
+      graduateChoice, contactPhone,contactEmail,contactAddress,workArea,job,companyRank,companySize,salarybirthDate,salary,
+      birthDate,homeTown,srcPlace,dstPlace} = this.schoolMateDetail
+    birthDate=moment(birthDate)
+    // TODO 地图相关全保持一致
+    homeTown=homeTown.split(' ')  //级联需要[ , , ]
+    srcPlace=srcPlace.split(' ')
+    dstPlace=dstPlace.split(' ')
+    this.schoolMateDetail = {id,name,gender,nationality,faculty,educationStatus,politicalStatus,yearOfEnrollment,yearOfGraduation,major,majorClass,
+      graduateChoice, contactPhone,contactEmail,contactAddress,workArea,job,companyRank,companySize,salarybirthDate,salary,
+      birthDate,homeTown,srcPlace,dstPlace}
+    console.log(this.schoolMateDetail)
   }
 
 }

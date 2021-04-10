@@ -142,9 +142,6 @@ class AccountManage extends Component<IProps,IState> {
       editRecord:{},
     })
   }
-  refresh = () => {
-
-  }
   render(){
     const { accountStore }=this.props
     const {adminsTableData} = accountStore
