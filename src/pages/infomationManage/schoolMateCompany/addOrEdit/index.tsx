@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import { Modal, Form, Input, Button, Row, Col,Select,Upload,message } from 'antd';
+import { Modal, Form, Input, Button, Row, Col,Select,Upload,message,Cascader } from 'antd';
 import { FormInstance } from 'antd/lib/form';
 import { znEnReg , phoneReg , emailReg } from '@/utils/reg'
 import { UploadOutlined } from '@ant-design/icons';
+import {companyTypesData,addressData,companySizeList}from '@/utils/staticData'
 const { Item } = Form
 const {Option}=Select
 const { TextArea } = Input
 interface IProps {
     schoolCompanyStore?: any;
-    editFlag:number
-    editRecord?:any,
-    editModalVisible:boolean,
+    editFlag:any;
+    // editRecord?:any,
+    // editModalVisible:boolean,
     hideEdit:any,
+    fetchData?: any;
 }
 interface IState {
 
@@ -23,27 +25,39 @@ class AddOrEdit extends Component<IProps,IState> {
       super(props)
       this.formRef = React.createRef<FormInstance>()
     }
-
+    componentDidMount(){
+        const {editFlag } = this.props
+        if(editFlag==='edit'){
+            const {schoolCompanyStore:{schoolCompanyDetail}}=this.props
+            this.formRef.current?.setFieldsValue(schoolCompanyDetail)
+        }else{
+            this.formRef.current?.resetFields()
+        }
+    }
     submit=async(values:any)=>{
         const { editFlag }=this.props
         const { schoolCompanyStore: {goschoolCompaniesCreate,goschoolCompaniesModify} } = this.props
         //处理values
+        let params={...values}
+        params.companyCity=params.companyCity.join(' ')
         //判断编辑还是创建
         switch(editFlag){
-            case 0: 
+            case 'add': 
                 {//注意传参 TODO
-                let params={}
+                // let params={}
                 var res=await goschoolCompaniesCreate(params)
                 break;}
-            case 1: 
+            case 'edit': 
                 {//注意传参 TODO
-                let params={}
+                // let params={}
                 var res=await goschoolCompaniesModify(params)
                 break;}
         }
         if(res.success){
             message.success(res.msg)
             this.props.hideEdit()
+        }else{
+            message.error(res.msg)
         }
     }
 
@@ -53,7 +67,7 @@ class AddOrEdit extends Component<IProps,IState> {
     }
 
     render(){  
-        const {editModalVisible, editRecord, editFlag}=this.props
+        const {editFlag}=this.props
         const layout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 16 },
@@ -62,42 +76,43 @@ class AddOrEdit extends Component<IProps,IState> {
             wrapperCol: { span: 14 , offset: 9 },
         };
         const modalProps={
-            visible:editModalVisible,
+            visible:true,
             centered:true,
             closable:false,
             footer:null,
             width:1100,
-            title:editFlag?"编辑校友单位":'创建校友单位',
+            title:editFlag==='edit'?"编辑校友单位":'创建校友单位',
             onCancel:this.handleCancel,
             destroyOnClose:true,
         }
-        const uploadProps = {
-            beforeUpload: (file:any) => {
-              if (file.type !== 'image/png') {
-                message.error(`${file.name} is not a png file`);
-              }
-            //   return file.type === 'image/png' ? true : Upload.LIST_IGNORE;
-            return file.type === 'image/png' ? true : false;
-            },
-            onChange: (info:any) => {
-              console.log(info.fileList);
-            },
-          };
+        // const uploadProps = {
+        //     beforeUpload: (file:any) => {
+        //       if (file.type !== 'image/png') {
+        //         message.error(`${file.name} is not a png file`);
+        //       }
+        //     //   return file.type === 'image/png' ? true : Upload.LIST_IGNORE;
+        //     return file.type === 'image/png' ? true : false;
+        //     },
+        //     onChange: (info:any) => {
+        //       console.log(info.fileList);
+        //     },
+        //   };
         return(
             <div>
                 <Modal {...modalProps} >
-                    <Form ref={this.formRef} {...layout} initialValues={editRecord} onFinish={this.submit} >
+                    <Form ref={this.formRef} {...layout} onFinish={this.submit} >
                         <Row>
                             <Col span={8}>
                                 <Item label="企业名称" name="companyName"rules={[
                                         { required: true, message: '请填写校友企业名称' },
                                         { pattern: znEnReg , message:'请输入中文或英文' }
                                     ]} >
-                                    {editFlag?
+                                    {/*     企业名称可更改否？
+                                    editFlag==='edit'?
                                         <span>{editRecord.companyName}</span>
-                                        :
+                                        : */}
                                         <Input placeholder="请输入校友企业名称" />
-                                    }
+                                    
                                 </Item>
                             </Col>
                             <Col span={8}>
@@ -105,43 +120,59 @@ class AddOrEdit extends Component<IProps,IState> {
                                     rules={[ { required: true, message: '请选择企业性质' },]}
                                 >
                                     <Select placeholder="请选择企业性质">
-                                        <Option value={0}>企业性质</Option>
+                                    {
+                                        companyTypesData.map((item: any) => <Option value={item.value} key={item.value}>{item.label}</Option>)
+                                    }
                                     </Select>
                                 </Item>
                             </Col>
                             <Col span={8}>
-                                <Item label="主要所在城市" name="companyCity" >
-                                    <Select placeholder="请选择所在城市">
-                                        <Option value={0}>所在城市</Option>
+                                <Item label="企业规模" name="companySize"
+                                    rules={[ { required: true, message: '请选择企业规模' },]}
+                                >
+                                    <Select placeholder="请选择企业规模">
+                                    {
+                                        companySizeList.map((item: any) => <Option value={item.value} key={item.value}>{item.label}</Option>)
+                                    }
                                     </Select>
                                 </Item>
                             </Col>
+                            <Col span={8}>
+                                <Item label="所在城市" name="companyCity"
+                                    rules={[ { required: true, message: '请选择主要所在城市' },]}
+                                >
+                                <Cascader
+                                    placeholder="请选择主要所在城市"
+                                    options={addressData}
+                                    className='inputMarginB'
+                                />
+                                </Item>
+                            </Col>
 
-                            <Col span={16}>
+                            {/* <Col span={16}>
                                 <Item label="企业图片" name="companyPic" labelCol={{span: 3}} wrapperCol={{span: 20}} >
-                                    {/* TODO 照片墙形式？或者有值就显示没值就这个 */}
                                 <Upload {...uploadProps}>
                                     <Button icon={<UploadOutlined />}>Upload png only</Button>
                                 </Upload>
                                 </Item>
-                            </Col>
-                            <Col span={8}>
+                            </Col> */}
+                            {/* <Col span={8}>
                                 <Item label="所属行业" name="belongArea" >
                                     <Select placeholder="请选择所属行业" >
                                         <Option value={0}>所属行业</Option>
                                     </Select>
                                 </Item>
-                            </Col>
+                            </Col> */}
 
-                            <Col span={24}>
-                                <Item label="企业主要地址" name="companyAddress" labelCol={{span: 2}} wrapperCol={{span: 21}} >
-                                    <Input placeholder="请输入企业主要地址" />
+                            <Col span={16}>
+                                <Item label="企业地址" name="companyAddress" labelCol={{span: 3}} wrapperCol={{span:20}} >
+                                    <Input placeholder="请输入企业地址" />
                                 </Item>
                             </Col>
 
                             <Col span={8}>
-                                <Item label="企业负责人" name="companyPrincipal" >
-                                    <Input placeholder="请输入企业负责人" />
+                                <Item label="企业网址" name="companyWebsite" >
+                                    <Input placeholder="请输入企业网址" />
                                 </Item>
                             </Col>
                             <Col span={8}>
@@ -161,7 +192,7 @@ class AddOrEdit extends Component<IProps,IState> {
 
                             <Col span={24}>
                                 <Item label="企业描述" name="companyDescription" labelCol={{span: 2}} wrapperCol={{span: 21}} >
-                                    <TextArea showCount maxLength={300} />
+                                    <TextArea showCount maxLength={400} placeholder="请输入企业描述"/>
                                 </Item>
                             </Col>
                         </Row>

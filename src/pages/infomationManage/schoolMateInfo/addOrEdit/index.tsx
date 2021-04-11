@@ -3,7 +3,7 @@ import { Modal, Form, Input, Button, Row, Col,Select , message ,Cascader, InputN
 import { FormInstance } from 'antd/lib/form';
 import { znEnReg , phoneReg , emailReg } from '@/utils/reg'
 import moment from 'moment'
-import {politicalStatusData,nationList,graduateChoiceList,addressData,majorList,industryMap,industryList,companySizeList,companyRankList} from '@/utils/staticData'
+import {politicalStatusData,nationList,graduateChoiceList,addressData,majorList,industryMap,industryList,companySizeMap,companyRankMap} from '@/utils/staticData'
 const { Item } = Form
 const {Option}=Select
 interface IProps {
@@ -302,7 +302,7 @@ class AddOrEdit extends Component<IProps,IState> {
                                 <Item label="公司规模" name="companySize" >
                                     <Select placeholder="请选择公司规模" >
                                     {
-                                        companySizeList.map((item: any) => <Option value={item} key={item}>{item}</Option>)
+                                        companySizeMap.map((item: any) => <Option value={item} key={item}>{item}</Option>)
                                     }
                                     </Select>
                                 </Item>
@@ -311,7 +311,7 @@ class AddOrEdit extends Component<IProps,IState> {
                                 <Item label="公司排名" name="companyRank" >
                                     <Select placeholder="请选择公司排名" >
                                     {
-                                        companyRankList.map((item: any) => <Option value={item} key={item}>{item}</Option>)
+                                        companyRankMap.map((item: any) => <Option value={item} key={item}>{item}</Option>)
                                     }
                                     </Select>
                                 </Item>

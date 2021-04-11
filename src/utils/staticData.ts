@@ -9,11 +9,8 @@ export const politicalStatusData:any[]=[
 export const companyTypesData:any[]= [
     {label:'国有企业',value:1},
     {label:'三资企业',value:2},
-    {label:'其他企业',value:3},
-    {label:'机关',value:4},
-    {label:'教育单位',value:5},
-    {label:'其他事业单位',value:6},
-    {label:'其他',value:7},
+    {label:'事业单位',value:3},
+    {label:'其他企业',value:4},
 ];
 //行业，地区，民族,企业性质，就业标志？
 
@@ -26,8 +23,14 @@ export const graduateChoiceList=[
   { label: '其他' ,value: '其他' },
   { label: '未就业' ,value: '未就业' },
 ]
-export const companyRankList=["50强","100强","500强","其他"];
-export const companySizeList=["0-20","20-99","100-499","500-999","1000-9999","10000及以上"];
+export const companyRankMap=["50强","100强","500强","其他"];
+export const companySizeMap=["0-20","20-99","100-499","500-999","1000-9999","10000及以上"];
+const sizelist:any[]=[]
+companySizeMap.map((item)=>{
+  sizelist.push({label:item,value:item})
+})
+export const companySizeList=[...sizelist];
+
 //行业
 export const industryList=[
   {value:"edu",label:"教育行业"},

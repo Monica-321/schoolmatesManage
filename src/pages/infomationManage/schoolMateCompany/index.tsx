@@ -6,7 +6,7 @@ import SearchPanel from '@/components/SearchFormComp'
 import InfoModal from '@/components/InfoModal'
 import AddOrEdit from './addOrEdit'
 import BatchExportModal from './batchExport'
-import {companyTypesData} from '@/utils/staticData'
+import {companyTypesData,companySizeList,addressData} from '@/utils/staticData'
 import { observer, inject } from 'mobx-react'
 const { Item } = Form
 const { Option } = Select
@@ -21,7 +21,7 @@ interface IState {
   deleteRecord?:any,
   editModalVisible:boolean,
   editRecord?:any,
-  editFlag:number,
+  editFlag:any,
   batchExportVisible:boolean,
   // batchImportVisible:boolean,
 }
@@ -48,7 +48,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
     deleteRecord:{},
     editModalVisible:false ,
     editRecord:{},
-    editFlag:0,
+    editFlag:'add',
     batchExportVisible:false,
     // batchImportVisible:false,
   }
@@ -89,8 +89,22 @@ class SchoolCompanyManage extends Component<IProps, IState>{
     })
   }
   //弹出编辑/创建框
-  showEdit=async(record:any)=>{
-    this.setState({editRecord:record,editModalVisible:true,editFlag:1})
+  openEditModal = async(record: any,editFlag:any) => {
+    if(editFlag==='edit'){
+      const {_id}=record
+      const {schoolCompanyStore: { fetchDetail }}=this.props
+      await fetchDetail({_id:_id},true)
+    }
+    // 处理下编辑数据以适应填写框
+    this.setState({
+      editModalVisible: true,
+      editFlag:editFlag,
+    })
+  }
+  hideEditModal = () => {
+    this.setState({
+      editModalVisible: false,
+    })
   }
 
   //删除
@@ -126,12 +140,12 @@ class SchoolCompanyManage extends Component<IProps, IState>{
       handleQuery:this.handleQuery,
       onRef:(Ref:any)=> this.searchRef=Ref,
       formItems: [
-        {
-          el:'input',
-          name:'companyId',
-          label:"企业编号",
-          placeholder:"请输入企业编号",
-        },
+        // {
+        //   el:'input',
+        //   name:'companyId',
+        //   label:"企业编号",
+        //   placeholder:"请输入企业编号",
+        // },
         {el:'input',label: '企业名称' ,name:'companyName',placeholder: '请输入企业名称',},
         {
           el:'select',
@@ -147,39 +161,34 @@ class SchoolCompanyManage extends Component<IProps, IState>{
         },
         {
           el:'select',
-          name:'companyCity',
-          label:"企业所在城市",
-          placeholder:"请选择企业所在城市",
+          name:'companySize',
+          label:"企业规模",
+          placeholder:"请选择企业规模",
           style:{width: 174},
-          selectOptions:[
-            { label: '一个级联地点选择' ,value: 1 },
-            { label: '其他' ,value: 2 },
-          ],
+          selectOptions:companySizeList,
           selectField: {
             label: 'label',
             value: 'value'
           }
         },
-        // {el:'input',label: '企业相关负责校友' ,name:'relatedSchoolMate',placeholder: '请输入',},
+        {
+          el:'cascader',
+          name:'companyCity',
+          label:"企业所在城市",
+          placeholder:"请选择企业所在城市",
+          style:{width: 174},
+          cascaderOptions:addressData,
+        },
       ]
     }
 
-    // //fake
-    // let dataSource=[{
-    //   companyId:'1',
-    //   companyName:'qy企业',
-    //   companyType:2,
-    //   companyCity:'江苏省溧阳市',
-    //   belongArea:'行业',
-    // }]
-
      //表格部分
      const columns = [
-      {
-        title: '企业编号',
-        key: 'companyId',
-        dataIndex: 'companyId',
-      },
+      // {
+      //   title: '企业编号',
+      //   key: 'companyId',
+      //   dataIndex: 'companyId',
+      // },
       {
         title: '企业名称',
         key: 'companyName',
@@ -189,30 +198,45 @@ class SchoolCompanyManage extends Component<IProps, IState>{
         key: 'companyType',
         dataIndex: 'companyType',
         render:(text:any)=>{
-          //TODO 数组那个没用
           switch(text){
             case 1: return '国有企业';
             case 2: return '三资企业';
-            case 3: return '其他企业';
+            case 3: return '事业单位';
+            case 4: return '其他企业';
             default: return text;
           }
         }
       },{
+        title: '企业规模',
+        key: 'companySize',
+        dataIndex: 'companySize',
+      },{
         title: '主要所在城市',
         key: 'companyCity',
         dataIndex: 'companyCity',
-      },{
-        title:'所属行业',
-        key:'belongArea',
-        dataIndex:'belongArea',
+      },
+      // {
+      //   title:'所属行业',
+      //   key:'belongArea',
+      //   dataIndex:'belongArea',
+      // },
+      {
+        title: '联系电话',
+        key: 'companyPhone',
+        dataIndex: 'companyPhone',
+      },
+      {
+        title: '联系邮箱',
+        key: 'companyEmail',
+        dataIndex: 'companyEmail',
       },
       {
         title: '操作',
         key: 'action',
         render:(text:any, record:any, index:number)=>{
           return <span>
-          <Button type="link" onClick={()=>{this.props.history.push(`/infoManage/schoolCompanyDetail?id=${record.companyId}`)}}>查看详情</Button>
-          <Button type="link" onClick={()=>{this.setState({editRecord:record,editModalVisible:true}) }}>编辑</Button>
+          <Button type="link" onClick={()=>{this.props.history.push(`/infoManage/schoolCompanyDetail?id=${record._id}`)}}>查看详情</Button>
+          <Button type="link" onClick={this.openEditModal.bind(this,record,'edit')}>编辑</Button>
           <Button type="link" style={{color:'red'}} onClick={()=>this.setState({deleteModalVisible:true,deleteRecord:record})}>删除</Button> 
           </span>
         }
@@ -224,7 +248,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
       pageSize,
       total,
       showSizeChanger:true,
-      pageSizeOptions:[5,10,20],
+      // pageSizeOptions:[5,10,20],
       showQuickJumper:true,
       showTotal:() => `共 ${total} 条数据`,
       onChange:(pageNum:number, pageSize:number)=>{
@@ -266,14 +290,11 @@ class SchoolCompanyManage extends Component<IProps, IState>{
 
     let editModalProps={
       editFlag,
-      editRecord,
+      // editRecord,
       schoolCompanyStore ,
-      hideEdit:()=>{
-        this.setState({editRecord:{},editModalVisible:false},()=>{
-          this.getTableData()
-        })
-      },
-      editModalVisible,
+      hideEdit:this.hideEditModal,
+      fetchData: this.refreshData,
+      // editModalVisible,
     }
 
     let exportModalProps = {
@@ -291,7 +312,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
         </div>
         <div className={styles.tableBeforeNode}>
           <div>
-          <Button style={{margin:'0 10px 25px 10px'}} onClick={()=>{this.setState({editRecord:{},editModalVisible:true,editFlag:0}) }} >
+          <Button style={{margin:'0 10px 25px 10px'}} onClick={this.openEditModal.bind(this,{},'add')} >
             添加校友单位
           </Button>
           {/* <Button type='primary' onClick={()=>{}}>批量导入?</Button> */}
@@ -302,7 +323,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
           <Table {...listProps}/>
         </div>
         <InfoModal {...deleteModalProps}></InfoModal>
-        <AddOrEdit {...editModalProps} />
+        {editModalVisible && <AddOrEdit {...editModalProps} />}
         <BatchExportModal {...exportModalProps}/>
 
       </div>

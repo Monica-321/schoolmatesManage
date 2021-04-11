@@ -66,9 +66,9 @@ class Login extends Component<IProps,IState>{
               <Item name="password" rules={[{ required: true, message: '请输入您的密码' }]}  >
                 <Input.Password size="large" placeholder="请输入您的密码" prefix={<LockOutlined />} />
               </Item>
-              <Item  >
+              {/* <Item  >
                 验证码？
-              </Item>
+              </Item> */}
               {/* <Item label="省市地址" name="provinceId" htmlFor="provinceIdOther" rules={[{ required: true, message: '请选择省市地址' }]}>
                 <Cascader options={addressData} placeholder="请选择省市地址" allowClear onChange={(value, selectedOptions)=>{
                   console.log('value, selectedOptions及string分别是',value, selectedOptions,value.join(' '))

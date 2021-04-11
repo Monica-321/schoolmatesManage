@@ -66,7 +66,7 @@ class SchoolMateStore{
     return {success,msg}
   }
   formatData=()=>{
-    let {id,name,gender,nationality,faculty,educationStatus,politicalStatus,yearOfEnrollment,yearOfGraduation,major,majorClass,
+    let {_id,id,name,gender,nationality,faculty,educationStatus,politicalStatus,yearOfEnrollment,yearOfGraduation,major,majorClass,
       graduateChoice, contactPhone,contactEmail,contactAddress,workArea,job,companyRank,companySize,salarybirthDate,salary,
       birthDate,homeTown,srcPlace,dstPlace} = this.schoolMateDetail
     birthDate=moment(birthDate)
@@ -74,7 +74,7 @@ class SchoolMateStore{
     homeTown=homeTown.split(' ')  //级联需要[ , , ]
     srcPlace=srcPlace.split(' ')
     dstPlace=dstPlace.split(' ')
-    this.schoolMateDetail = {id,name,gender,nationality,faculty,educationStatus,politicalStatus,yearOfEnrollment,yearOfGraduation,major,majorClass,
+    this.schoolMateDetail = {_id,id,name,gender,nationality,faculty,educationStatus,politicalStatus,yearOfEnrollment,yearOfGraduation,major,majorClass,
       graduateChoice, contactPhone,contactEmail,contactAddress,workArea,job,companyRank,companySize,salarybirthDate,salary,
       birthDate,homeTown,srcPlace,dstPlace}
     console.log(this.schoolMateDetail)

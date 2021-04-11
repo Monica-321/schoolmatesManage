@@ -420,11 +420,6 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         dataIndex: 'major',
         render:(text:any)=>{
           return majorMap[text] || text
-          // majorList.map((item:any)=>{
-          //   if(text===item.value){
-          //     return item.label
-          //   }
-          // })  //TODO
         }
       },{
         title: '班级',

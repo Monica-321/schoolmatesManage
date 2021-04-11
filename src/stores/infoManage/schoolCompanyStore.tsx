@@ -51,14 +51,27 @@ class SchoolCompanyStore{
 
   //详情查询
   @action
-  fetchDetail= async(params:any) => {
+  fetchDetail= async(params:any,format:Boolean) => {
     let {status,success,msg, data} = await schoolCompaniesDetail(params)
     if(success){
       runInAction(() => {
         this.schoolCompanyDetail = data
       })
+      if(format){
+        // console.log('格式化')
+        this.formatData()
+      }
     }
     return {success,msg}
+  }
+  formatData=()=>{
+    let {_id,companyName,companyType,companySize,companyCity,companyAddress,
+      companyWebsite,companyPhone,companyEmail,companyDescription} = this.schoolCompanyDetail
+    // TODO 地图相关全保持一致
+    companyCity=companyCity.split(' ')  //级联需要[ , , ]
+    this.schoolCompanyDetail = {_id,companyName,companyType,companySize,companyCity,companyAddress,
+      companyWebsite,companyPhone,companyEmail,companyDescription}
+    console.log(this.schoolCompanyDetail)
   }
 
 }
