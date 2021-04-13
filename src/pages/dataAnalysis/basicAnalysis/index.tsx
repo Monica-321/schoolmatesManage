@@ -6,15 +6,20 @@ import BarChart from '@/components/ChartComp/BarChart'
 import ChinaMap from '@/components/ChartComp/ChinaMap'
 import { FormInstance } from 'antd/lib/form'
 import { DatePicker, Form, Table, Button,Modal, Row, Col } from 'antd'
+import { observer, inject } from 'mobx-react'
 import styles from './index.module.less';
 interface IProps {
-
+  basicAnalysisStore?:any;
+  history?: any,
 }
 interface IState {
   loading: boolean,
   loadingGenderPie:boolean,
+  searchVal?: any,
   
 }
+@inject('basicAnalysisStore')
+@observer
 class BasicAnalysis extends Component<IProps, IState>{
   searchRef: React.RefObject<FormInstance> = React.createRef<FormInstance>()
   constructor(props:IProps){
@@ -24,79 +29,112 @@ class BasicAnalysis extends Component<IProps, IState>{
   state:IState = {
     loading: false,
     loadingGenderPie:false,  //TODO
+    searchVal:{},  
   }
   componentDidMount(){
+    //如果年份变成需要查询就在此处查询
+    const params={educationStatus:0,yearOfGraduation:'2021'}
+    this.searchRef.current?.setFieldsValue(params)
     //刚进来默认最新一年毕业年份和本科
-    this.fetchData()
+    this.setState({searchVal:params},()=>{this.fetchData()})
   }
   fetchData=async()=>{
-      
-
+      // 各图根据选择的身份和年份来查询
+      const { basicAnalysisStore: {fetchGenderRate,fetchEducationRate,fetchMajorNum,fetchPoliticalSta} } = this.props
+      // this.setState({loadingGenderPie:true})
+      await fetchGenderRate({...this.state.searchVal})
+      await fetchEducationRate({...this.state.searchVal})
+      await fetchMajorNum({...this.state.searchVal})
+      await fetchPoliticalSta({...this.state.searchVal})
+      // this.setState({loadingGenderPie:false})
   }
-  handleQuery = ()=>{
-
+  handleQuery = (params:any)=>{
+    //处理一下某些参数，比如城市那些、还有生日，以及是否精确查询？？
+    console.log("表单的请求参数为：",params)
+    this.setState({searchVal:params},()=>{
+      this.fetchData()
+    })
   }
 
   handleReset = ()=>{
-      this.searchRef.current?.resetFields()
-      this.handleQuery()
+    this.setState({searchVal:{}},()=>{
+      this.fetchData()
+    })
   }
 
   render(){
     const {loading,loadingGenderPie}=this.state
+    const {basicAnalysisStore:{educationRateData,genderRateData,majorNumData,politicalStaData}}=this.props
+    const {majornames,majorvalues}=majorNumData
+    const {politicalnames,politicalvalues}=politicalStaData
+    // console.log('柱状图数据',majornames,majorvalues,politicalnames,politicalvalues)
     let searchProps={
-      handleReset:this.handleReset,
+      hasResetBtn:false,
+      // handleReset:this.handleReset,
       handleQuery:this.handleQuery,
       onRef:(Ref:any)=> this.searchRef=Ref,
       formItems: [
         {
           el:'select',
-          name:'yearOfGraduation',
-          label:"毕业年份",
-          placeholder:"请选择毕业年份",
-          style:{width: 230},
+          name:'educationStatus',
+          label:"就读身份",
+          placeholder:"请选择就读身份",
+          style:{width: 174},
           selectOptions:[
-            { label: '2021' ,value: 1 },
-            { label: '2020' ,value: 2 },
-            { label: '2019' ,value: 3 },
+            { label: '本科生' ,value: 0 },
+            { label: '硕士' ,value: 1 },
           ],
           selectField: {
             label: 'label',
             value: 'value'
-          }
+          },
+          initialValue:0,
+        },{
+          el:'select',
+          name:'yearOfGraduation',
+          label:"毕业年份",
+          placeholder:"请选择毕业年份",
+          style:{width: 174},
+          selectOptions:[
+            { label: '2021' ,value: '2021' },
+            { label: '2020' ,value: '2020' },
+            { label: '2019' ,value: '2019' },
+            { label: '2018' ,value: '2018' },
+            { label: '2017' ,value: '2017' },
+            { label: '2016' ,value: '2016' },
+          ],  //TODO 注意与身份的联动
+          selectField: {
+            label: 'label',
+            value: 'value'
+          },
+          initialValue:'2021',
         },
       ]
     }
 
     const genderPieProps = {
       chartName:'男女比例饼状图',
-      // showCenterText:true,
-      chartData: [
-        {value:'446',name:'男'},
-        {value:'554',name:'女'}
-      ],
-      // chartColor:['#52a2e5','#ef81a7'],
+      chartData: genderRateData,
     }
     const educationPieProps = {
       chartName:'毕业学历比例饼状图',
-      // showCenterText:true,
-      chartData: [
-        {value:'546',name:'本科'},
-        {value:'351',name:'硕士'},
-        {value:'101',name:'其他'},
-      ],
+      chartData: educationRateData,
     }
 
     const majorNumBarProps = {
       chartName:'各专业人数柱状图',
-      chartData:[{data: [120, 80, 150, 80, 50, ]}],
-      chartXAxis:  ['电子信息工程', '通信工程', '计算机科学与技术', '数字媒体技术', '智能科学与技术'],
+      // TODO 没显示出数据？？但是数据实际上是有的
+      chartData:majorvalues,
+      chartXAxis:majornames,
+      // chartData:[{data: [120, 80, 150, 80, 50, ]}],
+      // chartXAxis:  ['电子信息工程', '通信工程', '计算机科学与技术', '数字媒体技术', '智能科学与技术'],
     }
 
     const politicalBarProps={
       chartName:'政治面貌柱状图',
-      chartData:[{data: [80, 10, 115, 12, 13 , 11 , 14, 15, 21 , 22 , 23, 65,234 ]}],
-      chartXAxis:  ['中共党员', '中共预备党员', '共青团员', '民革党员', '民盟盟员','民建会员','民进会员','农工党党员','致公党党员','九三学社社员','台盟盟员','无党派人士','群众'],
+      //显示也有问题？？
+      chartData:politicalvalues,
+      chartXAxis: politicalnames ,
     }
 
     const chinaMap1Props={
@@ -115,24 +153,18 @@ class BasicAnalysis extends Component<IProps, IState>{
           </div>
           <div className={styles.searchTable}>
              <Row style={{marginBottom:'30px'}} >
-               <Col className={styles.chartsDiv} span={10} offset={1}>
+              <Col className={styles.chartsDiv} span={10} offset={1}>
                 {loadingGenderPie
                   ? <div className='loadingText'>图表加载中...</div>
                   : 
-                  <div>
-                    <PieChart {...genderPieProps}/>
-                    {/* <Button type="default" className={styles.saveBtn} >保存</Button> */}
-                  </div>
+                  <div><PieChart {...educationPieProps}/></div>
                 }
                </Col>
                <Col className={styles.chartsDiv} span={10} offset={1}>
                 {loadingGenderPie
                   ? <div className='loadingText'>图表加载中...</div>
                   : 
-                  <div>
-                    <PieChart {...educationPieProps}/>
-                    {/* <Button type="default" className={styles.saveBtn} >保存</Button> */}
-                  </div>
+                  <div> <PieChart {...genderPieProps}/> </div>
                 }
                </Col>
              </Row>

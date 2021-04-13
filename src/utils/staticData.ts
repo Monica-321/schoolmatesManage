@@ -86,8 +86,8 @@ export const nationList=[...list];
  //省市
 export const addressData:any[] = [
     {
-      "value": "北京市",
-      "label": "北京市",
+      "value": "北京",
+      "label": "北京",
       "children": [
         {
           "value": "北京市",
@@ -96,8 +96,8 @@ export const addressData:any[] = [
       ]
     },
     {
-      "value": "天津市",
-      "label": "天津市",
+      "value": "天津",
+      "label": "天津",
       "children": [
         {
           "value": "天津市",
@@ -422,8 +422,8 @@ export const addressData:any[] = [
       ]
     },
     {
-      "value": "上海市",
-      "label": "上海市",
+      "value": "上海",
+      "label": "上海",
       "children": [
         {
           "value": "上海市",
@@ -1144,8 +1144,8 @@ export const addressData:any[] = [
       ]
     },
     {
-      "value": "重庆市",
-      "label": "重庆市",
+      "value": "重庆",
+      "label": "重庆",
       "children": [
         {
           "value": "重庆市",
@@ -1624,8 +1624,8 @@ export const addressData:any[] = [
       ]
     },
     {
-      "value": "台湾省",
-      "label": "台湾省",
+      "value": "台湾",
+      "label": "台湾",
       "children": []
     },
     {
@@ -1636,6 +1636,11 @@ export const addressData:any[] = [
     {
       "value": "澳门特别行政区",
       "label": "澳门特别行政区",
+      "children": []
+    },
+    {
+      "value": "海外",
+      "label": "海外",
       "children": []
     }
   ];

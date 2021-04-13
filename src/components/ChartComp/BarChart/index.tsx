@@ -14,13 +14,13 @@ interface IProps {
 class BarChart extends Component<IProps> {
   render() {
     const {isLine,chartName, chartColor, chartLegend, chartXAxis, chartData, isLegendScroll, hideLegend} = this.props
-    const series:any = (chartData || []).map(item => {
-      item.type = 'bar'
-      if (isLine) {
-        item.type = 'line'
-      }
-      return item
-    })
+    // const series:any = (chartData || []).map(item => {
+    //   item.type = 'bar'
+    //   if (isLine) {
+    //     item.type = 'line'
+    //   }
+    //   return item
+    // })
     let chartOption:any = {
       title: {
         text: chartName,
@@ -53,10 +53,15 @@ class BarChart extends Component<IProps> {
         containLabel: true
       },
       xAxis: {
-        data: chartXAxis
+        data: chartXAxis,
       },
       yAxis: {},
-      series
+      series:[
+        {
+          type:'bar',
+          data:chartData
+        }
+      ]
     }
     if (isLine) {
       chartOption.xAxis.boundaryGap = false

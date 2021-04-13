@@ -216,7 +216,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           selectField: {
             label: 'label',
             value: 'value'
-          }
+          },
         },
         {
           el:'select',

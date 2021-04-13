@@ -27,22 +27,27 @@ class ChinaMap extends Component<IProps> {
           let cityArr = ['北京', '天津', '上海', '重庆']
           if (cityArr.includes(params.name)) {
             provinceName = params.name + '市'
-          } else if (params.name === '新疆') {
-            provinceName = '新疆维吾尔自治区'
-          } else if (params.name === '广西') {
-            provinceName = '广西壮族自治区'
-          } else if (params.name === '内蒙古') {
-            provinceName = '内蒙古自治区'
-          } else if (params.name === '西藏') {
-            provinceName = '西藏自治区'
-          } else if (params.name === '宁夏') {
-            provinceName = '宁夏回族自治区'
-          }else if (params.name === '香港') {
-            provinceName = '香港特别行政区'
-          }else if (params.name === '澳门') {
-            provinceName = '澳门特别行政区'
-          } else {
-            provinceName = params.name + '省'
+          } 
+          // else if (params.name === '新疆') {
+          //   provinceName = '新疆维吾尔自治区'
+          // } else if (params.name === '广西') {
+          //   provinceName = '广西壮族自治区'
+          // } else if (params.name === '内蒙古') {
+          //   provinceName = '内蒙古自治区'
+          // } else if (params.name === '西藏') {
+          //   provinceName = '西藏自治区'
+          // } else if (params.name === '宁夏') {
+          //   provinceName = '宁夏回族自治区'
+          // }else if (params.name === '香港') {
+          //   provinceName = '香港特别行政区'
+          // }else if (params.name === '澳门') {
+          //   provinceName = '澳门特别行政区'
+          // } 
+          // else {
+          //   provinceName = params.name + '省'
+          // }
+          else {
+            provinceName = params.name
           }
           return `${provinceName}<br /> 校友数量：${params.value} `
         }
@@ -132,111 +137,111 @@ class ChinaMap extends Component<IProps> {
               value: 75
             },
             {
-              name: "河北",
+              name: "河北省",
               value: 130
             },
             {
-              name: "河南",
+              name: "河南省",
               value: 83
             },
             {
-              name: "云南",
+              name: "云南省",
               value: 110
             },
             {
-              name: "辽宁",
+              name: "辽宁省",
               value: 19
             },
             {
-              name: "黑龙江",
+              name: "黑龙江省",
               value: 150
             },
             {
-              name: "湖南",
+              name: "湖南省",
               value: 9
             },
             {
-              name: "安徽",
+              name: "安徽省",
               value: 60
             },
             {
-              name: "山东",
+              name: "山东省",
               value: 39
             },
             {
-              name: "新疆",
+              name: "新疆维吾尔自治区",
               value: 4
             },
             {
-              name: "江苏",
+              name: "江苏省",
               value: 31
             },
             {
-              name: "浙江",
+              name: "浙江省",
               value: 4
             },
             {
-              name: "江西",
+              name: "江西省",
               value: 36
             },
             {
-              name: "湖北",
+              name: "湖北省",
               value: 52
             },
             {
-              name: "广西",
+              name: "广西壮族自治区",
               value: 33
             },
             {
-              name: "甘肃",
+              name: "甘肃省",
               value: 7
             },
             {
-              name: "山西",
+              name: "山西省",
               value: 5
             },
             {
-              name: "内蒙古",
+              name: "内蒙古自治区",
               value: 77
             },
             {
-              name: "陕西",
+              name: "陕西省",
               value: 22
             },
             {
-              name: "吉林",
+              name: "吉林省",
               value: 4
             },
             {
-              name: "福建",
+              name: "福建省",
               value: 18
             },
             {
-              name: "贵州",
+              name: "贵州省",
               value: 5
             },
             {
-              name: "广东",
+              name: "广东省",
               value: 98
             },
             {
-              name: "青海",
+              name: "青海省",
               value: 1
             },
             {
-              name: "西藏",
+              name: "西藏自治区",
               value: 0
             },
             {
-              name: "四川",
+              name: "四川省",
               value: 44
             },
             {
-              name: "宁夏",
+              name: "宁夏回族自治区",
               value: 4
             },
             {
-              name: "海南",
+              name: "海南省",
               value: 22
             },
             {
@@ -244,12 +249,16 @@ class ChinaMap extends Component<IProps> {
               value: 3
             },
             {
-              name: "香港",
+              name: "香港特别行政区",
               value: 5
             },
             {
-              name: "澳门",
+              name: "澳门特别行政区",
               value: 0
+            },
+            {
+              name: "海外",
+              value: 15
             }
           ],
         },

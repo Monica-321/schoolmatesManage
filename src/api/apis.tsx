@@ -37,7 +37,18 @@ const Api:any = {
         //批量导出
 
     //基本数据分析
+    getGenderRate:`GET ${api}/dataAnalysis/getGenderRate`,
+    getEducationRate:`GET ${api}/dataAnalysis/getEducationRate`,
+    getMajorNum:`GET ${api}/dataAnalysis/getMajorNum`,
+    getPoliticalSta:`GET ${api}/dataAnalysis/getPoliticalSta`,
     //毕业去向分析
+    getGraduateOption:`GET ${api}/dataAnalysis/getGraduateOption`,
+
+    getCompanyIndus:`GET ${api}/dataAnalysis/getCompanyIndus`,
+
+    getCompanyScale:`GET ${api}/dataAnalysis/getCompanyScale`,
+    getCompanyRank:`GET ${api}/dataAnalysis/getCompanyRank`,
+    
     //……
 
 }

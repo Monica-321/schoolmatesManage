@@ -13,6 +13,7 @@ interface IProps {
   onRef?: any;
   formItems?: any;
   isRightBtn?: boolean;   // 查询按钮是否右浮
+  hasResetBtn?:boolean;  //是否有重置
 }
 
 interface IState {
@@ -62,7 +63,7 @@ class SearchFormComp extends Component<IProps, IState> {
 
   render() {
     const {visibleAll} = this.state
-    const { formItems, isRightBtn=true } = this.props
+    const { formItems, isRightBtn=true , hasResetBtn=true} = this.props
     const layout={labelCol:{span:8},wrapperCol:{span:15}}
     return (
       <div className={styles.warp}>
@@ -105,6 +106,7 @@ class SearchFormComp extends Component<IProps, IState> {
                       style={item.style}
                       className='inputMarginB'
                       allowClear={item.isAllowClear}
+                      defaultValue={item.initialValue}
                     >
                       {
                         item.selectOptions.map((sel: any) => <Option value={sel[item.selectField['value']]} key={sel[item.selectField['value']]}>{sel[item.selectField['label']]}</Option>)
@@ -180,7 +182,9 @@ class SearchFormComp extends Component<IProps, IState> {
             <Col span={4}>
               <Item>
                 <Button type="primary" onClick={this.handleQuery} style={{marginRight: 10, marginBottom: 18}}>查询</Button>
+               {  hasResetBtn &&
                 <Button onClick={this.handleReset}>重置</Button>
+               }
               </Item>
             </Col>
           )}
@@ -188,7 +192,9 @@ class SearchFormComp extends Component<IProps, IState> {
         {isRightBtn && (
           <div className={styles.btnWrap}>
             <Button type="primary" onClick={this.handleQuery} style={{marginRight: 10, marginBottom: 18}}>查询</Button>
-            <Button onClick={this.handleReset}>重置</Button>
+            {  hasResetBtn &&
+              <Button onClick={this.handleReset}>重置</Button>
+            }
             {formItems.length > 6 && 
               <Button type="link" onClick={this.toggleShow}>
                 {visibleAll
