@@ -4,7 +4,7 @@ import PieChart from '@/components/ChartComp/PieChart'
 import BarChart from '@/components/ChartComp/BarChart'
 import ChinaMap from '@/components/ChartComp/ChinaMap'
 import { FormInstance } from 'antd/lib/form'
-import { DatePicker, Form, Table, Button,Modal, Row, Col } from 'antd'
+import { DatePicker, Form, Table, Button,Modal, Row, Col,Spin } from 'antd'
 import { observer, inject } from 'mobx-react'
 import styles from './index.module.less';
 interface IProps {
@@ -12,8 +12,12 @@ interface IProps {
   history?: any,
 }
 interface IState {
-  loading: boolean,
-  loadingGenderPie:boolean,
+  loading1: boolean,
+  loading2:boolean,
+  loading3: boolean,
+  loading4:boolean,
+  loading5: boolean,
+  loading6:boolean,
   searchVal?: any,
 }
 @inject('graduateAnalysisStore')
@@ -25,8 +29,12 @@ class GraduateAnalysis extends Component<IProps, IState>{
 
   }
   state:IState = {
-    loading: false,
-    loadingGenderPie:false,  //TODO
+    loading1: false,
+    loading2:false,
+    loading3: false,
+    loading4:false,
+    loading5: false,
+    loading6:false,
     searchVal:{},  
   }
   componentDidMount(){
@@ -40,14 +48,18 @@ class GraduateAnalysis extends Component<IProps, IState>{
     // 各图根据选择的身份和年份来查询
     const { graduateAnalysisStore: {fetchGraduateOption,fetchDstPlace,fetchCompanyIndus,fetchSalary,
       fetchCompanyScale,fetchCompanyRank} } = this.props
-    // this.setState({loadingGenderPie:true})
+    this.setState({loading1:true,loading2:true,loading3:true,loading4:true,loading5:true,loading6:true})
     await fetchGraduateOption({...this.state.searchVal})
+    this.setState({loading1:false})
     // await fetchDstPlace({...this.state.searchVal})
+    this.setState({loading2:false})
     await fetchCompanyIndus({...this.state.searchVal})
+    this.setState({loading3:false})
     // await fetchSalary({...this.state.searchVal})
     await fetchCompanyScale({...this.state.searchVal})
+    this.setState({loading4:false})
     await fetchCompanyRank({...this.state.searchVal})
-    // this.setState({loadingGenderPie:false})
+    this.setState({loading5:false})
   }
   handleQuery = (params:any)=>{
     //处理一下某些参数，比如城市那些、还有生日，以及是否精确查询？？
@@ -64,7 +76,7 @@ class GraduateAnalysis extends Component<IProps, IState>{
   }
 
   render(){
-    const {loading,loadingGenderPie}=this.state
+    const {loading1,loading2,loading3,loading4,loading5,loading6}=this.state
     const {graduateAnalysisStore:{graduateOption,companyIndus,companyScale,companyRank}}=this.props
     const {ranknames,rankvalues}=companyRank
     // console.log('柱状图数据',ranknames,rankvalues)
@@ -194,7 +206,7 @@ class GraduateAnalysis extends Component<IProps, IState>{
                
                {/* <Col className={styles.chartsDiv} span={10} offset={1}>
                 {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div>
                     <PieChart {...educationPieProps}/>
@@ -203,8 +215,8 @@ class GraduateAnalysis extends Component<IProps, IState>{
                 }
                </Col> */}
                <Col className={styles.chartsDiv} span={21} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                {loading1
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div>
                     <PieChart {...graduationOptionPieProps}/>
@@ -215,8 +227,8 @@ class GraduateAnalysis extends Component<IProps, IState>{
 
              <Row style={{marginBottom:'30px'}}>
                <Col className={styles.chartsDiv} span={21} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                {loading2
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div><ChinaMap {...chinaMap3Props} /> </div>
                 }
@@ -231,8 +243,8 @@ class GraduateAnalysis extends Component<IProps, IState>{
 
               <Row style={{marginBottom:'30px'}}>
                 <Col className={styles.chartsDiv} span={21} offset={1}>
-                  {loadingGenderPie
-                    ? <div className='loadingText'>图表加载中...</div>
+                  {loading3
+                    ? <div className={styles.chartLoading}> <Spin /></div>
                     : 
                     <div>
                       <PieChart {...companyIndustryPieProps}/>
@@ -241,22 +253,22 @@ class GraduateAnalysis extends Component<IProps, IState>{
                 </Col>
               </Row>
 
-              <Row style={{marginBottom:'30px'}}>
+              {/* <Row style={{marginBottom:'30px'}}>
                 <Col className={styles.chartsDiv} span={21} offset={1}>
                   {loadingGenderPie
-                    ? <div className='loadingText'>图表加载中...</div>
+                    ? <div className={styles.chartLoading}> <Spin /></div>
                     : 
                     <div>
                       <BarChart {...workSalaryBarProps}/>
                     </div>
                   }
                 </Col>
-              </Row>
+              </Row> */}
 
                <Row style={{marginBottom:'30px'}}>
                <Col className={styles.chartsDiv} span={10} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                {loading4
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div>
                     <PieChart {...workCompanyScalePieProps}/>
@@ -264,8 +276,8 @@ class GraduateAnalysis extends Component<IProps, IState>{
                 }
                </Col>
                 <Col className={styles.chartsDiv} span={10} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                {loading5
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div>
                     <BarChart {...companyRankBarProps}/>

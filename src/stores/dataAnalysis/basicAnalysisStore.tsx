@@ -45,8 +45,8 @@ class BasicAnalysisStore{
       runInAction(() => {
         for (let i=0;i<data.length;i++){
             switch(data[i].name){
-              case 0: data[i].name='本科生';break;
-              case 1: data[i].name='硕士';break;
+              case '0': data[i].name='本科生';break;
+              case '1': data[i].name='硕士';break;
               default: break;
             }
         }
@@ -80,9 +80,10 @@ class BasicAnalysisStore{
         }
         obj={majornames,majorvalues}
 
-        // console.log('data',data,obj)
-        this.majorNumData = {...obj}
-        console.log('this.majorNumData',this.majorNumData)
+        console.log('data',data,obj)
+        this.majorNumData = obj
+        // this.majorNumData = {...data}
+        // console.log('this.majorNumData',this.majorNumData)
       })
     }
     return {success,msg}
@@ -93,7 +94,17 @@ class BasicAnalysisStore{
     let {status,success,msg, data} = await getPoliticalSta(params)
     if(success){
       runInAction(() => {
-        this.politicalStaData = data
+        let obj={}
+        let politicalnames=[]
+        let politicalvalues=[]
+        for (let i=0;i<data.length;i++){
+          politicalnames.push(data[i]._id)
+          politicalvalues.push(data[i].value)
+        }
+        obj={politicalnames,politicalvalues}
+
+        console.log('data',data,obj)
+        this.politicalStaData = obj
       })
     }
     return {success,msg}

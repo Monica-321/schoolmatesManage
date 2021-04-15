@@ -45,7 +45,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   state:IState = {
     loading: false,
     pageNum: 1,
-    pageSize: 5,
+    pageSize: 10,
     total:10,
     searchVal:{},  
     defaultValue:this.defaultValue,
@@ -76,7 +76,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     }
     this.setState({loading: true})
     //TODO 传参
-    await fetchTableData({})
+    await fetchTableData(params)
     this.setState({loading: false})
     
   }
@@ -91,7 +91,14 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   //查询
   handleQuery=(params:any)=>{
     //处理一下某些参数，比如城市那些、还有生日，以及是否精确查询？？
-    // console.log("表单的请求参数为：",params)
+    console.log("表单的请求参数为：",params)
+    for(let key in params){
+      if(params[key]==="" || params[key]===null || params[key]===undefined){
+        delete params[key]
+      }else if(key==='homeTown' || key==='srcPlace' || key==='dstPlace'){
+        params[key]=params[key].join(' ')
+      }
+    }
     this.setState({pageNum: 1,searchVal:params,selectedRowKeys: [],},()=>{
       this.getTableData()
     })
@@ -135,12 +142,16 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     const { schoolMateStore: {goschoolMatesDelete} } = this.props
     const { deleteRecord }=this.state
     //注意传参 TODO
-    let params={}
+    let params={id:deleteRecord.id}
     const res=await goschoolMatesDelete(params)
     if(res.success){
       message.success(`"${deleteRecord.name}"已删除！`)
-      this.getTableData()
+      this.setState({ pageNum: 1,}, () => {
+        this.getTableData()
+      })
       this.setState({deleteModalVisible:false})
+    }else{
+      message.error(res.msg)
     }
   }
 
@@ -210,8 +221,8 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
           placeholder:"请选择就读身份",
           style:{width: 174},
           selectOptions:[
-            { label: '本科生' ,value: 0 },
-            { label: '硕士' ,value: 1 },
+            { label: '本科生' ,value: '0' },
+            { label: '硕士' ,value: '1' },
           ],
           selectField: {
             label: 'label',
@@ -405,8 +416,8 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         dataIndex: 'educationStatus',
         render:(text:any)=>{
           switch(text){
-            case 0: return '本科生';
-            case 1: return '硕士';
+            case '0': return '本科生';
+            case '1': return '硕士';
             default: return text;
           }
         }

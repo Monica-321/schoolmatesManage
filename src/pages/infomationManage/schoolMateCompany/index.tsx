@@ -67,7 +67,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
     }
     this.setState({loading: true})
     //TODO 传参
-    await fetchTableData({})
+    await fetchTableData(params)
     this.setState({loading: false})
   }
   refreshData = () => {
@@ -84,7 +84,14 @@ class SchoolCompanyManage extends Component<IProps, IState>{
   //查询
   handleQuery=(params:any)=>{
     console.log("表单的请求参数为：",params)
-    this.setState({pageNum: 1,searchVal:params},()=>{
+    for(let key in params){
+      if(params[key]==="" || params[key]===null || params[key]===undefined){
+        delete params[key]
+      }else if(key==='companyCity'){
+        params[key]=params[key].join(' ')
+      }
+    }
+    this.setState({pageNum: 1,searchVal:{...params}},()=>{
       this.getTableData()
     })
   }
@@ -112,12 +119,16 @@ class SchoolCompanyManage extends Component<IProps, IState>{
     const { schoolCompanyStore: {goschoolCompaniesDelete} } = this.props
     const { deleteRecord }=this.state
     //注意传参 TODO
-    let params={}
+    let params={_id:deleteRecord._id}
     const res=await goschoolCompaniesDelete(params)
     if(res.success){
       message.success(`"${deleteRecord.companyName}"已删除！`)
-      this.getTableData()
+      this.setState({ pageNum: 1,}, () => {
+        this.getTableData()
+      })
       this.setState({deleteModalVisible:false})
+    }else{
+      message.error(res.msg)
     }
   }
   //批量导出

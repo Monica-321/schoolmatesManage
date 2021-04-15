@@ -36,26 +36,26 @@ class AddOrEdit extends Component<IProps,IState> {
     }
     submit=async(values:any)=>{
         const { editFlag }=this.props
-        const { schoolCompanyStore: {goschoolCompaniesCreate,goschoolCompaniesModify} } = this.props
+        const { schoolCompanyStore: {schoolCompanyDetail,goschoolCompaniesCreate,goschoolCompaniesModify} } = this.props
         //处理values
         let params={...values}
         params.companyCity=params.companyCity.join(' ')
         //判断编辑还是创建
         switch(editFlag){
             case 'add': 
-                {//注意传参 TODO
-                // let params={}
+                {
                 var res=await goschoolCompaniesCreate(params)
                 break;}
             case 'edit': 
-                {//注意传参 TODO
-                // let params={}
+                {
+                params._id=schoolCompanyDetail._id
                 var res=await goschoolCompaniesModify(params)
                 break;}
         }
         if(res.success){
             message.success(res.msg)
             this.props.hideEdit()
+            this.props.fetchData()
         }else{
             message.error(res.msg)
         }
@@ -177,14 +177,20 @@ class AddOrEdit extends Component<IProps,IState> {
                             </Col>
                             <Col span={8}>
                                 <Item label="联系电话" name="companyPhone"
-                                    // rules={[{ pattern: phoneReg , message:'请输入正确格式的手机号' }]}
+                                    rules={[
+                                        // { pattern: phoneReg , message:'请输入正确格式的手机号' },    //可能还有座机TODO
+                                        { required: true, message: '请填写校友企业联系电话' },
+                                    ]}
                                 >
                                     <Input placeholder="请输入企业联系电话" />
                                 </Item>
                             </Col>
                             <Col span={8}>
                                 <Item label="联系邮箱" name="companyEmail"
-                                    rules={[ { pattern: emailReg , message:'请输入正确格式的邮箱地址' }]}
+                                    rules={[ 
+                                        { pattern: emailReg , message:'请输入正确格式的邮箱地址' },
+                                        { required: true, message: '请填写校友企业联系邮箱' },
+                                    ]}
                                 >
                                     <Input placeholder="请输入企业联系邮箱" />
                                 </Item>

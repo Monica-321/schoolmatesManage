@@ -53,10 +53,10 @@ const menuData = [
         name:"毕业去向分析",
         url:"/dataAnalysis/graduateAnalysis",
       },
-      {
-        name:"校友企业分析",
-        url:"/dataAnalysis/companyAnalysis",
-      },
+      // {
+      //   name:"校友企业分析",
+      //   url:"/dataAnalysis/companyAnalysis",
+      // },
     ]
   },
   {

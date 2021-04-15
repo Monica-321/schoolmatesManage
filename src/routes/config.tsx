@@ -108,10 +108,10 @@ const routes = [
       path:'/graduateAnalysis',
       component:DataAnalysis.GraduateAnalysis,
     },
-    {
-      path:'/companyAnalysis',
-      component:DataAnalysis.CompanyAnalysis,
-    },
+    // {
+    //   path:'/companyAnalysis',
+    //   component:DataAnalysis.CompanyAnalysis,
+    // },
   ]
 },
 //MediaCenter

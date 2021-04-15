@@ -1,6 +1,6 @@
 import { observable, action , makeObservable, runInAction } from 'mobx'
 import api from '@/api'
-
+import {industryMap} from '@/utils/staticData'
 const {
   getGraduateOption,
   getCompanyIndus,
@@ -33,6 +33,9 @@ class GraduateAnalysisStore{
     let {status,success,msg, data} = await getCompanyIndus(params)
     if(success){
       runInAction(() => {
+        for (let i=0;i<data.length;i++){
+          data[i].name=industryMap[data[i].name]
+      }
         this.companyIndus = data
       })
     }
@@ -55,7 +58,17 @@ class GraduateAnalysisStore{
     let {status,success,msg, data} = await getCompanyRank(params)
     if(success){
       runInAction(() => {
-        this.companyRank =data
+        let obj={}
+        let ranknames=[]
+        let rankvalues=[]
+        for (let i=0;i<data.length;i++){
+          ranknames.push(data[i]._id)
+          rankvalues.push(data[i].value)
+        }
+        obj={ranknames,rankvalues}
+
+        console.log('data',data,obj)
+        this.companyRank =obj
       })
     }
     return {success,msg}

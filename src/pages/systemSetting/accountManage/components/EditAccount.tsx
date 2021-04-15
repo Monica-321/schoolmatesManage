@@ -35,14 +35,16 @@ class EditAccount extends Component<IProps,IState> {
     this.props.hideModal()
   }
 
-  submit = async() => {
+  submit = async(values:any) => {
     this.formRef.current?.validateFields()
     const { action,editRecord } = this.props
     const {accountStore:{goAdminsCreate,goAdminsModify}}=this.props
     if(action==='add'){
-      //TODO 传参，默认普通管理员、启用状态，密码也默认？
+      //TODO 传参，默认普通管理员、启用状态，密码也默认123456a
       const params={
-
+        identity:1,
+        status:1,
+        ...values,
       }
       const res=await goAdminsCreate(params)
       if(res.success){
@@ -55,7 +57,8 @@ class EditAccount extends Component<IProps,IState> {
     }else{
       //TODO 传参，普通管理员,id也传一下以找到此数据
       const params={
-
+        _id:editRecord._id,
+        ...values
       }
       const res=await goAdminsModify(params)
       if(res.success){

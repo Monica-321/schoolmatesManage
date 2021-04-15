@@ -5,7 +5,7 @@ import PieChart from '@/components/ChartComp/PieChart'
 import BarChart from '@/components/ChartComp/BarChart'
 import ChinaMap from '@/components/ChartComp/ChinaMap'
 import { FormInstance } from 'antd/lib/form'
-import { DatePicker, Form, Table, Button,Modal, Row, Col } from 'antd'
+import { DatePicker, Form, Table, Button,Modal, Row, Col , Spin } from 'antd'
 import { observer, inject } from 'mobx-react'
 import styles from './index.module.less';
 interface IProps {
@@ -13,8 +13,12 @@ interface IProps {
   history?: any,
 }
 interface IState {
-  loading: boolean,
-  loadingGenderPie:boolean,
+  loading1: boolean,
+  loading2:boolean,
+  loading3: boolean,
+  loading4:boolean,
+  loading5: boolean,
+  loading6:boolean,
   searchVal?: any,
   
 }
@@ -27,13 +31,17 @@ class BasicAnalysis extends Component<IProps, IState>{
 
   }
   state:IState = {
-    loading: false,
-    loadingGenderPie:false,  //TODO
+    loading1: false,
+    loading2:false,
+    loading3: false,
+    loading4:false,
+    loading5: false,
+    loading6:false,
     searchVal:{},  
   }
   componentDidMount(){
     //如果年份变成需要查询就在此处查询
-    const params={educationStatus:0,yearOfGraduation:'2021'}
+    const params={educationStatus:'0',yearOfGraduation:'2021'}
     this.searchRef.current?.setFieldsValue(params)
     //刚进来默认最新一年毕业年份和本科
     this.setState({searchVal:params},()=>{this.fetchData()})
@@ -41,12 +49,15 @@ class BasicAnalysis extends Component<IProps, IState>{
   fetchData=async()=>{
       // 各图根据选择的身份和年份来查询
       const { basicAnalysisStore: {fetchGenderRate,fetchEducationRate,fetchMajorNum,fetchPoliticalSta} } = this.props
-      // this.setState({loadingGenderPie:true})
+      this.setState({loading1:true,loading2:true,loading3:true,loading4:true})
       await fetchGenderRate({...this.state.searchVal})
+      this.setState({loading1:false})
       await fetchEducationRate({...this.state.searchVal})
+      this.setState({loading2:false})
       await fetchMajorNum({...this.state.searchVal})
+      this.setState({loading3:false})
       await fetchPoliticalSta({...this.state.searchVal})
-      // this.setState({loadingGenderPie:false})
+      this.setState({loading4:false})
   }
   handleQuery = (params:any)=>{
     //处理一下某些参数，比如城市那些、还有生日，以及是否精确查询？？
@@ -63,7 +74,7 @@ class BasicAnalysis extends Component<IProps, IState>{
   }
 
   render(){
-    const {loading,loadingGenderPie}=this.state
+    const {loading1,loading2,loading3,loading4,loading5,loading6}=this.state
     const {basicAnalysisStore:{educationRateData,genderRateData,majorNumData,politicalStaData}}=this.props
     const {majornames,majorvalues}=majorNumData
     const {politicalnames,politicalvalues}=politicalStaData
@@ -81,14 +92,14 @@ class BasicAnalysis extends Component<IProps, IState>{
           placeholder:"请选择就读身份",
           style:{width: 174},
           selectOptions:[
-            { label: '本科生' ,value: 0 },
-            { label: '硕士' ,value: 1 },
+            { label: '本科生' ,value: '0' },
+            { label: '硕士' ,value: '1' },
           ],
           selectField: {
             label: 'label',
             value: 'value'
           },
-          initialValue:0,
+          initialValue:'0',
         },{
           el:'select',
           name:'yearOfGraduation',
@@ -126,8 +137,6 @@ class BasicAnalysis extends Component<IProps, IState>{
       // TODO 没显示出数据？？但是数据实际上是有的
       chartData:majorvalues,
       chartXAxis:majornames,
-      // chartData:[{data: [120, 80, 150, 80, 50, ]}],
-      // chartXAxis:  ['电子信息工程', '通信工程', '计算机科学与技术', '数字媒体技术', '智能科学与技术'],
     }
 
     const politicalBarProps={
@@ -139,11 +148,155 @@ class BasicAnalysis extends Component<IProps, IState>{
 
     const chinaMap1Props={
       chartName:'籍贯统计地图',
-
+      mapData:[
+        {
+          name: "北京",
+          value: 54
+        },
+        {
+          name: "天津",
+          value: 130
+        },
+        {
+          name: "上海",
+          value: 400
+        },
+        {
+          name: "重庆",
+          value: 75
+        },
+        {
+          name: "河北省",
+          value: 130
+        },
+        {
+          name: "河南省",
+          value: 83
+        },
+        {
+          name: "云南省",
+          value: 110
+        },
+        {
+          name: "辽宁省",
+          value: 19
+        },
+        {
+          name: "黑龙江省",
+          value: 150
+        },
+        {
+          name: "湖南省",
+          value: 9
+        },
+        {
+          name: "安徽省",
+          value: 60
+        },
+        {
+          name: "山东省",
+          value: 39
+        },
+        {
+          name: "新疆维吾尔自治区",
+          value: 4
+        },
+        {
+          name: "江苏省",
+          value: 31
+        },
+        {
+          name: "浙江省",
+          value: 4
+        },
+        {
+          name: "江西省",
+          value: 36
+        },
+        {
+          name: "湖北省",
+          value: 52
+        },
+        {
+          name: "广西壮族自治区",
+          value: 33
+        },
+        {
+          name: "甘肃省",
+          value: 7
+        },
+        {
+          name: "山西省",
+          value: 5
+        },
+        {
+          name: "内蒙古自治区",
+          value: 77
+        },
+        {
+          name: "陕西省",
+          value: 22
+        },
+        {
+          name: "吉林省",
+          value: 4
+        },
+        {
+          name: "福建省",
+          value: 18
+        },
+        {
+          name: "贵州省",
+          value: 5
+        },
+        {
+          name: "广东省",
+          value: 98
+        },
+        {
+          name: "青海省",
+          value: 1
+        },
+        {
+          name: "西藏自治区",
+          value: 0
+        },
+        {
+          name: "四川省",
+          value: 44
+        },
+        {
+          name: "宁夏回族自治区",
+          value: 4
+        },
+        {
+          name: "海南省",
+          value: 22
+        },
+        {
+          name: "台湾",
+          value: 3
+        },
+        {
+          name: "香港特别行政区",
+          value: 5
+        },
+        {
+          name: "澳门特别行政区",
+          value: 0
+        },
+        {
+          name: "海外",
+          value: 15
+        }
+      ]
     }
     const chinaMap2Props={
       chartName:'生源地统计地图',
-      
+      mapData:[{
+        name: "澳门特别行政区",
+        value: 0
+      },]
     }
 
     return(
@@ -154,15 +307,15 @@ class BasicAnalysis extends Component<IProps, IState>{
           <div className={styles.searchTable}>
              <Row style={{marginBottom:'30px'}} >
               <Col className={styles.chartsDiv} span={10} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                {loading1
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div><PieChart {...educationPieProps}/></div>
                 }
                </Col>
                <Col className={styles.chartsDiv} span={10} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                {loading2
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div> <PieChart {...genderPieProps}/> </div>
                 }
@@ -170,9 +323,9 @@ class BasicAnalysis extends Component<IProps, IState>{
              </Row>
 
              <Row style={{marginBottom:'30px'}}>
-               <Col className={styles.chartsDiv} span={21} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+               <Col className={styles.chartsDiv} span={10} offset={1}>
+                {loading3
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div>
                     <BarChart {...majorNumBarProps}/>
@@ -180,12 +333,12 @@ class BasicAnalysis extends Component<IProps, IState>{
                   </div>
                 }
                </Col>
-             </Row>
+             {/* </Row>
 
-             <Row style={{marginBottom:'30px'}}>
-               <Col className={styles.chartsDiv} span={21} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+             <Row style={{marginBottom:'30px'}}> */}
+               <Col className={styles.chartsDiv} span={10} offset={1}>
+                {loading4
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div>
                     <BarChart {...politicalBarProps}/>
@@ -197,8 +350,8 @@ class BasicAnalysis extends Component<IProps, IState>{
 
              <Row style={{marginBottom:'30px'}}>
                <Col className={styles.chartsDiv} span={21} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                {loading5
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div>
                     <ChinaMap {...chinaMap1Props} />
@@ -210,8 +363,8 @@ class BasicAnalysis extends Component<IProps, IState>{
 
              <Row style={{marginBottom:'30px'}}>
                <Col className={styles.chartsDiv} span={21} offset={1}>
-                {loadingGenderPie
-                  ? <div className='loadingText'>图表加载中...</div>
+                {loading6
+                  ? <div className={styles.chartLoading}> <Spin /></div>
                   : 
                   <div>
                     <ChinaMap {...chinaMap2Props} />

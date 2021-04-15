@@ -4,6 +4,7 @@ import api from '@/api'
 
 const {
   schoolMatesQuery,
+  schoolMatesIdCheck,
   schoolMatesCreate,
   schoolMatesModify,
   schoolMatesDelete,
@@ -26,6 +27,11 @@ class SchoolMateStore{
         this.schoolMatesTableData = data
       })
     }
+    return {success,msg}
+  }
+
+  checkMateId=async(params:any)=>{
+    let {status,success,msg}=await schoolMatesIdCheck(params)
     return {success,msg}
   }
 

@@ -65,7 +65,7 @@ class AccountManage extends Component<IProps,IState> {
     }
     this.setState({loading: true})
     //TODO 传参
-    await fetchTableData({})
+    await fetchTableData(params)
     this.setState({loading: false})
     
   }
@@ -83,6 +83,11 @@ class AccountManage extends Component<IProps,IState> {
     }) 
   }
   handleQuery = (params: any) =>{
+    for(let key in params){
+      if(params[key]==="" || params[key]===null || params[key]===undefined){
+        delete params[key]
+      }
+    }
     this.setState({
       pageNum: 1,
       searchVal: {...params}
@@ -94,12 +99,15 @@ class AccountManage extends Component<IProps,IState> {
     const { accountStore: {goAdminsDelete} } = this.props
     const { deleteRecord }=this.state
     //注意传参 TODO
-    let params={}
+    // @ts-ignore
+    let params={_id:deleteRecord._id}
     const res=await goAdminsDelete(params)
     if(res.success){
       // @ts-ignore
       message.success(`"${deleteRecord.username}"删除成功！`)
-      this.getAccountList()
+      this.setState({ pageNum: 1,}, () => {
+        this.getAccountList()
+      })
       this.setState({deleteModalVisible:false})
     }else{
       message.error(res.msg)
@@ -108,12 +116,18 @@ class AccountManage extends Component<IProps,IState> {
   changeStatus = async (checked: boolean,record:any) => {
     const { accountStore: {goOnOrOff} } = this.props
     let params={
-      // id:record.id,
-      // status:checked?1:0
+      _id:record._id,
+      status:checked?1:0
+      // 就传状态以修改
     }
-    await goOnOrOff(params)
-    //TODO 目前不产生提醒
-    this.getAccountList()
+    const res=await goOnOrOff(params)
+    //TODO 目前成功不产生提醒？
+    if(!res.success){
+      message.error(res.msg)
+    }else{
+      this.getAccountList()
+    }
+    
   }
   openEditModal = async(record: any,action:string) => {
 
@@ -233,6 +247,7 @@ class AccountManage extends Component<IProps,IState> {
       current: pageNum,
       pageSize: pageSize,
       total,
+      pageSizeOptions:[5,10,20,50],
       showSizeChanger: true,
       showQuickJumper: true,
       showTotal() {
@@ -257,7 +272,7 @@ class AccountManage extends Component<IProps,IState> {
       handleReset: this.handleReset,
       onRef: (ref: any) => this.searchRef = ref,
       formItems: [
-        {el:'input',label: '用户名' ,name:'username',placeholder: '用户名',},
+        {el:'input',label: '用户名' ,name:'username',placeholder: '用户名'},
         {
           el:'select',
           name:'identity',

@@ -35,10 +35,10 @@ export default class BasicSetting extends React.Component<IProps> {
             {pattern: emailReg, message: '请输入正确格式的邮箱地址'}
         ]
     }
-    update=async()=>{
-        const {userStore:{updateUserInfo,fetchUserInfo}}=this.props
-        //TODO 传参
-        const params={ }
+    update=async(values:any)=>{
+        const {userStore:{userData,updateUserInfo,fetchUserInfo}}=this.props
+        const {username}=userData
+        const params={ username,...values }
         const res=await updateUserInfo(params)
         if(res.success){
             message.success(res.msg)

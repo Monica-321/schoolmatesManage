@@ -63,7 +63,7 @@ class SchoolMateInfoDetail extends Component<IProps, IState>{
         <Item label="籍贯" span={2}>{homeTown}</Item>
         <Item label="生源地" span={2}>{srcPlace} </Item>
         <Item label="去向城市" span={2}>{dstPlace} </Item>
-        <Item label="就读身份">{educationStatus===0?'本科生':'硕士'}</Item>
+        <Item label="就读身份">{educationStatus==='0'?'本科生':'硕士'}</Item>
         <Item label="院系">{faculty}</Item>
         <Item label="专业">{majorMap[major]}</Item>
         <Item label="班级">{majorClass}</Item>

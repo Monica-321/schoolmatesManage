@@ -24,18 +24,22 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
         super(prop)
         this.formRef = React.createRef<FormInstance>()
     }
-    update=async()=>{
-        const {userStore:{updateUserPwd,handelLogout}}=this.props
+    update=async(values:any)=>{
+        const {userStore:{userName,updateUserPwd,handelLogout}}=this.props
         //TODO 传参
-        const params={ }
+        const params={username:userName,...values }
         const res=await updateUserPwd(params)
         if(res.success){
-            message.success(res.msg)
+            // message.success(res.msg)
             //TODO 重新登录
-            setTimeout(message.warn('密码已更改，请重新登录…'),5000)
-            // handelLogout().then(()=>{
-            //     // this.props.history.push('../login')
-            // })
+            setTimeout(message.success('密码已更改，请重新登录…'),5000)
+            // const response=await handelLogout()
+            // if(response.success){
+            //     // message.success(response.msg)
+            //     this.props.history.push('../login')
+            // }else{
+            //     message.error(response.msg)
+            // }
             
         }else{
             message.error(res.msg)
@@ -51,7 +55,7 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
             throw new Error('请输入新密码信息')
         }
         let formVals = this.formRef.current?.getFieldsValue()
-        if (value && value === formVals.old ) {
+        if (value && value === formVals.oldPwd ) {
             throw new Error('新密码不能与原密码相同，请确认')
         }
         if(value.length>20 || value.length<6)throw new Error('新密码需限制在6~20个字符')
@@ -64,11 +68,11 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
             throw new Error('请输入确认密码信息')
         }
         let formVals = this.formRef.current?.getFieldsValue()
-        if (value && value === formVals.old ) {
+        if (value && value === formVals.oldPwd ) {
             throw new Error('新密码不能与原密码相同，请确认')
         }
         if(value.length>20|| value.length<6)throw new Error('确认密码需限制在6~20个字符')
-        let newPwd = this.formRef.current?.getFieldValue('new')
+        let newPwd = this.formRef.current?.getFieldValue('newPwd')
         if(newPwd !== value){
             throw new Error('确认密码输入信息错误，请确认')
         }
@@ -77,7 +81,7 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
         return(<>
             <div className={styles.content}>
                 <Form ref={this.formRef} {...FORM_LAYOUT} onFinish={this.update}>
-                    <Form.Item label='原密码' name="old"
+                    <Form.Item label='原密码' name="oldPwd"
                         validateTrigger="onBlur"
                         rules={[{validator: this.oldValidator}]}
                         required
@@ -88,7 +92,7 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
                             }}
                         />
                     </Form.Item>
-                    <Form.Item label='新密码' name="new"
+                    <Form.Item label='新密码' name="newPwd"
                         validateTrigger="onBlur"
                         rules={[{validator: this.newValidator}]}
                         required
@@ -99,7 +103,7 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
                             }}
                         />
                     </Form.Item>
-                    <Form.Item label='确认密码' name="confirm"
+                    <Form.Item label='确认密码' name="confirmPwd"
                         validateTrigger="onBlur"
                         rules={[{validator: this.confirmValidator}]}
                         required

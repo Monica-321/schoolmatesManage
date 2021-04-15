@@ -22,6 +22,7 @@ const Api:any = {
     
     //校友信息管理
     schoolMatesQuery:`POST ${api}/schoolMates/schoolMatesList`,
+    schoolMatesIdCheck:`GET ${api}/schoolMates/schoolMatesIdCheck`,
     schoolMatesCreate:`POST ${api}/schoolMates/schoolMatesCreate`,
     schoolMatesModify:`POST ${api}/schoolMates/schoolMatesUpdate`,
     schoolMatesDelete:`POST ${api}/schoolMates/schoolMatesDelete`,

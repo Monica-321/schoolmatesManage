@@ -34,34 +34,43 @@ class AddOrEdit extends Component<IProps,IState> {
             this.formRef.current?.resetFields()
         }
     }
-
+    checkID=async(event:any)=>{
+        // console.log('id',event.target.value)
+        const id=event.target.value
+        const { schoolMateStore: {checkMateId} } = this.props
+        const res=await checkMateId({id})
+        if(res.success){
+            message.success(res.msg)
+        }else{
+            message.error(res.msg)
+        }
+    }
     submit=async(values:any)=>{
         const { editFlag }=this.props
-        const { schoolMateStore: {goschoolMatesCreate,goschoolMatesModify} } = this.props
-        // console.log('原始数据：',values)
+        const { schoolMateStore: {schoolMateDetail,goschoolMatesCreate,goschoolMatesModify} } = this.props
         // 处理values
         let params={...values}
         params.birthDate=moment(params.birthDate).format('YYYY-MM-DD')
         params.homeTown=params.homeTown.join(' ')
         params.srcPlace=params.srcPlace.join(' ')
         params.dstPlace=params.dstPlace.join(' ')
-        // console.log(params)
+        params.faculty='信息学院'
         // 判断编辑还是创建
         switch(editFlag){
             case 'add': 
-                {//注意传参 TODO,id是否自己写？
-                // let params={}
+                {
                 var res=await goschoolMatesCreate(params)
                 break;}
             case 'edit': 
-                {//注意传参 TODO
-                // let params={}
+                {
+                params.id=schoolMateDetail.id
                 var res=await goschoolMatesModify(params)
                 break;}
         }
         if(res.success){
             message.success(res.msg)
             this.props.hideEdit()
+            this.props.fetchData()
         }else{
             message.error(res.msg)
         }
@@ -104,7 +113,7 @@ class AddOrEdit extends Component<IProps,IState> {
                                     {editFlag==='edit'?
                                         <Input  disabled/>
                                         :
-                                        <Input placeholder="请输入校友学号" />
+                                        <Input placeholder="请输入校友学号" onBlur={this.checkID.bind(this)} />
                                     }
                                 </Item>
                             </Col>
@@ -196,8 +205,8 @@ class AddOrEdit extends Component<IProps,IState> {
                                         { required: true, message: '请选择就读身份' },
                                     ]} >
                                     <Select placeholder="请选择就读身份">
-                                        <Option value={0}>本科生</Option>
-                                        <Option value={1}>硕士</Option>
+                                        <Option value='0'>本科生</Option>
+                                        <Option value='1'>硕士</Option>
                                     </Select>
                                 </Item>
                             </Col>
