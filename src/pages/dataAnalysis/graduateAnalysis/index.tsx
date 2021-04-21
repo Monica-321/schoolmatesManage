@@ -51,7 +51,7 @@ class GraduateAnalysis extends Component<IProps, IState>{
     this.setState({loading1:true,loading2:true,loading3:true,loading4:true,loading5:true,loading6:true})
     await fetchGraduateOption({...this.state.searchVal})
     this.setState({loading1:false})
-    // await fetchDstPlace({...this.state.searchVal})
+    await fetchDstPlace({...this.state.searchVal})
     this.setState({loading2:false})
     await fetchCompanyIndus({...this.state.searchVal})
     this.setState({loading3:false})
@@ -77,7 +77,7 @@ class GraduateAnalysis extends Component<IProps, IState>{
 
   render(){
     const {loading1,loading2,loading3,loading4,loading5,loading6}=this.state
-    const {graduateAnalysisStore:{graduateOption,companyIndus,companyScale,companyRank}}=this.props
+    const {graduateAnalysisStore:{graduateOption,dstMapData,companyIndus,companyScale,companyRank}}=this.props
     const {ranknames,rankvalues}=companyRank
     // console.log('柱状图数据',ranknames,rankvalues)
     let searchProps={
@@ -93,14 +93,14 @@ class GraduateAnalysis extends Component<IProps, IState>{
           placeholder:"请选择就读身份",
           style:{width: 174},
           selectOptions:[
-            { label: '本科生' ,value: 0 },
-            { label: '硕士' ,value: 1 },
+            { label: '本科生' ,value: '0' },
+            { label: '硕士' ,value: '1' },
           ],
           selectField: {
             label: 'label',
             value: 'value'
           },
-          initialValue:0,
+          initialValue:'0',
         },{
           el:'select',
           name:'yearOfGraduation',
@@ -141,7 +141,7 @@ class GraduateAnalysis extends Component<IProps, IState>{
 
     const chinaMap3Props={
       chartName:'去向城市统计地图',
-      
+      mapData:dstMapData,
     }
     const companyIndustryPieProps={
       chartName:'毕业就业单位行业饼图',

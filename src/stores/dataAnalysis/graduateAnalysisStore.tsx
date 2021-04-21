@@ -3,6 +3,7 @@ import api from '@/api'
 import {industryMap} from '@/utils/staticData'
 const {
   getGraduateOption,
+  getDstPlace,
   getCompanyIndus,
   getCompanyScale,
   getCompanyRank,
@@ -16,6 +17,7 @@ class GraduateAnalysisStore{
   @observable companyIndus:any=[]
   @observable companyScale:any=[]
   @observable companyRank:any={}
+  @observable dstMapData:any=[]
 
   @action
   fetchGraduateOption=async(params:any) => {
@@ -23,6 +25,17 @@ class GraduateAnalysisStore{
     if(success){
       runInAction(() => {
         this.graduateOption = data
+      })
+    }
+    return {success,msg}
+  }
+
+  @action
+  fetchDstPlace=async(params:any) => {
+    let {status,success,msg, data} = await getDstPlace(params)
+    if(success){
+      runInAction(() => {
+        this.dstMapData = data
       })
     }
     return {success,msg}

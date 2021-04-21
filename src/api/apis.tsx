@@ -42,16 +42,21 @@ const Api:any = {
     getEducationRate:`GET ${api}/dataAnalysis/getEducationRate`,
     getMajorNum:`GET ${api}/dataAnalysis/getMajorNum`,
     getPoliticalSta:`GET ${api}/dataAnalysis/getPoliticalSta`,
+    getHomePlace:`GET ${api}/dataAnalysis/getHomePlace`,
+    getSrcPlace:`GET ${api}/dataAnalysis/getSrcPlace`,
     //毕业去向分析
     getGraduateOption:`GET ${api}/dataAnalysis/getGraduateOption`,
-
+    getDstPlace:`GET ${api}/dataAnalysis/getDstPlace`,
     getCompanyIndus:`GET ${api}/dataAnalysis/getCompanyIndus`,
 
     getCompanyScale:`GET ${api}/dataAnalysis/getCompanyScale`,
     getCompanyRank:`GET ${api}/dataAnalysis/getCompanyRank`,
     
-    //……
-
+    //数字影像
+    getMajorAndClass:`GET ${api}/schoolMates/getMajorAndClass`,
+    getClassPics:`POST ${api}/graduateMedia/getClassPics`,
+    addGraduateMedia:`POST ${api}/graduateMedia/graduateMediaAdd`,
+    deleteGraduateMedia:`POST ${api}/graduateMedia/graduateMediaDelete`,
 }
 
 export default Api

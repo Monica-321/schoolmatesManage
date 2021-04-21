@@ -126,9 +126,9 @@ class ChinaMap extends Component<IProps> {
         y: 'bottom',
         splitList: [
           { start: 0, end: 0, label: '无' },
-          { start: 1, end: 49, label: '1-49' },
-          { start: 50, end: 99, label: '50-99'},
-          { start: 100, end: 9999, label: '100及以上'},
+          { start: 1, end: 29, label: '1-29' },
+          { start: 30, end: 59, label: '30-59'},
+          { start: 60, end: 9999, label: '60及以上'},
         ],
         // color: ['#276678', '#1687a7', '#d3e0ea', '#f6f5f5']
         color:['#7579e7','#9ab3f5','#d8edfd','#f6f5f5'] //配色暂定

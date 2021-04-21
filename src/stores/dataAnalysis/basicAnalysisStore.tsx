@@ -7,6 +7,8 @@ const {
   getEducationRate,
   getMajorNum,
   getPoliticalSta,
+  getHomePlace,
+  getSrcPlace
 } = api
 
 class BasicAnalysisStore{
@@ -17,6 +19,8 @@ class BasicAnalysisStore{
   @observable educationRateData:any=[]
   @observable majorNumData:any={}
   @observable politicalStaData:any={}
+  @observable homeMapData:any=[]
+  @observable srcMapData:any=[]
 
   //性别比例
   @action
@@ -105,6 +109,28 @@ class BasicAnalysisStore{
 
         console.log('data',data,obj)
         this.politicalStaData = obj
+      })
+    }
+    return {success,msg}
+  }
+
+  @action
+  fetchHomePlace=async(params:any) => {
+    let {status,success,msg, data} = await getHomePlace(params)
+    if(success){
+      runInAction(() => {
+        this.homeMapData = data
+      })
+    }
+    return {success,msg}
+  }
+
+  @action
+  fetchSrcPlace=async(params:any) => {
+    let {status,success,msg, data} = await getSrcPlace(params)
+    if(success){
+      runInAction(() => {
+        this.srcMapData = data
       })
     }
     return {success,msg}
