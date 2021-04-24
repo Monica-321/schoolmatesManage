@@ -10,8 +10,11 @@ class PageNotFound extends Component{
   render(){
     return(
       <div className={`${styles.pageCenter}`}>
-        <div>PageNotFound page - 404</div>
+        <div className={`${styles.msgBox}`}>
+          404<br />
+          Page  Not Found
         </div>
+      </div>
     )
   }
 };

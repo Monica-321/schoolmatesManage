@@ -10,14 +10,14 @@ let cancelTokenSource = axios.CancelToken.source()
 
 //请求拦截器
 axios.interceptors.request.use(async (config: any) => {
-  // const token = localStorage.getItem("token")
-  // const headers = {
-  //   'Content-Type': 'application/json;charset=UTF-8',
-  //   'token': token
-  // };
-  // config.cancelToken = cancelTokenSource.token
-  // return {...config, headers}
-  return config
+  const token = localStorage.getItem("token")
+  const headers = {
+    'Content-Type': 'application/json;charset=UTF-8',
+    'token': token
+  };
+  config.cancelToken = cancelTokenSource.token  //?啥意思
+  return {...config, headers}
+  // return config
 }, function (error: any) {
   return Promise.reject(error)
 });
@@ -28,14 +28,28 @@ axios.interceptors.response.use((response: any) => {
   if (data instanceof Blob) {
     return response
   } else {
-    const {msg, success , result} = data
+    const {msg, success , code} = data
     // console.log("发起一个请求时的response",response)
     if(!success){
-      if(data.result && data.result.code && data.result.code===-1){
-          message.error('登录失效，跳转登录页')
-          localStorage.clear()
-          sessionStorage.clear()
-          window.location.href = '../login'
+      if(data.code){
+        switch(data.code){
+        case -1:{
+            message.error('登录失效，即将跳转登录页…')
+            setTimeout(()=>{
+              localStorage.clear()
+              sessionStorage.clear()
+              window.location.href = '../'
+            },2000)
+          };break;
+        case -2:{
+            message.error('没有访问权限！')
+            // setTimeout(()=>{
+              window.location.href = '../404'
+            // },2000)
+          };break;
+        default:break;
+        }
+        return response.data;
       }
       else{
         return response.data;
@@ -44,10 +58,33 @@ axios.interceptors.response.use((response: any) => {
     return response.data;
   }
   },(error: any)=>{
+    console.log(error,error.code)
     if(error.message === 'cancel'){
       return Promise.resolve({data: null, msg: '', status: 500, success: false})
     }
-    message.error('网络错误，请稍后重试')
+    message.error(`${error.name}:${error.message}`)
+    // if (error.response) {
+    //   switch (error.response.status) {
+    //     case 401:
+    //       {
+    //         // console.log(error.response.status,error)
+    //         message.error('登录失效，即将跳转登录页…')
+    //         setTimeout(()=>{
+    //           localStorage.clear()
+    //           sessionStorage.clear()
+    //           window.location.href = ''
+    //         },2500)
+    //       };
+    //       break;
+    //     case 403:
+    //       {
+    //       // console.log(error.response.status,error)
+    //         message.error('没有访问权限');
+    //         // 错误页面？
+    //       };
+    //       break;
+    //   }
+    // }
     return Promise.reject(error);
   }
 );

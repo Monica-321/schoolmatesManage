@@ -20,7 +20,11 @@ const TopBar: FC<IProps> = props => {
     const response=await handelLogout()
     if(response.success){
       message.success(response.msg)
-      history.push('../login')
+      setTimeout(()=>{
+        localStorage.clear()
+        sessionStorage.clear()
+        history.push('../')
+      },1500)
     }else{
       message.error(response.msg)
     }

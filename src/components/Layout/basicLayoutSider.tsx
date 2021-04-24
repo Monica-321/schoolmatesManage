@@ -13,15 +13,20 @@ const { Header, Content, Sider } = Layout;
 interface IProps {
   children: any;
   router?:any;
-  data:[any];
+  // data:[any];
+  getInfo():{
+    authority:[any],
+    userName:string
+  };
   defaultCollapsed:boolean;
 }
   const BasicLayoutSider: FC<IProps> = props => {
-    const {data,router,defaultCollapsed} = props;
+    const {router,defaultCollapsed} = props;
     const [collapsed, setCollapsed] = useState(defaultCollapsed);
     const siderBarProps = {
       collapsed,
-      data,
+      // data,
+      data:props.getInfo().authority,
       router,
     }
     return(

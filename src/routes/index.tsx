@@ -1,19 +1,32 @@
 import React from 'react';
-import {HashRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, HashRouter,Redirect, Route, Switch} from 'react-router-dom';
 import { Provider } from "mobx-react";
 import RootStore from "@/stores";
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale/zh_CN';
-import data from '@/components/Layout/SiderBar/menuData'
+// import alldata from '@/components/Layout/SiderBar/menuData'
 import routes from './config';
 class Router extends React.Component{
+  getInfo(){
+    const {userStore} = RootStore;
+    const {
+      authority,
+      userName
+    } = userStore;
+    const newAuthority = authority.length>0?authority:JSON.parse(localStorage.getItem('Authority')||'[]');
+    const newUserName = userName!==''?userName:localStorage.getItem('userName')||'';
+    return {
+      authority:newAuthority,
+      userName:newUserName
+    };
+  }
   render(){
     let store: any = RootStore;
-    // const data = JSON.parse(localStorage.getItem('Authority')||'[]') //菜单吧
+    // const data = JSON.parse(localStorage.getItem('Authority')||'[]') //菜单
     return(
       <Provider {...store}>
         <ConfigProvider locale={zhCN}>
-          <HashRouter>   
+          <BrowserRouter>   
             <Switch>
               {
                 routes.map((item:any,index:number)=>{
@@ -22,7 +35,7 @@ class Router extends React.Component{
                       <Route key={`item${index}`} path={item.path} component={
                         (router:any)=>{
                           return (
-                            <item.component router={router} defaultCollapsed={item.collapsed?item.collapsed:false} data={data}>
+                            <item.component router={router} defaultCollapsed={item.collapsed?item.collapsed:false} getInfo={this.getInfo}>
                               {
                                 item.children.map((cItem:any,cIndex:number)=>{
                                   return (
@@ -37,13 +50,14 @@ class Router extends React.Component{
                     )          
                   }else{
                     return (
-                      <Route key={`item${index}`} exact path={item.path} component={item.component} />                
+                      <Route key={`item${index}`} exact path={item.path} component={item.component} />               
                     )
                   }
                 })
               }
+              <Redirect from="*" to="/404"></Redirect> 
             </Switch>
-          </HashRouter>
+          </BrowserRouter>
         </ConfigProvider>
       </Provider>
     )

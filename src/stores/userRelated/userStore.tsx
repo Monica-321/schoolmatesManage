@@ -31,6 +31,7 @@ class UserStore{
   }
   @observable userData:any={}
   @observable userName: string = localStorage.getItem('userName')||''
+  @observable authority: any[] = JSON.parse(localStorage.getItem('Authority')||'[]');
   // @action
   // handelLogin= async(params:any) => {
   //   // var encrypt = new JSEncrypt();
@@ -45,11 +46,15 @@ class UserStore{
   handelLogin= async(params:any) => {
     let {status,success ,  msg , data} = await loginApi(params)
     if (success) {
-      const {phone,email, username, identity, status,permissions} = data
+      const {phone,email, username, identity, status,permissions,token} = data
       runInAction(()=>{
         this.userData=data
         localStorage.setItem("userName", username);
+        localStorage.setItem('token', token);
+        localStorage.setItem('Authority', JSON.stringify(permissions));
+        localStorage.setItem("firstRoute", permissions[0].url || permissions[0].children[0].url)
         this.userName = username
+        this.authority = permissions
         console.log('用户数据：',this.userData,'用户名',this.userName)
       })
     } 

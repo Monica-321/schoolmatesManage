@@ -32,16 +32,26 @@ class Login extends Component<IProps,IState>{
     console.log('finishValues:', values);
     //验证账号
     this.setState({loading:true})
-    const response=await handelLogin(values) 
-    this.setState({loading:false})
+    // const response=await handelLogin(values) 
+    // this.setState({loading:false})
 
-    if(response.success){
-      message.success(response.msg)
-      this.props.history.push('/dashboard/index')
-      // this.props.history.push(menuData[0].children[0].path)
-    }else{
-      message.error(response.msg)
-    }   
+    // if(response.success){
+    //   message.success(response.msg)
+    //   // this.props.history.push('/dashboard/index')
+    //   let firstRoute = localStorage.getItem('firstRoute')
+    //   this.props.history.push(firstRoute)
+    //   // this.props.history.push(menuData[0].children[0].path)
+    // }else{
+    //   message.error(response.msg)
+    // }   
+    handelLogin(values).then((res:any) => {
+      if(res.success){
+        let firstRoute = localStorage.getItem('firstRoute')
+        this.props.history.push(firstRoute)
+        
+      }else
+        return
+    })
   }
 
   onFinishFailed=(errorInfo:any)=>{
