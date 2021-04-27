@@ -1786,3 +1786,29 @@ export const addressData:any[] = [
       "children": []
     }
   ];
+
+export const excelColumn:any[]= [
+    { "dataIndex":"id","title":"学号"},
+    { "dataIndex":"name","title":"姓名"},
+    { "dataIndex":"gender","title":"性别"},
+    { "dataIndex":"nationality","title":"民族"},
+    { "dataIndex":"birthDate","title":"出生日期"},
+    { "dataIndex":"faculty","title":"院系"},
+    { "dataIndex":"educationStatus","title":"就读身份"},
+    { "dataIndex":"yearOfEnrollment","title":"入学年份"},
+    { "dataIndex":"yearOfGraduation","title":"毕业年份"},
+    { "dataIndex":"politicalStatus","title":"政治面貌"},
+    { "dataIndex":"homeTown","title":"籍贯"},
+    { "dataIndex":"srcPlace","title":"生源地"},
+    { "dataIndex":"dstPlace","title":"去向城市"},
+    { "dataIndex":"major","title":"专业"},
+    { "dataIndex":"majorClass","title":"班级"},
+    { "dataIndex":"contactPhone","title":"联系手机"},
+    { "dataIndex":"contactEmail","title":"联系邮箱"},
+    { "dataIndex":"workArea","title":"工作行业"},
+    { "dataIndex":"job","title":"工作岗位"},
+    { "dataIndex":"companyRank","title":"公司排名"},
+    { "dataIndex":"graduateChoice","title":"毕业去向"},
+    { "dataIndex":"salary","title":"毕业薪资"},
+    { "dataIndex":"companySize","title":"公司规模"},
+    ]

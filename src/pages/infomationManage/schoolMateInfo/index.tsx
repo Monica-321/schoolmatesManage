@@ -458,7 +458,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         key: 'graduateChoice',
         dataIndex: 'graduateChoice',
       },{
-        title: '从事行业',
+        title: '工作行业',
         key: 'workArea',
         dataIndex: 'workArea',
         render:(text:any)=>{
