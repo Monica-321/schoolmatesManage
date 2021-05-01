@@ -36,6 +36,13 @@ const Api:any = {
     schoolCompaniesDelete:`POST ${api}/schoolCompanies/schoolCompaniesDelete`,
     schoolCompaniesDetail:`GET ${api}/schoolCompanies/schoolCompaniesDetail`,
         //批量导出
+        
+    //活动公告管理
+    schoolPostsQuery:`POST ${api}/schoolPosts/schoolPostsList`,
+    schoolPostsCreate:`POST ${api}/schoolPosts/schoolPostsCreate`,
+    schoolPostsModify:`POST ${api}/schoolPosts/schoolPostsUpdate`,
+    schoolPostsDelete:`POST ${api}/schoolPosts/schoolPostsDelete`,
+    schoolPostsDetail:`GET ${api}/schoolPosts/schoolPostsDetail`,
 
     //基本数据分析
     getGenderRate:`GET ${api}/dataAnalysis/getGenderRate`,
@@ -44,6 +51,7 @@ const Api:any = {
     getPoliticalSta:`GET ${api}/dataAnalysis/getPoliticalSta`,
     getHomePlace:`GET ${api}/dataAnalysis/getHomePlace`,
     getSrcPlace:`GET ${api}/dataAnalysis/getSrcPlace`,
+
     //毕业去向分析
     getGraduateOption:`GET ${api}/dataAnalysis/getGraduateOption`,
     getDstPlace:`GET ${api}/dataAnalysis/getDstPlace`,

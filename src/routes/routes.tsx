@@ -15,6 +15,7 @@ import SchoolMateInfoManage from '@/pages/infomationManage/schoolMateInfo';
 import SchoolMateInfoDetail from '@/pages/infomationManage/schoolMateInfo/detail';
 import SchoolCompanyManage from '@/pages/infomationManage/schoolMateCompany';
 import SchoolCompanyDetail from '@/pages/infomationManage/schoolMateCompany/detail';
+import SchoolPostsManage from '@/pages/infomationManage/schoolNews';
 
 import BasicAnalysis from '@/pages/dataAnalysis/basicAnalysis'
 import GraduateAnalysis from '@/pages/dataAnalysis/graduateAnalysis'
@@ -58,6 +59,7 @@ const Routes = {
 	  // 校友单位信息管理 及详情？
     SchoolCompanyManage,     // 校友单位信息管理
     SchoolCompanyDetail,   // 校友单位信息详情
+    SchoolPostsManage,//活动公告
   },
   // // 操作日志？超级
   // Log: {

@@ -198,7 +198,7 @@ class AddOrEdit extends Component<IProps,IState> {
 
                             <Col span={24}>
                                 <Item label="企业描述" name="companyDescription" labelCol={{span: 2}} wrapperCol={{span: 21}} >
-                                    <TextArea showCount maxLength={400} placeholder="请输入企业描述"/>
+                                    <TextArea showCount autoSize={{ minRows: 2, maxRows: 5 }} maxLength={500} placeholder="请输入企业描述"/>
                                 </Item>
                             </Col>
                         </Row>

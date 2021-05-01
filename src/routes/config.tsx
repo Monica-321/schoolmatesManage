@@ -68,6 +68,10 @@ const routes = [
         path:'/schoolCompanyDetail',
         component:InfomationManage.SchoolCompanyDetail,
       },
+      {
+        path:'/schoolPostsManage',
+        component:InfomationManage.SchoolPostsManage,
+      },
     ]
   },
   // // 操作日志
