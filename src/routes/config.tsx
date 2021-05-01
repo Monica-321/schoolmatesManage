@@ -4,7 +4,7 @@ const {
   Login,
   // Register,
   Layout,
-  DashBoard,
+  // DashBoard,
   SystemSetting,
   InfomationManage,
   // Log,
@@ -31,32 +31,18 @@ const routes = [
   //   component:Register.Register,
   // },
   //首页
-  {
-    path:"/dashboard",
-    component:Layout.Master,
-    collapsed:true,
-    children: [
-      {
-        path: '/index',
-        component: DashBoard.IndexPage,
-      },
-    ],
+  // {
+  //   path:"/dashboard",
+  //   component:Layout.Master,
+  //   collapsed:true,
+  //   children: [
+  //     {
+  //       path: '/index',
+  //       component: DashBoard.IndexPage,
+  //     },
+  //   ],
     
-  },
-  {
-    path:"/systemSettings",
-    component:Layout.Master,
-    children:[
-      {
-        path:'/accountManage',
-        component:SystemSetting.AccountManage,
-      },
-      {
-        path:'/personalSetting',
-        component:SystemSetting.PersonalSetting,
-      },
-    ]
-  },
+  // },
   //InfomationManage
   {
     path:"/infoManage",
@@ -95,46 +81,59 @@ const routes = [
   //     },
   //   ],
   // },
-//DataAnalysis
-{
-  path:"/dataAnalysis",
-  component:Layout.Master,
-  children:[
-    {
-      path:'/basicAnalysis',
-      component:DataAnalysis.BasicAnalysis,
-    },
-    {
-      path:'/graduateAnalysis',
-      component:DataAnalysis.GraduateAnalysis,
-    },
-    // {
-    //   path:'/companyAnalysis',
-    //   component:DataAnalysis.CompanyAnalysis,
-    // },
-  ]
-},
-//MediaCenter
-{
-  path:"/mediaCenter",
-  component:Layout.Master,
-  children:[
-    {
-      path:'/graduateMedia',
-      component:MediaCenter.GraduateMedia,
-    },
-    // {
-    //   path:'/otherMedia',
-    //   component:MediaCenter.OtherMedia,
-    // },
-  ]
-},
+  //DataAnalysis
+  {
+    path:"/dataAnalysis",
+    component:Layout.Master,
+    children:[
+      {
+        path:'/basicAnalysis',
+        component:DataAnalysis.BasicAnalysis,
+      },
+      {
+        path:'/graduateAnalysis',
+        component:DataAnalysis.GraduateAnalysis,
+      },
+      // {
+      //   path:'/companyAnalysis',
+      //   component:DataAnalysis.CompanyAnalysis,
+      // },
+    ]
+  },
+  //MediaCenter
+  {
+    path:"/mediaCenter",
+    component:Layout.Master,
+    children:[
+      {
+        path:'/graduateMedia',
+        component:MediaCenter.GraduateMedia,
+      },
+      // {
+      //   path:'/otherMedia',
+      //   component:MediaCenter.OtherMedia,
+      // },
+    ]
+  },
+  {
+    path:"/systemSettings",
+    component:Layout.Master,
+    children:[
+      {
+        path:'/accountManage',
+        component:SystemSetting.AccountManage,
+      },
+      {
+        path:'/personalSetting',
+        component:SystemSetting.PersonalSetting,
+      },
+    ]
+  },
   //404
   {
     path:"/404",
     component:Error.Error,
   },
-
 ];
 
 export default routes;

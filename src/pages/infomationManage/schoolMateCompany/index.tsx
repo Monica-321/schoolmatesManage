@@ -17,6 +17,7 @@ interface IState {
   total?:number,
   searchVal?: any, 
   selectedRowKeys:any[],
+  selectedRows:any[],
   deleteModalVisible:boolean,
   deleteRecord?:any,
   editModalVisible:boolean,
@@ -40,10 +41,11 @@ class SchoolCompanyManage extends Component<IProps, IState>{
   state: IState = {
     loading: false,
     pageNum: 1,
-    pageSize: 5,
+    pageSize: 10,
     total:10,
     searchVal:{},
     selectedRowKeys:[],
+    selectedRows:[],
     deleteModalVisible:false,
     deleteRecord:{},
     editModalVisible:false ,
@@ -76,7 +78,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
   }
   //重置
   handleReset=()=>{
-    this.setState({pageNum: 1,searchVal:{}},()=>{
+    this.setState({pageNum: 1,searchVal:{},selectedRowKeys: [],selectedRows:[]},()=>{
       this.getTableData()
     })
   }
@@ -91,7 +93,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
         params[key]=params[key].join(' ')
       }
     }
-    this.setState({pageNum: 1,searchVal:{...params}},()=>{
+    this.setState({pageNum: 1,searchVal:{...params},selectedRowKeys: [],selectedRows:[]},()=>{
       this.getTableData()
     })
   }
@@ -144,7 +146,7 @@ class SchoolCompanyManage extends Component<IProps, IState>{
     const {schoolCompanyStore}=this.props
     const {schoolCompaniesTableData}=schoolCompanyStore
     const{total,list}=schoolCompaniesTableData
-    const {pageNum,pageSize,loading,selectedRowKeys , deleteModalVisible , deleteRecord ,
+    const {pageNum,pageSize,loading,selectedRowKeys,selectedRows , deleteModalVisible , deleteRecord ,
       editModalVisible, editRecord , editFlag , batchExportVisible  }=this.state
     let searchProps={
       handleReset:this.handleReset,
@@ -273,11 +275,11 @@ class SchoolCompanyManage extends Component<IProps, IState>{
       selectedRowKeys,
       onChange: (selectedRowKeys:any,selectedRows:any)=>{
           console.log('selectedRowKeys changed: ', selectedRowKeys);
-          this.setState({ selectedRowKeys });
+          this.setState({ selectedRowKeys,selectedRows });
       },
     }
     let listProps:any={
-      rowKey:'companyId',
+      rowKey:'companyName',
       columns,
       // dataSource:[],
       dataSource:list,
@@ -310,10 +312,11 @@ class SchoolCompanyManage extends Component<IProps, IState>{
 
     let exportModalProps = {
       // Store,
-      hideModal:()=> this.setState({ batchExportVisible: false,selectedRowKeys: []}),
+      hideModal:()=> this.setState({ batchExportVisible: false,selectedRowKeys: [],selectedRows:[]}),
       afterExport:() => this.refreshData(),
       batchExportVisible,
-      selectedRowKeys,
+      // selectedRowKeys,
+      selectedRows,
     }
 
     return (

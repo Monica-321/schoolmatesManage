@@ -49,9 +49,11 @@ class Login extends Component<IProps,IState>{
         let firstRoute = localStorage.getItem('firstRoute')
         this.props.history.push(firstRoute)
         
-      }else
-        return
+      }else{
+        message.error(res.msg)
+      }
     })
+    this.setState({loading:false})
   }
 
   onFinishFailed=(errorInfo:any)=>{

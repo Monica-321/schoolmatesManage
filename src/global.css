@@ -23,3 +23,8 @@ em, i {
 .inputMarginB {
   margin-bottom: 12px;
 }
+
+/* 导出导入，预览表格 */
+#modalContain .ant-table.ant-table-small {
+      font-size: 12px;
+}

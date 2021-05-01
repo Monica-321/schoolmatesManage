@@ -21,6 +21,7 @@ interface IState {
   defaultValue:any[],
   checkedValue:any[],
   selectedRowKeys:any[],
+  selectedRows:any[],
   deleteModalVisible:boolean,
   deleteRecord?:any,
   editModalVisible:boolean,
@@ -51,6 +52,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     defaultValue:this.defaultValue,
     checkedValue:sessionStorage.getItem("schoolMatesCols")? JSON.parse(sessionStorage.getItem("schoolMatesCols")||"[]") :  this.defaultValue ,
     selectedRowKeys:[],
+    selectedRows:[],
     deleteModalVisible:false,
     deleteRecord:{},
     editModalVisible:false ,
@@ -83,7 +85,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
   
   //重置
   handleReset=()=>{
-    this.setState({pageNum: 1,searchVal:{},selectedRowKeys: [],},()=>{
+    this.setState({pageNum: 1,searchVal:{},selectedRowKeys: [],selectedRows:[]},()=>{
       this.getTableData()
     })
   }
@@ -99,7 +101,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         params[key]=params[key].join(' ')
       }
     }
-    this.setState({pageNum: 1,searchVal:params,selectedRowKeys: [],},()=>{
+    this.setState({pageNum: 1,searchVal:params,selectedRowKeys: [],selectedRows:[]},()=>{
       this.getTableData()
     })
   }
@@ -173,7 +175,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     const {schoolMateStore}=this.props
     const {schoolMatesTableData}=schoolMateStore
     const{total,list}=schoolMatesTableData
-    const {pageNum,pageSize,loading,checkedValue, selectedRowKeys , deleteModalVisible , deleteRecord ,
+    const {pageNum,pageSize,loading,checkedValue, selectedRowKeys,selectedRows , deleteModalVisible , deleteRecord ,
     editModalVisible, editFlag , batchExportVisible , batchImportVisible }=this.state
     let searchProps={
       handleReset:this.handleReset,
@@ -509,8 +511,8 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
     const rowSelection = {
       selectedRowKeys,
       onChange: (selectedRowKeys:any,selectedRows:any)=>{
-          console.log('selectedRowKeys changed: ', selectedRowKeys);
-          this.setState({ selectedRowKeys });
+          console.log('selectedRowKeys changed: ', selectedRowKeys,selectedRows);
+          this.setState({ selectedRowKeys,selectedRows });
       },
     }
     let listProps:any={
@@ -546,10 +548,11 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
 
     let exportModalProps = {
       // Store,
-      hideModal:()=> this.setState({ batchExportVisible: false,selectedRowKeys: []}),
+      hideModal:()=> this.setState({ batchExportVisible: false,selectedRowKeys: [],selectedRows:[]}),
       afterExport:() => this.refreshData(),
       batchExportVisible,
-      selectedRowKeys,
+      // selectedRowKeys,
+      selectedRows,
     }
     let importModalProps = {
       // Store,

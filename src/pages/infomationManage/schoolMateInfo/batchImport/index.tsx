@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {excelColumn} from '@/utils/staticData'
 import XLSX from 'xlsx'
-import { Modal, Form, Button, Table, message , Upload } from 'antd';
+import { Modal, Form, Button, Table,Tooltip, message , Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 const { Dragger } = Upload;
 const { Item } = Form
@@ -139,14 +139,35 @@ class BatchImportModal extends Component<IProps,IState> {
         title: '籍贯',
         key: 'homeTown',
         dataIndex: 'homeTown',
+        render:(text:any)=>(
+          text && text.length > 4
+          ? <Tooltip placement="topLeft" title={text}>
+              {text.substr(0, 4)}...
+            </Tooltip>
+          : text
+        )
       },{
         title: '生源地',
         key: 'srcPlace',
         dataIndex: 'srcPlace',
+        render:(text:any)=>(
+          text && text.length > 4
+          ? <Tooltip placement="topLeft" title={text}>
+              {text.substr(0, 4)}...
+            </Tooltip>
+          : text
+        )
       },{
         title: '去向城市',
         key: 'dstPlace',
         dataIndex: 'dstPlace',
+        render:(text:any)=>(
+          text && text.length > 4
+          ? <Tooltip placement="topLeft" title={text}>
+              {text.substr(0, 4)}...
+            </Tooltip>
+          : text
+        )
       },{
         title: '就读身份',
         key: 'educationStatus',
@@ -196,18 +217,20 @@ class BatchImportModal extends Component<IProps,IState> {
     ]
 
     return(
+      <div id="modalContain">
         <Modal 
             visible={this.state.nextVisible} 
             title='预览导入数据'
             centered={true}
             width={1800}
             closable={false}
-            // getContainer={false}
+            getContainer={document.getElementById('modalContain')}
             footer={null}
             onCancel={this.nextCancel}
         >
-          <div style={{padding:'10px'}}>
+          <div style={{padding:'10px',fontSize:'12px'}}>
               <Table
+                  
                   columns={tableColumns} 
                   rowKey='id'
                   dataSource={data}
@@ -220,6 +243,7 @@ class BatchImportModal extends Component<IProps,IState> {
               </div>
           </div>
         </Modal>
+      </div>
     )
 }
 

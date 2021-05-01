@@ -41,10 +41,10 @@ const Routes = {
 	// Register,
   },
   //首页？
-  DashBoard:{
-	IndexPage,
+  // DashBoard:{
+	// IndexPage,
 
-  },
+  // },
   //系统设置？？分超级管理员、普通管理员？
   SystemSetting: {
     AccountManage,   // 账号管理
