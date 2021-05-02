@@ -48,7 +48,6 @@ class Login extends Component<IProps,IState>{
       if(res.success){
         let firstRoute = localStorage.getItem('firstRoute')
         this.props.history.push(firstRoute)
-        
       }else{
         message.error(res.msg)
       }
@@ -61,10 +60,6 @@ class Login extends Component<IProps,IState>{
   }
 
   render(){
-
-    const tailLayout = {
-      wrapperCol: { offset:10 , span: 14 },
-    };
 
     return(
       <div className={styles.pageCenter}>
@@ -80,11 +75,6 @@ class Login extends Component<IProps,IState>{
               </Item>
               {/* <Item  >
                 验证码？
-              </Item> */}
-              {/* <Item label="省市地址" name="provinceId" htmlFor="provinceIdOther" rules={[{ required: true, message: '请选择省市地址' }]}>
-                <Cascader options={addressData} placeholder="请选择省市地址" allowClear onChange={(value, selectedOptions)=>{
-                  console.log('value, selectedOptions及string分别是',value, selectedOptions,value.join(' '))
-                }}/>
               </Item> */}
               <Item wrapperCol={{ span: "24"}} >
                 <Button style={{width:'100%',height:'42px',fontSize:'17px',marginTop:'3px',marginBottom:'-10px'}} type="primary" htmlType="submit" loading={this.state.loading}>登录</Button>

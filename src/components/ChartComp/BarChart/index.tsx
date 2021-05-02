@@ -26,7 +26,8 @@ class BarChart extends Component<IProps> {
         text: chartName,
         left: 'center'
       },
-      color: chartColor || ['#8081ea', '#12a9ec', '#ff7b00', '#ef2c0c'],
+      color: chartColor ||['#1d6eb9'],
+      // || ['#8081ea', '#12a9ec', '#ff7b00', '#ef2c0c'],
       tooltip: {
         trigger: 'axis'
       },

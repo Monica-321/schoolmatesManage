@@ -17,9 +17,9 @@ module.exports = override(
        javascriptEnabled: true,
        localIdentName: '[local]--[hash:base64:5]',
        modifyVars: { 
-         "@primary-color": "#3ac1c3", //主题色
+         "@primary-color": "#3370a7", //主题色  校徽蓝#004d91 明度高一点的
          "@layout-header-background": "#fff", //header背景色
-         "@menu-dark-bg": "#333645",  //menu在dark模式下的背景色
+         "@menu-dark-bg": "#0a253e",  //menu在dark模式下的背景色 原来#333645
          "@menu-item-height": "50px", //菜单项高度
          "@item-hover-bg":"#e4e6e5",    // for active and hover states for things like list items or table cells
         }

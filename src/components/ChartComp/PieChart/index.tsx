@@ -18,8 +18,10 @@ class PieChart extends Component<IProps> {
         text: chartName,
         left: 'center'
       },
-      color: chartColor || ['#52a2e5','#ef81a7','#0980DA','#3AC1C4','#AD93C3','#FEC400','#FE6539',],
-      // || ['#ff7b00', '#ef2c0c','#8081ea', '#12a9ec', ],
+      color: chartColor||['#7b55b8','#ffa510','#0c84c6','#f74d4d','#ffbd66','#2455a4','#41b7ac'],
+      // ||['#3682be','#45a776','#f05326','#eed777','#334f65','#b3974e','#38cb7d','#ddae33',
+      //   '#844bb3','#93c555','#5f6694','#df3881'],
+      //  || ['#52a2e5','#ef81a7','#0980DA','#3AC1C4','#AD93C3','#FEC400','#FE6539',],
       tooltip: {
         trigger: 'item',
         formatter: (params: any) => {

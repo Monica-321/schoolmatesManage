@@ -28,24 +28,6 @@ class ChinaMap extends Component<IProps> {
           if (cityArr.includes(params.name)) {
             provinceName = params.name + '市'
           } 
-          // else if (params.name === '新疆') {
-          //   provinceName = '新疆维吾尔自治区'
-          // } else if (params.name === '广西') {
-          //   provinceName = '广西壮族自治区'
-          // } else if (params.name === '内蒙古') {
-          //   provinceName = '内蒙古自治区'
-          // } else if (params.name === '西藏') {
-          //   provinceName = '西藏自治区'
-          // } else if (params.name === '宁夏') {
-          //   provinceName = '宁夏回族自治区'
-          // }else if (params.name === '香港') {
-          //   provinceName = '香港特别行政区'
-          // }else if (params.name === '澳门') {
-          //   provinceName = '澳门特别行政区'
-          // } 
-          // else {
-          //   provinceName = params.name + '省'
-          // }
           else {
             provinceName = params.name
           }
@@ -130,8 +112,9 @@ class ChinaMap extends Component<IProps> {
           { start: 30, end: 59, label: '30-59'},
           { start: 60, end: 9999, label: '60及以上'},
         ],
-        // color: ['#276678', '#1687a7', '#d3e0ea', '#f6f5f5']
-        color:['#7579e7','#9ab3f5','#d8edfd','#f6f5f5'] //配色暂定
+        color: ['#2d70ae', '#5e9bd4', '#d6e6f5', '#f6f5f5']
+        // color:['#004582','#5d8fbb','#c9d9e8','#f6f5f5']
+        // ['#7579e7','#9ab3f5','#d8edfd','#f6f5f5'] //配色暂定
       },
 
     }

@@ -130,10 +130,12 @@ class BasicAnalysis extends Component<IProps, IState>{
     const genderPieProps = {
       chartName:'男女比例饼状图',
       chartData: genderRateData,
+      isRing:true,
     }
     const educationPieProps = {
       chartName:'毕业学历比例饼状图',
       chartData: educationRateData,
+      isRing:true,
     }
 
     const majorNumBarProps = {
