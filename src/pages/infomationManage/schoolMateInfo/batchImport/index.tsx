@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import {excelColumn} from '@/utils/staticData'
 import XLSX from 'xlsx'
+import {majorMap,industryMap,} from '@/utils/staticData'
 import { Modal, Form, Button, Table,Tooltip, message , Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 const { Dragger } = Upload;
 const { Item } = Form
 
 interface IProps {
-//   Store?: any;
+  schoolMateStore: any;
   batchImportVisible?: boolean;
   hideModal?: any;
   afterImport?: any;
@@ -18,6 +19,7 @@ interface IState {
   pageSize:number,
   data?:any,
   fileList?:any,
+  btnLoading:boolean;
 }
 class BatchImportModal extends Component<IProps,IState> {
   constructor(props: IProps){
@@ -29,6 +31,7 @@ class BatchImportModal extends Component<IProps,IState> {
     pageSize:10,
     data:[],
     fileList:[],
+    btnLoading:false,
   }
 
   //导入模板
@@ -90,10 +93,59 @@ class BatchImportModal extends Component<IProps,IState> {
     this.setState({nextVisible:true})
   }
 
-  submitImport=()=>{
+  findKey=(map:any,value:any, compare = (a:any, b:any) => a === b)=>{
+    return Object.keys(map).find(k => compare(map[k], value))
+  }
+
+  submitImport=async()=>{
+    const { schoolMateStore: {goMatesBatchCreation} } = this.props
+    //处理要传入的数据
+    let params=JSON.parse(JSON.stringify(this.state.data))
+    params.map((item:any)=>{
+      item.gender=(item.gender==='女'?0:1)
+      item.educationStatus=(item.educationStatus==='本科生'?'0':'1')
+      item.major=this.findKey(majorMap,item.major)
+      item.workArea=this.findKey(industryMap,item.workArea)
+    })
+    console.log('params',params)
+    // const params:any=[
+    //   {
+    //     "id" : "2013329620001",
+    //     "name" : "邓刚",
+    //     "gender" : 1,
+    //     "nationality" : "汉族",
+    //     "birthDate" : "1995-06-05",
+    //     "faculty" : "信息学院",
+    //     "educationStatus" : "0",
+    //     "yearOfEnrollment" : "2013",
+    //     "yearOfGraduation" : "2017",
+    //     "politicalStatus" : "中共党员",
+    //     "homeTown" : "澳门特别行政区 澳门半岛",
+    //     "srcPlace" : "台湾 嘉义市",
+    //     "dstPlace" : "澳门特别行政区 澳门半岛",
+    //     "major" : "cs",
+    //     "majorClass" : 1,
+    //     "contactPhone" : "13515800611",
+    //     "contactEmail" : "r.jjopsj@mvfhguls.td",
+    //     "workArea" : "internet",
+    //     "job" : "媒体运营",
+    //     "companyRank" : "100强",
+    //     "graduateChoice" : "就业",
+    //     "salary" : 15035,
+    //     "companySize" : "1000-9999",
+    //   }
+    // ]
     //批量提交
-    this.setState({nextVisible:false})
-    this.props.afterImport()
+    this.setState({btnLoading:true})
+    const res=await goMatesBatchCreation(params)
+    this.setState({btnLoading:false})
+    if(res.success){
+      message.success(res.msg)
+      this.setState({nextVisible:false})
+      this.props.afterImport()
+    }else{
+      message.error(res.msg)
+    }
   }
 
   nextModal(){
@@ -104,7 +156,7 @@ class BatchImportModal extends Component<IProps,IState> {
         pageSize: pageSize,
         total:data.length, //TODO
         // showQuickJumper: true,
-        // showSizeChanger:false,
+        showSizeChanger:false,
         onChange: (pageNum: number) => {
             this.setState({ pageNum,})
         },
@@ -230,7 +282,6 @@ class BatchImportModal extends Component<IProps,IState> {
         >
           <div style={{padding:'10px',fontSize:'12px'}}>
               <Table
-                  
                   columns={tableColumns} 
                   rowKey='id'
                   dataSource={data}
@@ -238,7 +289,7 @@ class BatchImportModal extends Component<IProps,IState> {
                   pagination={pagination}
               />
               <div style={{display:'flex',justifyContent:'center',marginTop:'15px'}}>
-                  <Button type="primary" onClick={this.submitImport}>确认导入</Button>
+                  <Button type="primary" loading={this.state.btnLoading} onClick={this.submitImport}>确认导入</Button>
                   <Button onClick={this.nextCancel} style={{marginLeft:'10px'}}>取消</Button>
               </div>
           </div>

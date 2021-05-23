@@ -32,15 +32,10 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
         if(res.success){
             // message.success(res.msg)
             //TODO 重新登录
-            setTimeout(message.success('密码已更改，请重新登录…'),5000)
-            // const response=await handelLogout()
-            // if(response.success){
-            //     // message.success(response.msg)
-            //     this.props.history.push('../login')
-            // }else{
-            //     message.error(response.msg)
-            // }
-            
+            setTimeout(message.success('密码已更改，请重新登录…'),2500)
+            localStorage.clear()
+            sessionStorage.clear()
+            window.location.href = '../'
         }else{
             message.error(res.msg)
         }
@@ -58,9 +53,9 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
         if (value && value === formVals.oldPwd ) {
             throw new Error('新密码不能与原密码相同，请确认')
         }
-        if(value.length>20 || value.length<6)throw new Error('新密码需限制在6~20个字符')
+        // if(value.length>20 || value.length<6)throw new Error('新密码需限制在6~20个字符')
         if(!pwdReg.test(value)){
-            throw new Error('密码输入信息错误，请确认')
+            throw new Error('密码需限制在6~20个字符，由英文数字符号至少两种组成')
         }
     }
     confirmValidator = async (rule: Rule, value: string)=>{
@@ -68,13 +63,13 @@ export default class PasswdSetting extends React.Component<IProp,IState> {
             throw new Error('请输入确认密码信息')
         }
         let formVals = this.formRef.current?.getFieldsValue()
-        if (value && value === formVals.oldPwd ) {
-            throw new Error('新密码不能与原密码相同，请确认')
+        if (value && value !== formVals.newPwd ) {
+            throw new Error('确认密码需与新密码相同')
         }
-        if(value.length>20|| value.length<6)throw new Error('确认密码需限制在6~20个字符')
+        // if(value.length>20|| value.length<6)throw new Error('确认密码需限制在6~20个字符')
         let newPwd = this.formRef.current?.getFieldValue('newPwd')
         if(newPwd !== value){
-            throw new Error('确认密码输入信息错误，请确认')
+            throw new Error('密码需限制在6~20个字符，由英文数字符号至少两种组成')
         }
     }
     render(){

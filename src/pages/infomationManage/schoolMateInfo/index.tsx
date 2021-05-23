@@ -370,7 +370,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       handleCheckChange:this.handleCheckChange,
     }
 
-     //表格部分,要映射
+     //表格
      const columns = [
       {
         title: '学号',
@@ -498,7 +498,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       pageSize,
       total,
       showSizeChanger:true,
-      // pageSizeOptions:[5,10,20],
+      // pageSizeOptions:[10,50,100],
       showQuickJumper:true,
       showTotal:() => `共 ${total} 条数据`,
       onChange:(pageNum:number, pageSize:number)=>{
@@ -555,7 +555,7 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
       selectedRows,
     }
     let importModalProps = {
-      // Store,
+      schoolMateStore,
       hideModal:()=> this.setState({ batchImportVisible: false}),
       afterImport:() => this.refreshData(),
       batchImportVisible,
@@ -568,16 +568,12 @@ class SchoolMateInfoManage extends Component<IProps, IState>{
         </div>
         <div className={styles.tableBeforeNode}>
           <div>
-          <Button style={{margin:'0 10px 25px 10px'}} onClick={
-            // this.setState({editRecord:{},editModalVisible:true,editFlag:0}) 
-            this.openEditModal.bind(this,{},'add')
-          }>
+          <Button style={{margin:'0 10px 25px 10px'}} onClick={ this.openEditModal.bind(this,{},'add') }>
             添加校友
           </Button>
           <Button type='primary' onClick={this.batchImport}>批量导入</Button>
           <Button type='primary' onClick={this.batchExport} style={{marginLeft:'10px'}}>批量导出</Button>
           </div>
-
           <FilterPopover {...filterProps} />
         </div>
         <div className={styles.searchTable}>

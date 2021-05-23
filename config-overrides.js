@@ -21,7 +21,7 @@ module.exports = override(
          "@layout-header-background": "#fff", //header背景色
          "@menu-dark-bg": "#0a253e",  //menu在dark模式下的背景色 原来#333645
          "@menu-item-height": "50px", //菜单项高度
-         "@item-hover-bg":"#e4e6e5",    // for active and hover states for things like list items or table cells
+         "@item-hover-bg":"#e4e6e5", 
         }
     }
   }),

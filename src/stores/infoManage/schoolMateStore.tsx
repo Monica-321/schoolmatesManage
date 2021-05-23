@@ -9,6 +9,7 @@ const {
   schoolMatesModify,
   schoolMatesDelete,
   schoolMatesDetail,
+  matesBatchCreation,
 } = api
 
 class SchoolMateStore{
@@ -84,6 +85,12 @@ class SchoolMateStore{
       graduateChoice, contactPhone,contactEmail,contactAddress,workArea,job,companyRank,companySize,salarybirthDate,salary,
       birthDate,homeTown,srcPlace,dstPlace}
     console.log(this.schoolMateDetail)
+  }
+  //批量添加
+  @action
+  goMatesBatchCreation=async(params:any)=>{
+    let {status,success,msg}=await matesBatchCreation(params)
+    return {success,msg}
   }
 
 }

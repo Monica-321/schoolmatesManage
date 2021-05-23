@@ -43,9 +43,9 @@ axios.interceptors.response.use((response: any) => {
           };break;
         case -2:{
             message.error('没有访问权限！')
-            // setTimeout(()=>{
+            setTimeout(()=>{
               window.location.href = '../404'
-            // },2000)
+            },1500)
           };break;
         default:break;
         }

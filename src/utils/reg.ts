@@ -9,7 +9,7 @@ export const fixedPhoneReg = /(^400[0-9]{7}$)|(^800[0-9]{7}$)|(^[08]\d{2,4}-[1-9
 // 邮箱
 export const emailReg = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 // 密码
-export const pwdReg = /(?!^[",.@#$%^&*_-]+$)(?!^[0-9]+$)(?!^[a-zA-Z]+$)^[a-zA-Z0-9",.@#$%^&*_-]{8,20}$/
+export const pwdReg = /(?!^[",.@#$%^&*_-]+$)(?!^[0-9]+$)(?!^[a-zA-Z]+$)^[a-zA-Z0-9",.@#$%^&*_-]{6,20}$/
 // 中文英文数字
 export const znEnNumReg = /^[\u4E00-\u9FA5A-Za-z0-9]+$/
 // 中文英文数字-

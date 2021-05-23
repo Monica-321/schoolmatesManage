@@ -3,7 +3,7 @@ import { Layout, Menu, Breadcrumb ,ConfigProvider } from 'antd';
 import {Redirect} from 'react-router-dom';
 import TopBar from './TopBar';
 import SiderBar from './SiderBar';
-import Bread from './Bread'
+// import Bread from './Bread'
 import MenuData from '@/components/Layout/SiderBar/menuData'
 import styles from './index.module.less'
 

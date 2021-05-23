@@ -34,17 +34,28 @@ class AddOrEdit extends Component<IProps,IState> {
             this.formRef.current?.resetFields()
         }
     }
-    checkID=async(event:any)=>{
-        // console.log('id',event.target.value)
-        const id=event.target.value
+    checkID =(rule:any, value:any, callback:any)=>{
+        console.log(value)
         const { schoolMateStore: {checkMateId} } = this.props
-        const res=await checkMateId({id})
-        if(res.success){
-            message.success(res.msg)
-        }else{
-            message.error(res.msg)
-        }
+        checkMateId({id:value}).then((res:any)=>{
+            if(res.success){
+                callback()
+            }else{
+                callback(res.msg)
+            }
+        })
     }
+    // checkID=async(event:any)=>{
+    //     // console.log('id',event.target.value)
+    //     const id=event.target.value
+    //     const { schoolMateStore: {checkMateId} } = this.props
+    //     const res=await checkMateId({id})
+    //     if(res.success){
+    //         message.success(res.msg)
+    //     }else{
+    //         message.error(res.msg)
+    //     }
+    // }
     submit=async(values:any)=>{
         const { editFlag }=this.props
         const { schoolMateStore: {schoolMateDetail,goschoolMatesCreate,goschoolMatesModify} } = this.props
@@ -82,7 +93,7 @@ class AddOrEdit extends Component<IProps,IState> {
     }
 
     render(){  
-        const { editFlag}=this.props
+        const { editFlag,schoolMateStore:{schoolMateDetail}}=this.props
         const layout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 16 },
@@ -106,16 +117,18 @@ class AddOrEdit extends Component<IProps,IState> {
                     <Form ref={this.formRef} {...layout} onFinish={this.submit} >
                         <Row>
                             <Col span={8}>
-                                <Item label="学号" name="id"rules={[
-                                        { required: true, message: '请填写学号' },
-                                        // { pattern: znEnReg , message:'请输入中文或英文' }
-                                    ]} >
-                                    {editFlag==='edit'?
-                                        <Input  disabled/>
-                                        :
-                                        <Input placeholder="请输入校友学号" onBlur={this.checkID.bind(this)} />
-                                    }
+                            {editFlag==='edit'?
+                                <Item label="学号" name="id" >
+                                    <Input disabled/>
                                 </Item>
+                            :
+                                <Item label="学号" name="id" validateTrigger="onBlur"  rules={[
+                                        { required: true, message: '请填写学号' },
+                                        { validator: this.checkID   }
+                                    ]} >
+                                    <Input placeholder="请输入校友学号"  />
+                                </Item>
+                            }
                             </Col>
                             <Col span={8}>
                                 <Item label="姓名" name="name"

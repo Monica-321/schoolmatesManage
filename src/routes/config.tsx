@@ -2,12 +2,9 @@ import Routes from './routes';
 
 const {
   Login,
-  // Register,
   Layout,
-  // DashBoard,
   SystemSetting,
   InfomationManage,
-  // Log,
   DataAnalysis,
   MediaCenter,
   Error,
@@ -25,24 +22,6 @@ const routes = [
     path:"/login",
     component:Login.Login,
   },
-  //注册
-  // {
-  //   path:"/register",
-  //   component:Register.Register,
-  // },
-  //首页
-  // {
-  //   path:"/dashboard",
-  //   component:Layout.Master,
-  //   collapsed:true,
-  //   children: [
-  //     {
-  //       path: '/index',
-  //       component: DashBoard.IndexPage,
-  //     },
-  //   ],
-    
-  // },
   //InfomationManage
   {
     path:"/infoManage",
@@ -52,10 +31,6 @@ const routes = [
         path:'/schoolMateInfoManage',
         component:InfomationManage.SchoolMateInfoManage,
       },
-      // {
-      //   path:'/schoolMateInfoAddEdit',
-      //   component:InfomationManage.SchoolMateAddEdit,
-      // },
       {
         path:'/schoolMateInfoDetail',
         component:InfomationManage.SchoolMateInfoDetail,
@@ -74,17 +49,6 @@ const routes = [
       },
     ]
   },
-  // // 操作日志
-  // {
-  //   path: '/log',
-  //   component: Layout.Master,
-  //   children: [
-  //     {
-  //       path: '/accountLog',
-  //       component: Log.AccountLog,
-  //     },
-  //   ],
-  // },
   //DataAnalysis
   {
     path:"/dataAnalysis",
@@ -98,10 +62,6 @@ const routes = [
         path:'/graduateAnalysis',
         component:DataAnalysis.GraduateAnalysis,
       },
-      // {
-      //   path:'/companyAnalysis',
-      //   component:DataAnalysis.CompanyAnalysis,
-      // },
     ]
   },
   //MediaCenter
@@ -113,10 +73,6 @@ const routes = [
         path:'/graduateMedia',
         component:MediaCenter.GraduateMedia,
       },
-      // {
-      //   path:'/otherMedia',
-      //   component:MediaCenter.OtherMedia,
-      // },
     ]
   },
   {

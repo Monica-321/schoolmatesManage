@@ -34,9 +34,9 @@ class SchoolMateInfoDetail extends Component<IProps, IState>{
     const { schoolMateStore: { fetchDetail } } = this.props
     //传id获取对应详情
     let params:any = {id}
-    // this.setState({loading: true})
+    this.setState({loading: true})
     await fetchDetail(params,false)
-    // this.setState({loading: false})
+    this.setState({loading: false})
   }
 
   render() {
@@ -45,8 +45,9 @@ class SchoolMateInfoDetail extends Component<IProps, IState>{
       homeTown,srcPlace,dstPlace,yearOfEnrollment,yearOfGraduation,major,majorClass,graduateChoice,
       contactPhone,contactEmail,contactAddress,workArea,job,companyRank,companySize,salary}=schoolMateDetail
     return (
+      <Spin spinning={this.state.loading} style={{width:'100%'}}>
       <div className={styles.pageCenter}>
-        {/* <Spin spinning={this.state.loading} style={{width:'100%'}}> */}
+        
       <Descriptions title={<span style={{fontSize:'23px'}}>校友信息详情</span>} bordered 
         style={{width:'95%',margin:'35px 0 30px 0'}} 
         column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
@@ -83,8 +84,9 @@ class SchoolMateInfoDetail extends Component<IProps, IState>{
         <Item label="毕业薪资"  span={2}>{salary?salary:'/'}</Item>
       </Descriptions>
       <Button style={{fontSize:'17px',height:'35px'}} onClick={()=>{this.props.history.goBack()}} >返回</Button>
-      {/* </Spin> */}
+      
       </div>
+      </Spin>
     )
   }
 };

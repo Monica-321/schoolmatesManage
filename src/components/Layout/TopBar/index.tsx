@@ -24,7 +24,7 @@ const TopBar: FC<IProps> = props => {
         localStorage.clear()
         sessionStorage.clear()
         history.push('../')
-      },1500)
+      },1200)
     }else{
       message.error(response.msg)
     }

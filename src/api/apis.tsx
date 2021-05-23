@@ -27,7 +27,7 @@ const Api:any = {
     schoolMatesModify:`POST ${api}/schoolMates/schoolMatesUpdate`,
     schoolMatesDelete:`POST ${api}/schoolMates/schoolMatesDelete`,
     schoolMatesDetail:`GET ${api}/schoolMates/schoolMatesDetail`,
-        //批量导入、导出
+    matesBatchCreation:`POST ${api}/schoolMates/matesBatchCreation`,
     
     //校友单位信息管理
     schoolCompaniesQuery:`POST ${api}/schoolCompanies/schoolCompaniesList`,

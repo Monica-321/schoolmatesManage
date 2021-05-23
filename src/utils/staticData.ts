@@ -1812,3 +1812,40 @@ export const excelColumn:any[]= [
     { "dataIndex":"salary","title":"毕业薪资"},
     { "dataIndex":"companySize","title":"公司规模"},
     ]
+
+export const exportColumn:any= {
+  "id":"学号",
+  "name":"姓名",
+  "gender":"性别",
+  "nationality":"民族",
+  "birthDate":"出生日期",
+  "faculty":"院系",
+  "educationStatus":"就读身份",
+  "yearOfEnrollment":"入学年份",
+  "yearOfGraduation":"毕业年份",
+  "politicalStatus":"政治面貌",
+  "homeTown":"籍贯",
+  "srcPlace":"生源地",
+  "dstPlace":"去向城市",
+  "major":"专业",
+  "majorClass":"班级",
+  "contactPhone":"联系手机",
+  "contactEmail":"联系邮箱",
+  "workArea":"工作行业",
+  "job":"工作岗位",
+  "companyRank":"公司排名",
+  "graduateChoice":"毕业去向",
+  "salary":"毕业薪资",
+  "companySize":"公司规模",
+}
+export const exportColumn2:any= {
+  "companyName":"企业名称",
+  "companyType":"企业性质",
+  "companySize":"企业规模",
+  "companyCity":"主要所在城市",
+  "companyAddress":"企业主要地址",
+  "companyWebsite":"企业网址",
+  "companyPhone":"联系电话",
+  "companyEmail":"联系邮箱",
+  "companyDescription":"企业描述"
+}
